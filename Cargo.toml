@@ -7,8 +7,10 @@ license = "MIT OR Apache-2.0"
 
 [dependencies]
 anyhow = "1.0.25"
+derive_more = "0.99.2"
 fnv = "1.0.6"
 itertools = "0.8.2"
+num-traits = "0.2.10"
 
 [dev-dependencies]
 criterion = "0.3.0"
