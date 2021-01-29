@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d09` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d09"><title>aoc::y2016::d09 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d09</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a></p><script>window.sidebarCurrent = {name: "d09", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2016/d09.rs.html#1-57" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a>::<wbr><a class="mod" href="">d09</a></span></h1><div class="docblock"><h1 id="day-9-explosives-in-cyberspace" class="section-header"><a href="#day-9-explosives-in-cyberspace">Day 9: Explosives in Cyberspace</a></h1>
+<p>Wandering around a secure area, you come across a datalink port to a new part of the network.
+After briefly scanning it for interesting files, you find one file in particular that catches
+your attention. It's compressed with an experimental format, but fortunately, the documentation
+for the format is nearby.</p>
+<p>The format compresses a sequence of characters. Whitespace is ignored. To indicate that some
+sequence should be repeated, a marker is added to the file, like <code>(10x2)</code>. To decompress this
+marker, take the subsequent <code>10</code> characters and repeat them <code>2</code> times. Then, continue reading
+the file <strong>after</strong> the repeated data. The marker itself is not included in the decompressed
+output.</p>
+<p>If parentheses or other characters appear within the data referenced by a marker, that's okay -
+treat it like normal data, not a marker, and then resume looking for markers after the
+decompressed section.</p>
+<p>For example:</p>
+<ul>
+<li><code>ADVENT</code> contains no markers and decompresses to itself with no changes, resulting in a
+decompressed length of <code>6</code>.</li>
+<li><code>A(1x5)BC</code> repeats only the <code>B</code> a total of <code>5</code> times, becoming <code>ABBBBBC</code> for a decompressed
+length of <code>7</code>.</li>
+<li><code>(3x3)XYZ</code> becomes <code>XYZXYZXYZ</code> for a decompressed length of <code>9</code>.</li>
+<li><code>A(2x2)BCD(2x2)EFG</code> doubles the <code>BC</code> and <code>EF</code>, becoming <code>ABCBCDEFEFG</code> for a decompressed
+length of <code>11</code>.</li>
+<li><code>(6x1)(1x3)A</code> simply becomes <code>(1x3)A</code> - the <code>(1x3)</code> looks like a marker, but because it's
+within a data section of another marker, it is not treated any differently from the <code>A</code> that
+comes after it. It has a decompressed length of <code>6</code>.</li>
+<li><code>X(8x2)(3x3)ABCY</code> becomes <code>X(3x3)ABC(3x3)ABCY</code> (for a decompressed length of <code>18</code>), because
+the decompressed data from the <code>(8x2)</code> marker (the <code>(3x3)ABC</code>) is skipped and not processed
+further.</li>
+</ul>
+<p>What is the <strong>decompressed length</strong> of the file (your puzzle input)? Don't count whitespace.</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2016::d09::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2016::d09::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2016::d09::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

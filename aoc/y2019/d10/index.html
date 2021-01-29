@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d10` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d10"><title>aoc::y2019::d10 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d10</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a></p><script>window.sidebarCurrent = {name: "d10", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2019/d10.rs.html#1-158" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a>::<wbr><a class="mod" href="">d10</a></span></h1><div class="docblock"><h1 id="day-10-monitoring-station" class="section-header"><a href="#day-10-monitoring-station">Day 10: Monitoring Station</a></h1>
+<p>You fly into the asteroid belt and reach the Ceres monitoring station. The Elves here have an
+emergency: they're having trouble tracking all of the asteroids and can't be sure they're safe.</p>
+<p>The Elves would like to build a new monitoring station in a nearby area of space; they hand you
+a map of all of the asteroids in that region (your puzzle input).</p>
+<p>The map indicates whether each position is empty (<code>.</code>) or contains an asteroid (<code>#</code>). The
+asteroids are much smaller than they appear on the map, and every asteroid is exactly in the
+center of its marked position. The asteroids can be described with <code>X,Y</code> coordinates where <code>X</code>
+is the distance from the left edge and <code>Y</code> is the distance from the top edge (so the top-left
+corner is <code>0,0</code> and the position immediately to its right is <code>1,0</code>).</p>
+<p>Your job is to figure out which asteroid would be the best place to build a <strong>new monitoring
+station</strong>. A monitoring station can <strong>detect</strong> any asteroid to which it has <strong>direct line of
+sight</strong> - that is, there cannot be another asteroid <strong>exactly</strong> between them. This line of sight
+can be at any angle, not just lines aligned to the grid or diagonally. The <strong>best</strong> location is
+the asteroid that can <strong>detect</strong> the largest number of other asteroids.</p>
+<p>For example, consider the following map:</p>
+<pre><code class="language-txt">.#..#
+.....
+#####
+....#
+...##
+</code></pre>
+<p>The best location for a new monitoring station on this map is the highlighted asteroid at <code>3,4</code>
+because it can detect <code>8</code> asteroids, more than any other location. (The only asteroid it cannot
+detect is the one at <code>1,0</code>; its view of this asteroid is blocked by the asteroid at <code>2,2</code>.) All
+other asteroids are worse locations; they can detect <code>7</code> or fewer other asteroids. Here is the
+number of other asteroids a monitoring station on each asteroid could detect:</p>
+<pre><code class="language-txt">.7..7
+.....
+67775
+....7
+...87
+</code></pre>
+<p>Here is an asteroid (<code>#</code>) and some examples of the ways its line of sight might be blocked. If
+there were another asteroid at the location of a capital letter, the locations marked with the
+corresponding lowercase letter would be blocked and could not be detected:</p>
+<pre><code class="language-txt">#.........
+...A......
+...B..a...
+.EDCG....a
+..F.c.b...
+.....c....
+..efd.c.gb
+.......c..
+....f...c.
+...e..d..c
+</code></pre>
+<p>Here are some larger examples:</p>
+<ul>
+<li>
+<p>Best is <code>5,8</code> with <code>33</code> other asteroids detected:</p>
+<pre><code class="language-txt">......#.#.
+#..#.#....
+..#######.
+.#.#.###..
+.#..#.....
+..#....#.#
+#..#....#.
+.##.#..###
+##...#..#.
+.#....####
+</code></pre>
+</li>
+<li>
+<p>Best is <code>1,2</code> with <code>35</code> other asteroids detected:</p>
+<pre><code class="language-txt">#.#...#.#.
+.###....#.
+.#....#...
+##.#.#.#.#
+....#.#.#.
+.##..###.#
+..#...##..
+..##....##
+......#...
+.####.###.
+</code></pre>
+</li>
+<li>
+<p>Best is <code>6,3</code> with <code>41</code> other asteroids detected:</p>
+<pre><code class="language-txt">.#..#..###
+####.###.#
+....###.#.
+..###.##.#
+##.##.#.#.
+....###..#
+..#.#..#.#
+#..#.#.###
+.##...##.#
+.....#.#..
+</code></pre>
+</li>
+<li>
+<p>Best is <code>11,13</code> with <code>210</code> other asteroids detected:</p>
+<pre><code class="language-txt">.#..##.###...#######
+##.############..##.
+.#.######.########.#
+.###.#######.####.#.
+#####.##.#.##.###.##
+..#####..#.#########
+####################
+#.####....###.#.#.##
+##.#################
+#####.##.###..####..
+..######..##.#######
+####.##.####...##..#
+.#####..#.######.###
+##...#.##########...
+#.##########.#######
+.####.#.###.###.#.##
+....##.##.###..#####
+.#.#.###########.###
+#.#.#.#####.####.###
+###.##.####.##.#..##
+</code></pre>
+</li>
+</ul>
+<p>Find the best location for a new monitoring station. <strong>How many other asteroids can be detected
+from that location?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2019::d10::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2019::d10::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2019::d10::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

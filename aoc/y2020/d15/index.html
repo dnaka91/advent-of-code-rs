@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d15` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d15"><title>aoc::y2020::d15 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d15</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2020</a></p><script>window.sidebarCurrent = {name: "d15", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2020/d15.rs.html#1-141" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2020</a>::<wbr><a class="mod" href="">d15</a></span></h1><div class="docblock"><h1 id="day-15-rambunctious-recitation" class="section-header"><a href="#day-15-rambunctious-recitation">Day 15: Rambunctious Recitation</a></h1>
+<p>You catch the airport shuttle and try to book a new flight to your vacation island. Due to the
+storm, all direct flights have been cancelled, but a route is available to get around the storm.
+You take it.</p>
+<p>While you wait for your flight, you decide to check in with the Elves back at the North Pole.
+They're playing a <strong>memory game</strong> and are ever so excited to explain the rules!</p>
+<p>In this game, the players take turns saying <strong>numbers</strong>. They begin by taking turns reading from
+a list of <strong>starting numbers</strong> (your puzzle input). Then, each turn consists of considering the
+<strong>most recently spoken number</strong>:</p>
+<ul>
+<li>If that was the <strong>first</strong> time the number has been spoken, the current player says <strong><code>0</code></strong>.</li>
+<li>Otherwise, the number had been spoken before; the current player announces <strong>how many turns
+apart</strong> the number is from when it was previously spoken.</li>
+</ul>
+<p>So, after the starting numbers, each turn results in that player speaking aloud either <strong><code>0</code></strong>
+(if the last number is new) or an <strong>age</strong> (if the last number is a repeat).</p>
+<p>For example, suppose the starting numbers are <code>0,3,6</code>:</p>
+<ul>
+<li><strong>Turn 1</strong>: The <code>1</code>st number spoken is a starting number, <strong><code>0</code></strong>.</li>
+<li><strong>Turn 2</strong>: The <code>2</code>nd number spoken is a starting number, <strong><code>3</code></strong>.</li>
+<li><strong>Turn 3</strong>: The <code>3</code>rd number spoken is a starting number, <strong><code>6</code></strong>.</li>
+<li><strong>Turn 4</strong>: Now, consider the last number spoken, <code>6</code>. Since that was the first time the
+number had been spoken, the <code>4</code>th number spoken is <strong><code>0</code></strong>.</li>
+<li><strong>Turn 5</strong>: Next, again consider the last number spoken, <code>0</code>. Since it <strong>had</strong> been spoken
+before, the next number to speak is the difference between the turn number when it was last
+spoken (the previous turn, <code>4</code>) and the turn number of the time it was most recently spoken
+before then (turn <code>1</code>). Thus, the <code>5</code>th number spoken is <code>4 - 1</code>, <strong><code>3</code></strong>.</li>
+<li><strong>Turn 6</strong>: The last number spoken, <code>3</code> had also been spoken before, most recently on turns
+<code>5</code> and <code>2</code>. So, the <code>6</code>th number spoken is <code>5 - 2</code>, <strong><code>3</code></strong>.</li>
+<li><strong>Turn 7</strong>: Since <code>3</code> was just spoken twice in a row, and the last two turns are <code>1</code> turn
+apart, the <code>7</code>th number spoken is <strong><code>1</code></strong>.</li>
+<li><strong>Turn 8</strong>: Since <code>1</code> is new, the <code>8</code>th number spoken is <strong><code>0</code></strong>.</li>
+<li><strong>Turn 9</strong>: <code>0</code> was last spoken on turns <code>8</code> and <code>4</code>, so the <code>9</code>th number spoken is the
+difference between them, <strong><code>4</code></strong>.</li>
+<li><strong>Turn 10</strong>: <code>4</code> is new, so the <code>10</code>th number spoken is <strong><code>0</code></strong>.</li>
+</ul>
+<p>(The game ends when the Elves get sick of playing or dinner is ready, whichever comes first.)</p>
+<p>Their question for you is: what will be the <strong><code>2020</code>th</strong> number spoken? In the example above,
+the <code>2020</code>th number spoken will be <code>436</code>.</p>
+<p>Here are a few more examples:</p>
+<ul>
+<li>Given the starting numbers <code>1,3,2</code>, the <code>2020</code>th number spoken is <code>1</code>.</li>
+<li>Given the starting numbers <code>2,1,3</code>, the <code>2020</code>th number spoken is <code>10</code>.</li>
+<li>Given the starting numbers <code>1,2,3</code>, the <code>2020</code>th number spoken is <code>27</code>.</li>
+<li>Given the starting numbers <code>2,3,1</code>, the <code>2020</code>th number spoken is <code>78</code>.</li>
+<li>Given the starting numbers <code>3,2,1</code>, the <code>2020</code>th number spoken is <code>438</code>.</li>
+<li>Given the starting numbers <code>3,1,2</code>, the <code>2020</code>th number spoken is <code>1836</code>.</li>
+</ul>
+<p>Given your starting numbers, <strong>what will be the <code>2020</code>th number spoken?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>Impressed, the Elves issue you a challenge: determine the <code>30000000</code>th number spoken. For
+example, given the same starting numbers as above:</p>
+<ul>
+<li>Given <code>0,3,6</code>, the <code>30000000</code>th number spoken is <code>175594</code>.</li>
+<li>Given <code>1,3,2</code>, the <code>30000000</code>th number spoken is <code>2578</code>.</li>
+<li>Given <code>2,1,3</code>, the <code>30000000</code>th number spoken is <code>3544142</code>.</li>
+<li>Given <code>1,2,3</code>, the <code>30000000</code>th number spoken is <code>261214</code>.</li>
+<li>Given <code>2,3,1</code>, the <code>30000000</code>th number spoken is <code>6895259</code>.</li>
+<li>Given <code>3,2,1</code>, the <code>30000000</code>th number spoken is <code>18</code>.</li>
+<li>Given <code>3,1,2</code>, the <code>30000000</code>th number spoken is <code>362</code>.</li>
+</ul>
+<p>Given your starting numbers, <strong>what will be the <code>30000000</code>th number spoken?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2020::d15::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2020::d15::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2020::d15::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

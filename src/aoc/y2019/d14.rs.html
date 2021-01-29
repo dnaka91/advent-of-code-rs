@@ -1,0 +1,292 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/y2019/d14.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>d14.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+<span id="109">109</span>
+<span id="110">110</span>
+<span id="111">111</span>
+<span id="112">112</span>
+<span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
+<span id="121">121</span>
+<span id="122">122</span>
+<span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+</pre><div class="example-wrap"><pre class="rust ">
+<span class="doccomment">//! # Day 14: Space Stoichiometry</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! As you approach the rings of Saturn, your ship&#39;s **low fuel** indicator turns on. There isn&#39;t</span>
+<span class="doccomment">//! any fuel here, but the rings have plenty of raw material. Perhaps your ship&#39;s Inter-Stellar</span>
+<span class="doccomment">//! Refinery Union brand **nanofactory** can turn these raw materials into fuel.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! You ask the nanofactory to produce a list of the **reactions** it can perform that are relevant</span>
+<span class="doccomment">//! to this process (your puzzle input). Every reaction turns some quantities of specific **input</span>
+<span class="doccomment">//! chemicals** into some quantity of an **output chemical**. Almost every **chemical** is produced</span>
+<span class="doccomment">//! by exactly one reaction; the only exception, `ORE`, is the raw material input to the entire</span>
+<span class="doccomment">//! process and is not produced by a reaction.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! You just need to know how much **`ORE`** you&#39;ll need to collect before you can produce one unit</span>
+<span class="doccomment">//! of **`FUEL`**.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Each reaction gives specific quantities for its inputs and output; reactions cannot be partially</span>
+<span class="doccomment">//! run, so only whole integer multiples of these quantities can be used. (It&#39;s okay to have</span>
+<span class="doccomment">//! leftover chemicals when you&#39;re done, though.) For example, the reaction `1 A, 2 B, 3 C =&gt; 2 D`</span>
+<span class="doccomment">//! means that exactly 2 units of chemical `D` can be produced by consuming exactly 1 `A`, 2 `B` and</span>
+<span class="doccomment">//! 3 `C`. You can run the full reaction as many times as necessary; for example, you could produce</span>
+<span class="doccomment">//! 10 `D` by consuming 5 `A`, 10 `B`, and 15 `C`.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Suppose your nanofactory produces the following list of reactions:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```txt</span>
+<span class="doccomment">//! 10 ORE =&gt; 10 A</span>
+<span class="doccomment">//! 1 ORE =&gt; 1 B</span>
+<span class="doccomment">//! 7 A, 1 B =&gt; 1 C</span>
+<span class="doccomment">//! 7 A, 1 C =&gt; 1 D</span>
+<span class="doccomment">//! 7 A, 1 D =&gt; 1 E</span>
+<span class="doccomment">//! 7 A, 1 E =&gt; 1 FUEL</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The first two reactions use only `ORE` as inputs; they indicate that you can produce as much of</span>
+<span class="doccomment">//! chemical `A` as you want (in increments of 10 units, each 10 costing 10 `ORE`) and as much of</span>
+<span class="doccomment">//! chemical `B` as you want (each costing 1 `ORE`). To produce 1 `FUEL`, a total of **31** `ORE` is</span>
+<span class="doccomment">//! required: 1 `ORE` to produce 1 `B`, then 30 more `ORE` to produce the 7 + 7 + 7 + 7 = 28 `A`</span>
+<span class="doccomment">//! (with 2 extra `A` wasted) required in the reactions to convert the `B` into `C`, `C` into `D`,</span>
+<span class="doccomment">//! `D` into `E`, and finally `E` into `FUEL`. (30 `A` is produced because its reaction requires</span>
+<span class="doccomment">//! that it is created in increments of 10.)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Or, suppose you have the following list of reactions:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```txt</span>
+<span class="doccomment">//! 9 ORE =&gt; 2 A</span>
+<span class="doccomment">//! 8 ORE =&gt; 3 B</span>
+<span class="doccomment">//! 7 ORE =&gt; 5 C</span>
+<span class="doccomment">//! 3 A, 4 B =&gt; 1 AB</span>
+<span class="doccomment">//! 5 B, 7 C =&gt; 1 BC</span>
+<span class="doccomment">//! 4 C, 1 A =&gt; 1 CA</span>
+<span class="doccomment">//! 2 AB, 3 BC, 4 CA =&gt; 1 FUEL</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The above list of reactions requires **165** `ORE` to produce 1 `FUEL`:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - Consume 45 `ORE` to produce 10 `A`.</span>
+<span class="doccomment">//! - Consume 64 `ORE` to produce 24 `B`.</span>
+<span class="doccomment">//! - Consume 56 `ORE` to produce 40 `C`.</span>
+<span class="doccomment">//! - Consume 6 `A`, 8 `B` to produce 2 `AB`.</span>
+<span class="doccomment">//! - Consume 15 `B`, 21 `C` to produce 3 `BC`.</span>
+<span class="doccomment">//! - Consume 16 `C`, 4 `A` to produce 4 `CA`.</span>
+<span class="doccomment">//! - Consume 2 `AB`, 3 `BC`, 4 `CA` to produce 1 `FUEL`.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Here are some larger examples:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - **13312** `ORE` for 1 `FUEL`:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!   ```txt</span>
+<span class="doccomment">//!   157 ORE =&gt; 5 NZVS</span>
+<span class="doccomment">//!   165 ORE =&gt; 6 DCFZ</span>
+<span class="doccomment">//!   44 XJWVT, 5 KHKGT, 1 QDVJ, 29 NZVS, 9 GPVTF, 48 HKGWZ =&gt; 1 FUEL</span>
+<span class="doccomment">//!   12 HKGWZ, 1 GPVTF, 8 PSHF =&gt; 9 QDVJ</span>
+<span class="doccomment">//!   179 ORE =&gt; 7 PSHF</span>
+<span class="doccomment">//!   177 ORE =&gt; 5 HKGWZ</span>
+<span class="doccomment">//!   7 DCFZ, 7 PSHF =&gt; 2 XJWVT</span>
+<span class="doccomment">//!   165 ORE =&gt; 2 GPVTF</span>
+<span class="doccomment">//!   3 DCFZ, 7 NZVS, 5 HKGWZ, 10 PSHF =&gt; 8 KHKGT</span>
+<span class="doccomment">//!   ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - **180697** `ORE` for 1 `FUEL`:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!   ```txt</span>
+<span class="doccomment">//!   2 VPVL, 7 FWMGM, 2 CXFTF, 11 MNCFX =&gt; 1 STKFG</span>
+<span class="doccomment">//!   17 NVRVD, 3 JNWZP =&gt; 8 VPVL</span>
+<span class="doccomment">//!   53 STKFG, 6 MNCFX, 46 VJHF, 81 HVMC, 68 CXFTF, 25 GNMV =&gt; 1 FUEL</span>
+<span class="doccomment">//!   22 VJHF, 37 MNCFX =&gt; 5 FWMGM</span>
+<span class="doccomment">//!   139 ORE =&gt; 4 NVRVD</span>
+<span class="doccomment">//!   144 ORE =&gt; 7 JNWZP</span>
+<span class="doccomment">//!   5 MNCFX, 7 RFSQX, 2 FWMGM, 2 VPVL, 19 CXFTF =&gt; 3 HVMC</span>
+<span class="doccomment">//!   5 VJHF, 7 MNCFX, 9 VPVL, 37 CXFTF =&gt; 6 GNMV</span>
+<span class="doccomment">//!   145 ORE =&gt; 6 MNCFX</span>
+<span class="doccomment">//!   1 NVRVD =&gt; 8 CXFTF</span>
+<span class="doccomment">//!   1 VJHF, 6 MNCFX =&gt; 4 RFSQX</span>
+<span class="doccomment">//!   176 ORE =&gt; 6 VJHF</span>
+<span class="doccomment">//!   ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - **2210736** `ORE` for 1 `FUEL`:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!   ```txt</span>
+<span class="doccomment">//!   171 ORE =&gt; 8 CNZTR</span>
+<span class="doccomment">//!   7 ZLQW, 3 BMBT, 9 XCVML, 26 XMNCP, 1 WPTQ, 2 MZWV, 1 RJRHP =&gt; 4 PLWSL</span>
+<span class="doccomment">//!   114 ORE =&gt; 4 BHXH</span>
+<span class="doccomment">//!   14 VRPVC =&gt; 6 BMBT</span>
+<span class="doccomment">//!   6 BHXH, 18 KTJDG, 12 WPTQ, 7 PLWSL, 31 FHTLT, 37 ZDVW =&gt; 1 FUEL</span>
+<span class="doccomment">//!   6 WPTQ, 2 BMBT, 8 ZLQW, 18 KTJDG, 1 XMNCP, 6 MZWV, 1 RJRHP =&gt; 6 FHTLT</span>
+<span class="doccomment">//!   15 XDBXC, 2 LTCX, 1 VRPVC =&gt; 6 ZLQW</span>
+<span class="doccomment">//!   13 WPTQ, 10 LTCX, 3 RJRHP, 14 XMNCP, 2 MZWV, 1 ZLQW =&gt; 1 ZDVW</span>
+<span class="doccomment">//!   5 BMBT =&gt; 4 WPTQ</span>
+<span class="doccomment">//!   189 ORE =&gt; 9 KTJDG</span>
+<span class="doccomment">//!   1 MZWV, 17 XDBXC, 3 XCVML =&gt; 2 XMNCP</span>
+<span class="doccomment">//!   12 VRPVC, 27 CNZTR =&gt; 2 XDBXC</span>
+<span class="doccomment">//!   15 KTJDG, 12 BHXH =&gt; 5 XCVML</span>
+<span class="doccomment">//!   3 BHXH, 2 VRPVC =&gt; 7 MZWV</span>
+<span class="doccomment">//!   121 ORE =&gt; 7 VRPVC</span>
+<span class="doccomment">//!   7 XCVML =&gt; 6 RJRHP</span>
+<span class="doccomment">//!   5 BHXH, 4 VRPVC =&gt; 5 LTCX</span>
+<span class="doccomment">//!   ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Given the list of reactions in your puzzle input, **what is the minimum amount of `ORE` required</span>
+<span class="doccomment">//! to produce exactly 1 `FUEL`?**</span>
+
+<span class="kw">use</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span>;
+
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">INPUT</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="macro">include_str</span><span class="macro">!</span>(<span class="string">&quot;d14.txt&quot;</span>);
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve_part_one</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Ok</span>(<span class="number">0</span>)
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve_part_two</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Ok</span>(<span class="number">0</span>)
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">part_one</span>() {}
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">part_two</span>() {}
+}
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

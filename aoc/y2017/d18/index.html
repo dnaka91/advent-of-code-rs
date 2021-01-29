@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d18` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d18"><title>aoc::y2017::d18 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d18</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2017</a></p><script>window.sidebarCurrent = {name: "d18", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2017/d18.rs.html#1-89" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2017</a>::<wbr><a class="mod" href="">d18</a></span></h1><div class="docblock"><h1 id="day-18-duet" class="section-header"><a href="#day-18-duet">Day 18: Duet</a></h1>
+<p>You discover a tablet containing some strange assembly code labeled simply &quot;<a href="https://en.wikipedia.org/wiki/Duet">Duet</a>&quot;. Rather than
+bother the sound card with it, you decide to run the code yourself. Unfortunately, you don't see
+any documentation, so you're left to figure out what the instructions mean on your own.</p>
+<p>It seems like the assembly is meant to operate on a set of <strong>registers</strong> that are each named
+with a single letter and that can each hold a single <a href="https://en.wikipedia.org/wiki/Integer">integer</a>. You suppose each register should
+start with a value of <code>0</code>.</p>
+<p>There aren't that many instructions, so it shouldn't be hard to figure out what they do. Here's
+what you determine:</p>
+<ul>
+<li><code>snd X</code> <strong>plays a sound</strong> with a frequency equal to the value of <code>X</code>.</li>
+<li><code>set X Y</code> <strong>sets</strong> register <code>X</code> to the value of <code>Y</code>.</li>
+<li><code>add X Y</code> <strong>increases</strong> register <code>X</code> by the value of <code>Y</code>.</li>
+<li><code>mul X Y</code> sets register <code>X</code> to the result of <strong>multiplying</strong> the value contained in register
+<code>X</code> by the value of <code>Y</code>.</li>
+<li><code>mod X Y</code> sets register <code>X</code> to the <strong>remainder</strong> of dividing the value contained in register
+<code>X</code> by the value of <code>Y</code> (that is, it sets <code>X</code> to the result of <code>X</code> <a href="https://en.wikipedia.org/wiki/Modulo_operation">modulo</a> <code>Y</code>).</li>
+<li><code>rcv X</code> <strong>recovers</strong> the frequency of the last sound played, but only when the value of <code>X</code> is
+not zero. (If it is zero, the command does nothing.)</li>
+<li><code>jgz X Y</code> <strong>jumps</strong> with an offset of the value of <code>Y</code>, but only if the value of <code>X</code> is
+<strong>greater than zero</strong>. (An offset of <code>2</code> skips the next instruction, an offset of <code>-1</code> jumps
+to the previous instruction, and so on.)</li>
+</ul>
+<p>Many of the instructions can take either a register (a single letter) or a number. The value of
+a register is the integer it contains; the value of a number is that number.</p>
+<p>After each <strong>jump</strong> instruction, the program continues with the instruction to which the
+<strong>jump</strong> jumped. After any other instruction, the program continues with the next instruction.
+Continuing (or jumping) off either end of the program terminates it.</p>
+<p>For example:</p>
+<pre><code class="language-txt">set a 1
+add a 2
+mul a a
+mod a 5
+snd a
+set a 0
+rcv a
+jgz a -1
+set a 1
+jgz a -2
+</code></pre>
+<ul>
+<li>The first four instructions set <code>a</code> to <code>1</code>, add <code>2</code> to it, square it, and then set it to
+itself modulo <code>5</code>, resulting in a value of <code>4</code>.</li>
+<li>Then, a sound with frequency <code>4</code> (the value of <code>a</code>) is played.</li>
+<li>After that, <code>a</code> is set to <code>0</code>, causing the subsequent <code>rcv</code> and <code>jgz</code> instructions to both be
+skipped (<code>rcv</code> because <code>a</code> is <code>0</code>, and <code>jgz</code> because <code>a</code> is not greater than <code>0</code>).</li>
+<li>Finally, <code>a</code> is set to <code>1</code>, causing the next <code>jgz</code> instruction to activate, jumping back two
+instructions to another jump, which jumps again to the <code>rcv</code>, which ultimately triggers the
+<strong>recover</strong> operation.</li>
+</ul>
+<p>At the time the <strong>recover</strong> operation is executed, the frequency of the last sound played is
+<code>4</code>.</p>
+<p><strong>What is the value of the recovered frequency</strong> (the value of the most recently played sound)
+the <strong>first</strong> time a <code>rcv</code> instruction is executed with a non-zero value?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2017::d18::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2017::d18::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2017::d18::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

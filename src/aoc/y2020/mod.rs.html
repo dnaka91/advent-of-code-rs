@@ -1,0 +1,184 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/y2020/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1"> 1</span>
+<span id="2"> 2</span>
+<span id="3"> 3</span>
+<span id="4"> 4</span>
+<span id="5"> 5</span>
+<span id="6"> 6</span>
+<span id="7"> 7</span>
+<span id="8"> 8</span>
+<span id="9"> 9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+</pre><div class="example-wrap"><pre class="rust ">
+<span class="doccomment">//! # Year 2020</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! &lt;style&gt;</span>
+<span class="doccomment">//! .calendar {</span>
+<span class="doccomment">//!   cursor: default;</span>
+<span class="doccomment">//!   -webkit-user-select: none;</span>
+<span class="doccomment">//!   -khtml-user-select: none;</span>
+<span class="doccomment">//!   -moz-user-select: -moz-none;</span>
+<span class="doccomment">//!   -o-user-select: none;</span>
+<span class="doccomment">//!   user-select: none;</span>
+<span class="doccomment">//!   color: #666666;</span>
+<span class="doccomment">//!   background-color: #0f0f23;</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! .calendar &gt; span {</span>
+<span class="doccomment">//!   color: #333333;</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! .calendar &gt; a {</span>
+<span class="doccomment">//!   text-decoration: none !important;</span>
+<span class="doccomment">//!   color: #666666 !important;</span>
+<span class="doccomment">//!   outline: none;</span>
+<span class="doccomment">//!   cursor: default;</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! .calendar a:hover, .calendar a:focus {</span>
+<span class="doccomment">//!   background-color: #1e1e46;</span>
+<span class="doccomment">//!   background-color: rgba(119,119,165,.2);</span>
+<span class="doccomment">//!   cursor: pointer;</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! .calendar .calendar-day { color: #666666; }</span>
+<span class="doccomment">//! .calendar a .calendar-day { color: #cccccc; }</span>
+<span class="doccomment">//! .calendar a .calendar-mark-complete,</span>
+<span class="doccomment">//! .calendar a .calendar-mark-verycomplete { visibility: hidden; }</span>
+<span class="doccomment">//! .calendar a.calendar-complete     .calendar-mark-complete,</span>
+<span class="doccomment">//! .calendar a.calendar-verycomplete .calendar-mark-complete { visibility: visible; color: #ffff66; }</span>
+<span class="doccomment">//! .calendar a.calendar-verycomplete .calendar-mark-verycomplete { visibility: visible; color: #ffff66; }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! .calendar .calendar-color-b { color:#333399; }</span>
+<span class="doccomment">//! .calendar .calendar-color-l { color:#ccccff; }</span>
+<span class="doccomment">//! .calendar .calendar-color-r { color:#ff0000; }</span>
+<span class="doccomment">//! .calendar .calendar-color-w { color:#ffffff; }</span>
+<span class="doccomment">//! .calendar .calendar-color-g { color:#00cc00; }</span>
+<span class="doccomment">//! .calendar .calendar-color-a { color:#cccccc; }</span>
+<span class="doccomment">//! &lt;/style&gt;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! &lt;pre class=&quot;calendar&quot;&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d01/index.html&quot; class=&quot;calendar-day1 calendar-verycomplete&quot;&gt;              &lt;span class=&quot;calendar-color-l&quot;&gt;..........&lt;/span&gt;&lt;span class=&quot;calendar-color-r&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;calendar-color-l&quot;&gt;..........&lt;/span&gt;                &lt;span class=&quot;calendar-day&quot;&gt; 1&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d02/index.html&quot; class=&quot;calendar-day2 calendar-verycomplete&quot;&gt;   &lt;span class=&quot;calendar-color-l&quot;&gt;.....&#39;&#39;&#39;&#39;&#39;&#39;&lt;/span&gt; &lt;span class=&quot;calendar-color-w&quot;&gt;.&#39;&lt;/span&gt;  &lt;span class=&quot;calendar-color-w&quot;&gt;-&lt;/span&gt;  &lt;span class=&quot;calendar-color-w&quot;&gt;-&lt;/span&gt;  &lt;span class=&quot;calendar-color-a&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;calendar-color-w&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;calendar-color-w&quot;&gt;.&#39;&#39;&lt;/span&gt;&lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-l&quot;&gt;&#39;&#39;&#39;&#39;&#39;&#39;.....&lt;/span&gt;     &lt;span class=&quot;calendar-day&quot;&gt; 2&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d03/index.html&quot; class=&quot;calendar-day3 calendar-verycomplete&quot;&gt;&lt;span class=&quot;calendar-color-l&quot;&gt;&#39;&#39;&#39;&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-w&quot;&gt;&#39;.&#39;.&lt;/span&gt; &lt;span class=&quot;calendar-color-w&quot;&gt;-&lt;/span&gt;   &lt;span class=&quot;calendar-color-w&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;calendar-color-a&quot;&gt;\&lt;/span&gt; &lt;span class=&quot;calendar-color-w&quot;&gt;-&#39;&#39;:&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-l&quot;&gt;&#39;&#39;&#39;&lt;/span&gt;  &lt;span class=&quot;calendar-day&quot;&gt; 3&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d04/index.html&quot; class=&quot;calendar-day4 calendar-verycomplete&quot;&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-w&quot;&gt;&#39;&#39;..&#39;&#39;&#39;&lt;/span&gt;&lt;span class=&quot;calendar-color-a&quot;&gt;_[]&lt;/span&gt;&lt;span class=&quot;calendar-color-w&quot;&gt;.&#39;&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;    &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-day&quot;&gt; 4&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d05/index.html&quot; class=&quot;calendar-day5 calendar-verycomplete&quot;&gt;&lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-g&quot;&gt;.&#39;.&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-a&quot;&gt;____/&lt;/span&gt; &lt;span class=&quot;calendar-color-w&quot;&gt;&#39;&#39;&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  ~  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;    &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-day&quot;&gt; 5&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d06/index.html&quot; class=&quot;calendar-day6 calendar-verycomplete&quot;&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;    &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-g&quot;&gt;&#39;&#39;&lt;/span&gt;  &lt;span class=&quot;calendar-color-g&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;calendar-color-a&quot;&gt;_____/&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;    _ &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; _   O&amp;gt;    &lt;span class=&quot;calendar-day&quot;&gt; 6&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d07/index.html&quot; class=&quot;calendar-day7 calendar-verycomplete&quot;&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-g&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;calendar-color-a&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;calendar-color-g&quot;&gt;&#39;.&lt;/span&gt;   &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;      &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  \ / \ / \ /  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-day&quot;&gt; 7&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d08/index.html&quot; class=&quot;calendar-day8 calendar-verycomplete&quot;&gt;       &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;     &lt;span class=&quot;calendar-color-g&quot;&gt;&#39;.&lt;/span&gt;&lt;span class=&quot;calendar-color-a&quot;&gt;\&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;        &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   ~  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;      &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;    ~  &lt;span class=&quot;calendar-day&quot;&gt; 8&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d17/index.html&quot; class=&quot;calendar-day17 calendar-verycomplete&quot;&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;      &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-a&quot;&gt;\&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-a&quot;&gt;____&lt;/span&gt;     &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;      &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;      &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;    &lt;span class=&quot;calendar-day&quot;&gt;17&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d09/index.html&quot; class=&quot;calendar-day9 calendar-verycomplete&quot;&gt;       &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;       &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-a&quot;&gt;\____/&lt;/span&gt; &lt;span class=&quot;calendar-color-g&quot;&gt;.&#39;&#39;&lt;/span&gt;&lt;span class=&quot;calendar-color-a&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;calendar-color-g&quot;&gt;&#39;..&lt;/span&gt;    &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;       &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;    &lt;span class=&quot;calendar-color-g&quot;&gt;.&lt;/span&gt;  &lt;span class=&quot;calendar-day&quot;&gt; 9&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d16/index.html&quot; class=&quot;calendar-day16 calendar-verycomplete&quot;&gt;    &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;       &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-a&quot;&gt;__/\&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-g&quot;&gt;.&#39;&lt;/span&gt;&lt;span class=&quot;calendar-color-w&quot;&gt;^&lt;/span&gt; &lt;span class=&quot;calendar-color-a&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;calendar-color-g&quot;&gt;.&#39;&lt;/span&gt;      &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-g&quot;&gt;..&#39;&#39;&lt;/span&gt;   &lt;span class=&quot;calendar-day&quot;&gt;16&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d18/index.html&quot; class=&quot;calendar-day18 calendar-verycomplete&quot;&gt;&lt;span class=&quot;calendar-color-g&quot;&gt;.&lt;/span&gt;.&lt;span class=&quot;calendar-color-g&quot;&gt;.&lt;/span&gt;     &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;calendar-color-a&quot;&gt;_____/&lt;/span&gt;&lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-a&quot;&gt;\&lt;/span&gt;    &lt;span class=&quot;calendar-color-g&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;calendar-color-w&quot;&gt;^&lt;/span&gt; &lt;span class=&quot;calendar-color-g&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;calendar-color-g&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;calendar-color-a&quot;&gt;\&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;       &lt;span class=&quot;calendar-color-g&quot;&gt;:&#39;&#39;&lt;/span&gt;  &lt;span class=&quot;calendar-color-g&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;calendar-color-w&quot;&gt;^&lt;/span&gt;  &lt;span class=&quot;calendar-day&quot;&gt;18&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d15/index.html&quot; class=&quot;calendar-day15 calendar-verycomplete&quot;&gt;##&lt;span class=&quot;calendar-color-g&quot;&gt;#&lt;/span&gt;: &lt;span class=&quot;calendar-color-g&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;calendar-color-a&quot;&gt;/&lt;/span&gt;   &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;      &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;calendar-color-a&quot;&gt;\&lt;/span&gt;    &lt;span class=&quot;calendar-color-g&quot;&gt;&#39;..&#39;&lt;/span&gt;  &lt;span class=&quot;calendar-color-a&quot;&gt;\_______&lt;/span&gt;&lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;span class=&quot;calendar-color-g&quot;&gt;&#39;.&lt;/span&gt; &lt;span class=&quot;calendar-color-g&quot;&gt;,&lt;/span&gt;      &lt;span class=&quot;calendar-day&quot;&gt;15&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a class=&quot;calendar-day19&quot;&gt;&lt;span class=&quot;calendar-color-g&quot;&gt;.&lt;/span&gt;&#39;&#39; &lt;span class=&quot;calendar-color-g&quot;&gt;.&lt;/span&gt;&#39;&lt;span class=&quot;calendar-color-a&quot;&gt;[]&lt;/span&gt;&#39;&lt;span class=&quot;calendar-color-g&quot;&gt;.&lt;/span&gt;           &lt;span class=&quot;calendar-color-a&quot;&gt;\&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;       &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-a&quot;&gt;\&lt;/span&gt;  &lt;span class=&quot;calendar-color-g&quot;&gt;:&lt;/span&gt;  &lt;span class=&quot;calendar-color-g&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;calendar-color-w&quot;&gt;^&lt;/span&gt;   &lt;span class=&quot;calendar-day&quot;&gt;19&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d10/index.html&quot; class=&quot;calendar-day10 calendar-verycomplete&quot;&gt;&#39;.&lt;span class=&quot;calendar-color-g&quot;&gt;.&lt;/span&gt;.&#39;#&lt;span class=&quot;calendar-color-g&quot;&gt;#&lt;/span&gt;#&lt;span class=&quot;calendar-color-g&quot;&gt;#&lt;/span&gt;#&lt;span class=&quot;calendar-color-g&quot;&gt;&#39;.&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;    &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-a&quot;&gt;\&lt;/span&gt;   &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;            &lt;span class=&quot;calendar-color-g&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;calendar-color-a&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;calendar-color-g&quot;&gt;&#39;&lt;/span&gt; &lt;span class=&quot;calendar-color-g&quot;&gt;,&lt;/span&gt;  &lt;span class=&quot;calendar-color-w&quot;&gt;^&lt;/span&gt; &lt;span class=&quot;calendar-color-w&quot;&gt;^&lt;/span&gt;  &lt;span class=&quot;calendar-day&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d14/index.html&quot; class=&quot;calendar-day14 calendar-verycomplete&quot;&gt;##### ,##&lt;span class=&quot;calendar-color-g&quot;&gt;#&lt;/span&gt;.&lt;span class=&quot;calendar-color-g&quot;&gt;&#39;&lt;/span&gt;           &lt;span class=&quot;calendar-color-a&quot;&gt;\&lt;/span&gt;   &lt;span class=&quot;calendar-color-g&quot;&gt;.&lt;/span&gt;       &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-g&quot;&gt;&#39;.&lt;/span&gt;&lt;span class=&quot;calendar-color-a&quot;&gt;[]&lt;/span&gt;  &lt;span class=&quot;calendar-color-g&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;calendar-color-w&quot;&gt;^&lt;/span&gt;   &lt;span class=&quot;calendar-day&quot;&gt;14&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;span class=&quot;calendar-day20&quot;&gt;#,      , &#39;.         &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-a&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;calendar-color-g&quot;&gt;&#39;&#39;,:&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;       &lt;span class=&quot;calendar-color-a&quot;&gt;_/&lt;/span&gt;&lt;span class=&quot;calendar-color-g&quot;&gt;&#39;..&lt;/span&gt;  &lt;span class=&quot;calendar-color-g&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;calendar-color-w&quot;&gt;^&lt;/span&gt;  &lt;span class=&quot;calendar-day&quot;&gt;20&lt;/span&gt;&lt;/span&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d11/index.html&quot; class=&quot;calendar-day11 calendar-verycomplete&quot;&gt;   ~ ~   , ,&#39;.   ~     &lt;span class=&quot;calendar-color-g&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;calendar-color-a&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;calendar-color-g&quot;&gt;..&#39;&lt;/span&gt;         &lt;span class=&quot;calendar-color-a&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;   &lt;span class=&quot;calendar-color-g&quot;&gt;&#39;&#39;...&lt;/span&gt;  &lt;span class=&quot;calendar-day&quot;&gt;11&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d13/index.html&quot; class=&quot;calendar-day13 calendar-verycomplete&quot;&gt;    ~ ~     , :         &lt;span class=&quot;calendar-color-g&quot;&gt;&#39;&#39;&lt;/span&gt;&lt;span class=&quot;calendar-color-a&quot;&gt;\__&lt;/span&gt;  &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;     &lt;span class=&quot;calendar-color-a&quot;&gt;/&lt;/span&gt;             &lt;span class=&quot;calendar-day&quot;&gt;13&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;span class=&quot;&quot;&gt;       ~ ~                &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;  &lt;span class=&quot;calendar-color-a&quot;&gt;\__&lt;/span&gt;    &lt;span class=&quot;calendar-color-a&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;      &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;    &lt;/span&gt;</span>
+<span class="doccomment">//! &lt;a href=&quot;d12/index.html&quot; class=&quot;calendar-day12 calendar-verycomplete&quot;&gt;                                &lt;span class=&quot;calendar-color-a&quot;&gt;\__/&lt;/span&gt;               &lt;span class=&quot;calendar-day&quot;&gt;12&lt;/span&gt; &lt;span class=&quot;calendar-mark-complete&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;calendar-mark-verycomplete&quot;&gt;*&lt;/span&gt;&lt;/a&gt;</span>
+<span class="doccomment">//! &lt;span class=&quot;&quot;&gt;                                &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;         &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;    &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt; &lt;/span&gt;</span>
+<span class="doccomment">//! &lt;span class=&quot;&quot;&gt;                           &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;                     &lt;/span&gt;</span>
+<span class="doccomment">//! &lt;span class=&quot;&quot;&gt;                             &lt;span class=&quot;calendar-color-g&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;calendar-color-g&quot;&gt;..&lt;/span&gt;   &lt;span class=&quot;calendar-color-g&quot;&gt;.&#39;&lt;/span&gt; &lt;span class=&quot;calendar-color-g&quot;&gt;..&lt;/span&gt;       &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;&lt;/span&gt;</span>
+<span class="doccomment">//! &lt;span class=&quot;&quot;&gt;                              &lt;span class=&quot;calendar-color-g&quot;&gt;&#39;.&lt;/span&gt;            &lt;span class=&quot;calendar-color-b&quot;&gt;~&lt;/span&gt;    &lt;/span&gt;</span>
+<span class="doccomment">//! &lt;/pre&gt;</span>
+
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d01</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d02</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d03</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d04</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d05</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d06</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d07</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d08</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d09</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d10</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d11</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d12</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d13</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d14</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d15</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d16</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d17</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">d18</span>;
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

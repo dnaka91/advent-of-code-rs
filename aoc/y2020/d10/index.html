@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d10` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d10"><title>aoc::y2020::d10 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d10</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2020</a></p><script>window.sidebarCurrent = {name: "d10", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2020/d10.rs.html#1-314" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2020</a>::<wbr><a class="mod" href="">d10</a></span></h1><div class="docblock"><h1 id="day-10-adapter-array" class="section-header"><a href="#day-10-adapter-array">Day 10: Adapter Array</a></h1>
+<p>Patched into the aircraft's data port, you discover weather forecasts of a massive tropical
+storm. Before you can figure out whether it will impact your vacation plans, however, your
+device suddenly turns off!</p>
+<p>Its battery is dead.</p>
+<p>You'll need to plug it in. There's only one problem: the charging outlet near your seat produces
+the wrong number of <strong>jolts</strong>. Always prepared, you make a list of all of the joltage adapters
+in your bag.</p>
+<p>Each of your joltage adapters is rated for a specific <strong>output joltage</strong> (your puzzle input).
+Any given adapter can take an input <code>1</code>, <code>2</code>, or <code>3</code> jolts <strong>lower</strong> than its rating and still
+produce its rated output joltage.</p>
+<p>In addition, your device has a built-in joltage adapter rated for <strong><code>3</code> jolts higher</strong> than the
+highest-rated adapter in your bag. (If your adapter list were <code>3</code>, <code>9</code>, and <code>6</code>, your device's
+built-in adapter would be rated for <code>12</code> jolts.)</p>
+<p>Treat the charging outlet near your seat as having an effective joltage rating of <code>0</code>.</p>
+<p>Since you have some time to kill, you might as well test all of your adapters. Wouldn't want to
+get to your resort and realize you can't even charge your device!</p>
+<p>If you <strong>use every adapter in your bag</strong> at once, what is the distribution of joltage
+differences between the charging outlet, the adapters, and your device?</p>
+<p>For example, suppose that in your bag, you have adapters with the following joltage ratings:</p>
+<pre><code class="language-txt">16
+10
+15
+5
+1
+11
+7
+19
+6
+12
+4
+</code></pre>
+<p>With these adapters, your device's built-in joltage adapter would be rated for <code>19 + 3 = 22</code>
+jolts, 3 higher than the highest-rated adapter.</p>
+<p>Because adapters can only connect to a source 1-3 jolts lower than its rating, in order to use
+every adapter, you'd need to choose them like this:</p>
+<ul>
+<li>The charging outlet has an effective rating of <code>0</code> jolts, so the only adapters that could
+connect to it directly would need to have a joltage rating of <code>1</code>, <code>2</code>, or <code>3</code> jolts. Of
+these, only one you have is an adapter rated <code>1</code> jolt (difference of <strong><code>1</code></strong>).</li>
+<li>From your <code>1</code>-jolt rated adapter, the only choice is your <code>4</code>-jolt rated adapter (difference
+of <strong><code>3</code></strong>).</li>
+<li>From the <code>4</code>-jolt rated adapter, the adapters rated <code>5</code>, <code>6</code>, or <code>7</code> are valid choices.
+However, in order to not skip any adapters, you have to pick the adapter rated <code>5</code> jolts
+(difference of <strong><code>1</code></strong>).</li>
+<li>Similarly, the next choices would need to be the adapter rated <code>6</code> and then the adapter rated
+<code>7</code> (with difference of <strong><code>1</code></strong> and <strong><code>1</code></strong>).</li>
+<li>The only adapter that works with the <code>7</code>-jolt rated adapter is the one rated <code>10</code> jolts
+(difference of <strong><code>3</code></strong>).</li>
+<li>From <code>10</code>, the choices are <code>11</code> or <code>12</code>; choose <code>11</code> (difference of <strong><code>1</code></strong>) and then <code>12</code>
+(difference of <strong><code>1</code></strong>).</li>
+<li>After <code>12</code>, only valid adapter has a rating of <code>15</code> (difference of <strong><code>3</code></strong>), then <code>16</code>
+(difference of <strong><code>1</code></strong>), then <code>19</code> (difference of <strong><code>3</code></strong>).</li>
+<li>Finally, your device's built-in adapter is always 3 higher than the highest adapter, so its
+rating is <code>22</code> jolts (always a difference of <strong><code>3</code></strong>).</li>
+</ul>
+<p>In this example, when using every adapter, there are <strong><code>7</code></strong> differences of 1 jolt and <strong><code>5</code></strong>
+differences of 3 jolts.</p>
+<p>Here is a larger example:</p>
+<pre><code class="language-txt">28
+33
+18
+42
+31
+14
+46
+20
+48
+47
+24
+23
+49
+45
+19
+38
+39
+11
+1
+32
+25
+35
+8
+17
+7
+9
+4
+2
+34
+10
+3
+</code></pre>
+<p>In this larger example, in a chain that uses all of the adapters, there are <strong><code>22</code></strong> differences
+of 1 jolt and <strong><code>10</code></strong> differences of 3 jolts.</p>
+<p>Find a chain that uses all of your adapters to connect the charging outlet to your device's
+built-in adapter and count the joltage differences between the charging outlet, the adapters,
+and your device. <strong>What is the number of 1-jolt differences multiplied by the number of 3-jolt
+differences?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>To completely determine whether you have enough adapters, you'll need to figure out how many
+different ways they can be arranged. Every arrangement needs to connect the charging outlet to
+your device. The previous rules about when adapters can successfully connect still apply.</p>
+<p>The first example above (the one that starts with <code>16</code>, <code>10</code>, <code>15</code>) supports the following
+arrangements:</p>
+<pre><code class="language-txt">(0), 1, 4, 5, 6, 7, 10, 11, 12, 15, 16, 19, (22)
+(0), 1, 4, 5, 6, 7, 10, 12, 15, 16, 19, (22)
+(0), 1, 4, 5, 7, 10, 11, 12, 15, 16, 19, (22)
+(0), 1, 4, 5, 7, 10, 12, 15, 16, 19, (22)
+(0), 1, 4, 6, 7, 10, 11, 12, 15, 16, 19, (22)
+(0), 1, 4, 6, 7, 10, 12, 15, 16, 19, (22)
+(0), 1, 4, 7, 10, 11, 12, 15, 16, 19, (22)
+(0), 1, 4, 7, 10, 12, 15, 16, 19, (22)
+</code></pre>
+<p>(The charging outlet and your device's built-in adapter are shown in parentheses.) Given the
+adapters from the first example, the total number of arrangements that connect the charging
+outlet to your device is <strong><code>8</code></strong>.</p>
+<p>The second example above (the one that starts with <code>28</code>, <code>33</code>, <code>18</code>) has many arrangements. Here
+are a few:</p>
+<pre><code class="language-txt">(0), 1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 17, 18, 19, 20, 23, 24, 25, 28, 31,
+32, 33, 34, 35, 38, 39, 42, 45, 46, 47, 48, 49, (52)
+
+(0), 1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 17, 18, 19, 20, 23, 24, 25, 28, 31,
+32, 33, 34, 35, 38, 39, 42, 45, 46, 47, 49, (52)
+
+(0), 1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 17, 18, 19, 20, 23, 24, 25, 28, 31,
+32, 33, 34, 35, 38, 39, 42, 45, 46, 48, 49, (52)
+
+(0), 1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 17, 18, 19, 20, 23, 24, 25, 28, 31,
+32, 33, 34, 35, 38, 39, 42, 45, 46, 49, (52)
+
+(0), 1, 2, 3, 4, 7, 8, 9, 10, 11, 14, 17, 18, 19, 20, 23, 24, 25, 28, 31,
+32, 33, 34, 35, 38, 39, 42, 45, 47, 48, 49, (52)
+
+(0), 3, 4, 7, 10, 11, 14, 17, 20, 23, 25, 28, 31, 34, 35, 38, 39, 42, 45,
+46, 48, 49, (52)
+
+(0), 3, 4, 7, 10, 11, 14, 17, 20, 23, 25, 28, 31, 34, 35, 38, 39, 42, 45,
+46, 49, (52)
+
+(0), 3, 4, 7, 10, 11, 14, 17, 20, 23, 25, 28, 31, 34, 35, 38, 39, 42, 45,
+47, 48, 49, (52)
+
+(0), 3, 4, 7, 10, 11, 14, 17, 20, 23, 25, 28, 31, 34, 35, 38, 39, 42, 45,
+47, 49, (52)
+
+(0), 3, 4, 7, 10, 11, 14, 17, 20, 23, 25, 28, 31, 34, 35, 38, 39, 42, 45,
+48, 49, (52)
+</code></pre>
+<p>In total, this set of adapters can connect the charging outlet to your device in <strong><code>19208</code></strong>
+distinct arrangements.</p>
+<p>You glance back down at your bag and try to remember why you brought so many adapters; there
+must be <strong>more than a trillion</strong> valid ways to arrange them! Surely, there must be an efficient
+way to count the arrangements.</p>
+<p><strong>What is the total number of distinct ways you can arrange the adapters to connect the charging
+outlet to your device?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2020::d10::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2020::d10::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2020::d10::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

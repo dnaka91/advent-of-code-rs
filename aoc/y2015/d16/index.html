@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d16` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d16"><title>aoc::y2015::d16 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d16</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2015</a></p><script>window.sidebarCurrent = {name: "d16", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2015/d16.rs.html#1-75" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2015</a>::<wbr><a class="mod" href="">d16</a></span></h1><div class="docblock"><h1 id="day-16-aunt-sue" class="section-header"><a href="#day-16-aunt-sue">Day 16: Aunt Sue</a></h1>
+<p>Your Aunt Sue has given you a wonderful gift, and you'd like to send her a thank you card.
+However, there's a small problem: she signed it &quot;From, Aunt Sue&quot;.</p>
+<p>You have 500 Aunts named &quot;Sue&quot;.</p>
+<p>So, to avoid sending the card to the wrong person, you need to figure out which Aunt Sue (which
+you conveniently number 1 to 500, for sanity) gave you the gift. You open the present and, as
+luck would have it, good ol' Aunt Sue got you a My First Crime Scene Analysis Machine! Just what
+you wanted. Or needed, as the case may be.</p>
+<p>The My First Crime Scene Analysis Machine (MFCSAM for short) can detect a few specific compounds
+in a given sample, as well as how many distinct kinds of those compounds there are. According to
+the instructions, these are what the MFCSAM can detect:</p>
+<ul>
+<li><code>children</code>, by human DNA age analysis.</li>
+<li><code>cats</code>. It doesn't differentiate individual breeds.</li>
+<li>Several seemingly random breeds of dog: <a href="https://en.wikipedia.org/wiki/Samoyed_%28dog%29"><code>samoyeds</code></a>, <a href="https://en.wikipedia.org/wiki/Pomeranian_%28dog%29"><code>pomeranians</code></a>, <a href="https://en.wikipedia.org/wiki/Akita_%28dog%29"><code>akitas</code></a>, and
+<a href="https://en.wikipedia.org/wiki/Vizsla"><code>vizslas</code></a>.</li>
+<li><code>goldfish</code>. No other kinds of fish.</li>
+<li><code>trees</code>, all in one group.</li>
+<li><code>cars</code>, presumably by exhaust or gasoline or something.</li>
+<li><code>perfumes</code>, which is handy, since many of your Aunts Sue wear a few kinds.</li>
+</ul>
+<p>In fact, many of your Aunts Sue have many of these. You put the wrapping from the gift into the
+MFCSAM. It beeps inquisitively at you a few times and then prints out a message on
+<a href="https://en.wikipedia.org/wiki/Ticker_tape">ticker tape</a>:</p>
+<pre><code class="language-txt">children: 3
+cats: 7
+samoyeds: 2
+pomeranians: 3
+akitas: 0
+vizslas: 0
+goldfish: 5
+trees: 3
+cars: 2
+perfumes: 1
+</code></pre>
+<p>You make a list of the things you can remember about each Aunt Sue. Things missing from your
+list aren't zero - you simply don't remember the value.</p>
+<p>What is the <strong>number</strong> of the Sue that got you the gift?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2015::d16::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2015::d16::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2015::d16::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

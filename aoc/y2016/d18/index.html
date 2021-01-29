@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d18` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d18"><title>aoc::y2016::d18 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d18</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a></p><script>window.sidebarCurrent = {name: "d18", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2016/d18.rs.html#1-103" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a>::<wbr><a class="mod" href="">d18</a></span></h1><div class="docblock"><h1 id="day-18-like-a-rogue" class="section-header"><a href="#day-18-like-a-rogue">Day 18: Like a Rogue</a></h1>
+<p>As you enter this room, you hear a loud click! Some of the tiles in the floor here seem to be
+pressure plates for <a href="https://nethackwiki.com/wiki/Trap">traps</a>, and the trap you just triggered has run out of... whatever it tried
+to do to you. You doubt you'll be so lucky next time.</p>
+<p>Upon closer examination, the traps and safe tiles in this room seem to follow a pattern. The
+tiles are arranged into rows that are all the same width; you take note of the safe tiles (<code>.</code>)
+and traps (<code>^</code>) in the first row (your puzzle input).</p>
+<p>The type of tile (trapped or safe) in each row is based on the types of the tiles in the same
+position, and to either side of that position, in the previous row. (If either side is off
+either end of the row, it counts as &quot;safe&quot; because there isn't a trap embedded in the wall.)</p>
+<p>For example, suppose you know the first row (with tiles marked by letters) and want to determine
+the next row (with tiles marked by numbers):</p>
+<pre><code class="language-txt">ABCDE
+12345
+</code></pre>
+<p>The type of tile <code>2</code> is based on the types of tiles <code>A</code>, <code>B</code>, and <code>C</code>; the type of tile <code>5</code> is
+based on tiles <code>D</code>, <code>E</code>, and an imaginary &quot;safe&quot; tile. Let's call these three tiles from the
+previous row the <strong>left</strong>, <strong>center</strong>, and <strong>right</strong> tiles, respectively. Then, a new tile is a
+<strong>trap</strong> only in one of the following situations:</p>
+<ul>
+<li>Its <strong>left</strong> and <strong>center</strong> tiles are traps, but its <strong>right</strong> tile is not.</li>
+<li>Its <strong>center</strong> and <strong>right</strong> tiles are traps, but its <strong>left</strong> tile is not.</li>
+<li>Only its <strong>left</strong> tile is a trap.</li>
+<li>Only its <strong>right</strong> tile is a trap.</li>
+</ul>
+<p>In any other situation, the new tile is safe.</p>
+<p>Then, starting with the row <code>..^^.</code>, you can determine the next row by applying those rules to
+each new tile:</p>
+<ul>
+<li>The leftmost character on the next row considers the left (nonexistent, so we assume &quot;safe&quot;),
+center (the first <code>.</code>, which means &quot;safe&quot;), and right (the second <code>.</code>, also &quot;safe&quot;) tiles on
+the previous row. Because all of the trap rules require a trap in at least one of the previous
+three tiles, the first tile on this new row is also safe, <code>.</code>.</li>
+<li>The second character on the next row considers its left (<code>.</code>), center (<code>.</code>), and right (<code>^</code>)
+tiles from the previous row. This matches the fourth rule: only the right tile is a trap.
+Therefore, the next tile in this new row is a trap, <code>^</code>.</li>
+<li>The third character considers <code>.^^</code>, which matches the second trap rule: its center and right
+tiles are traps, but its left tile is not. Therefore, this tile is also a trap, <code>^</code>.</li>
+<li>The last two characters in this new row match the first and third rules, respectively, and so
+they are both also traps, <code>^</code>.</li>
+</ul>
+<p>After these steps, we now know the next row of tiles in the room: <code>.^^^^</code>. Then, we continue on
+to the next row, using the same rules, and get <code>^^..^</code>. After determining two new rows, our map
+looks like this:</p>
+<pre><code class="language-txt">..^^.
+.^^^^
+^^..^
+</code></pre>
+<p>Here's a larger example with ten tiles per row and ten rows:</p>
+<pre><code class="language-txt">.^^.^.^^^^
+^^^...^..^
+^.^^.^.^^.
+..^^...^^^
+.^^^^.^^.^
+^^..^.^^..
+^^^^..^^^.
+^..^^^^.^^
+.^^^..^.^^
+^^.^^^..^^
+</code></pre>
+<p>In ten rows, this larger example has <code>38</code> safe tiles.</p>
+<p>Starting with the map in your puzzle input, in a total of <code>40</code> rows (including the starting
+row), <strong>how many safe tiles</strong> are there?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2016::d18::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2016::d18::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2016::d18::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

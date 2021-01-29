@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d06` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d06"><title>aoc::y2017::d06 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d06</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2017</a></p><script>window.sidebarCurrent = {name: "d06", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2017/d06.rs.html#1-125" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2017</a>::<wbr><a class="mod" href="">d06</a></span></h1><div class="docblock"><h1 id="day-6-memory-reallocation" class="section-header"><a href="#day-6-memory-reallocation">Day 6: Memory Reallocation</a></h1>
+<p>A debugger program here is having an issue: it is trying to repair a memory reallocation
+routine, but it keeps getting stuck in an infinite loop.</p>
+<p>In this area, there are sixteen memory banks; each memory bank can hold any number of
+<strong>blocks</strong>. The goal of the reallocation routine is to balance the blocks between the memory
+banks.</p>
+<p>The reallocation routine operates in cycles. In each cycle, it finds the memory bank with the
+most blocks (ties won by the lowest-numbered memory bank) and redistributes those blocks among
+the banks. To do this, it removes all of the blocks from the selected bank, then moves to the
+next (by index) memory bank and inserts one of the blocks. It continues doing this until it runs
+out of blocks; if it reaches the last memory bank, it wraps around to the first one.</p>
+<p>The debugger would like to know how many redistributions can be done before a blocks-in-banks
+configuration is produced that <strong>has been seen before</strong>.</p>
+<p>For example, imagine a scenario with only four memory banks:</p>
+<ul>
+<li>The banks start with <code>0</code>, <code>2</code>, <code>7</code>, and <code>0</code> blocks. The third bank has the most blocks, so it
+is chosen for redistribution.</li>
+<li>Starting with the next bank (the fourth bank) and then continuing to the first bank, the
+second bank, and so on, the <code>7</code> blocks are spread out over the memory banks. The fourth,
+first, and second banks get two blocks each, and the third bank gets one back. The final
+result looks like this: <code>2 4 1 2</code>.</li>
+<li>Next, the second bank is chosen because it contains the most blocks (four). Because there are
+four memory banks, each gets one block. The result is: <code>3 1 2 3</code>.</li>
+<li>Now, there is a tie between the first and fourth memory banks, both of which have three
+blocks. The first bank wins the tie, and its three blocks are distributed evenly over the
+other three banks, leaving it with none: <code>0 2 3 4</code>.</li>
+<li>The fourth bank is chosen, and its four blocks are distributed such that each of the four
+banks receives one: <code>1 3 4 1</code>.</li>
+<li>The third bank is chosen, and the same thing happens: <code>2 4 1 2</code>.</li>
+</ul>
+<p>At this point, we've reached a state we've seen before: <code>2 4 1 2</code> was already seen. The infinite
+loop is detected after the fifth block redistribution cycle, and so the answer in this example
+is <code>5</code>.</p>
+<p>Given the initial block counts in your puzzle input, <strong>how many redistribution cycles</strong> must be
+completed before a configuration is produced that has been seen before?</p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>Out of curiosity, the debugger would also like to know the size of the loop: starting from a
+state that has already been seen, how many block redistribution cycles must be performed before
+that same state is seen again?</p>
+<p>In the example above, <code>2 4 1 2</code> is seen again after four cycles, and so the answer in that
+example would be <code>4</code>.</p>
+<p><strong>How many cycles</strong> are in the infinite loop that arises from the configuration in your puzzle
+input?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2017::d06::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2017::d06::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2017::d06::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

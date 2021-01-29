@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d14` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d14"><title>aoc::y2019::d14 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d14</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a></p><script>window.sidebarCurrent = {name: "d14", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2019/d14.rs.html#1-143" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a>::<wbr><a class="mod" href="">d14</a></span></h1><div class="docblock"><h1 id="day-14-space-stoichiometry" class="section-header"><a href="#day-14-space-stoichiometry">Day 14: Space Stoichiometry</a></h1>
+<p>As you approach the rings of Saturn, your ship's <strong>low fuel</strong> indicator turns on. There isn't
+any fuel here, but the rings have plenty of raw material. Perhaps your ship's Inter-Stellar
+Refinery Union brand <strong>nanofactory</strong> can turn these raw materials into fuel.</p>
+<p>You ask the nanofactory to produce a list of the <strong>reactions</strong> it can perform that are relevant
+to this process (your puzzle input). Every reaction turns some quantities of specific <strong>input
+chemicals</strong> into some quantity of an <strong>output chemical</strong>. Almost every <strong>chemical</strong> is produced
+by exactly one reaction; the only exception, <code>ORE</code>, is the raw material input to the entire
+process and is not produced by a reaction.</p>
+<p>You just need to know how much <strong><code>ORE</code></strong> you'll need to collect before you can produce one unit
+of <strong><code>FUEL</code></strong>.</p>
+<p>Each reaction gives specific quantities for its inputs and output; reactions cannot be partially
+run, so only whole integer multiples of these quantities can be used. (It's okay to have
+leftover chemicals when you're done, though.) For example, the reaction <code>1 A, 2 B, 3 C =&gt; 2 D</code>
+means that exactly 2 units of chemical <code>D</code> can be produced by consuming exactly 1 <code>A</code>, 2 <code>B</code> and
+3 <code>C</code>. You can run the full reaction as many times as necessary; for example, you could produce
+10 <code>D</code> by consuming 5 <code>A</code>, 10 <code>B</code>, and 15 <code>C</code>.</p>
+<p>Suppose your nanofactory produces the following list of reactions:</p>
+<pre><code class="language-txt">10 ORE =&gt; 10 A
+1 ORE =&gt; 1 B
+7 A, 1 B =&gt; 1 C
+7 A, 1 C =&gt; 1 D
+7 A, 1 D =&gt; 1 E
+7 A, 1 E =&gt; 1 FUEL
+</code></pre>
+<p>The first two reactions use only <code>ORE</code> as inputs; they indicate that you can produce as much of
+chemical <code>A</code> as you want (in increments of 10 units, each 10 costing 10 <code>ORE</code>) and as much of
+chemical <code>B</code> as you want (each costing 1 <code>ORE</code>). To produce 1 <code>FUEL</code>, a total of <strong>31</strong> <code>ORE</code> is
+required: 1 <code>ORE</code> to produce 1 <code>B</code>, then 30 more <code>ORE</code> to produce the 7 + 7 + 7 + 7 = 28 <code>A</code>
+(with 2 extra <code>A</code> wasted) required in the reactions to convert the <code>B</code> into <code>C</code>, <code>C</code> into <code>D</code>,
+<code>D</code> into <code>E</code>, and finally <code>E</code> into <code>FUEL</code>. (30 <code>A</code> is produced because its reaction requires
+that it is created in increments of 10.)</p>
+<p>Or, suppose you have the following list of reactions:</p>
+<pre><code class="language-txt">9 ORE =&gt; 2 A
+8 ORE =&gt; 3 B
+7 ORE =&gt; 5 C
+3 A, 4 B =&gt; 1 AB
+5 B, 7 C =&gt; 1 BC
+4 C, 1 A =&gt; 1 CA
+2 AB, 3 BC, 4 CA =&gt; 1 FUEL
+</code></pre>
+<p>The above list of reactions requires <strong>165</strong> <code>ORE</code> to produce 1 <code>FUEL</code>:</p>
+<ul>
+<li>Consume 45 <code>ORE</code> to produce 10 <code>A</code>.</li>
+<li>Consume 64 <code>ORE</code> to produce 24 <code>B</code>.</li>
+<li>Consume 56 <code>ORE</code> to produce 40 <code>C</code>.</li>
+<li>Consume 6 <code>A</code>, 8 <code>B</code> to produce 2 <code>AB</code>.</li>
+<li>Consume 15 <code>B</code>, 21 <code>C</code> to produce 3 <code>BC</code>.</li>
+<li>Consume 16 <code>C</code>, 4 <code>A</code> to produce 4 <code>CA</code>.</li>
+<li>Consume 2 <code>AB</code>, 3 <code>BC</code>, 4 <code>CA</code> to produce 1 <code>FUEL</code>.</li>
+</ul>
+<p>Here are some larger examples:</p>
+<ul>
+<li>
+<p><strong>13312</strong> <code>ORE</code> for 1 <code>FUEL</code>:</p>
+<pre><code class="language-txt">157 ORE =&gt; 5 NZVS
+165 ORE =&gt; 6 DCFZ
+44 XJWVT, 5 KHKGT, 1 QDVJ, 29 NZVS, 9 GPVTF, 48 HKGWZ =&gt; 1 FUEL
+12 HKGWZ, 1 GPVTF, 8 PSHF =&gt; 9 QDVJ
+179 ORE =&gt; 7 PSHF
+177 ORE =&gt; 5 HKGWZ
+7 DCFZ, 7 PSHF =&gt; 2 XJWVT
+165 ORE =&gt; 2 GPVTF
+3 DCFZ, 7 NZVS, 5 HKGWZ, 10 PSHF =&gt; 8 KHKGT
+</code></pre>
+</li>
+<li>
+<p><strong>180697</strong> <code>ORE</code> for 1 <code>FUEL</code>:</p>
+<pre><code class="language-txt">2 VPVL, 7 FWMGM, 2 CXFTF, 11 MNCFX =&gt; 1 STKFG
+17 NVRVD, 3 JNWZP =&gt; 8 VPVL
+53 STKFG, 6 MNCFX, 46 VJHF, 81 HVMC, 68 CXFTF, 25 GNMV =&gt; 1 FUEL
+22 VJHF, 37 MNCFX =&gt; 5 FWMGM
+139 ORE =&gt; 4 NVRVD
+144 ORE =&gt; 7 JNWZP
+5 MNCFX, 7 RFSQX, 2 FWMGM, 2 VPVL, 19 CXFTF =&gt; 3 HVMC
+5 VJHF, 7 MNCFX, 9 VPVL, 37 CXFTF =&gt; 6 GNMV
+145 ORE =&gt; 6 MNCFX
+1 NVRVD =&gt; 8 CXFTF
+1 VJHF, 6 MNCFX =&gt; 4 RFSQX
+176 ORE =&gt; 6 VJHF
+</code></pre>
+</li>
+<li>
+<p><strong>2210736</strong> <code>ORE</code> for 1 <code>FUEL</code>:</p>
+<pre><code class="language-txt">171 ORE =&gt; 8 CNZTR
+7 ZLQW, 3 BMBT, 9 XCVML, 26 XMNCP, 1 WPTQ, 2 MZWV, 1 RJRHP =&gt; 4 PLWSL
+114 ORE =&gt; 4 BHXH
+14 VRPVC =&gt; 6 BMBT
+6 BHXH, 18 KTJDG, 12 WPTQ, 7 PLWSL, 31 FHTLT, 37 ZDVW =&gt; 1 FUEL
+6 WPTQ, 2 BMBT, 8 ZLQW, 18 KTJDG, 1 XMNCP, 6 MZWV, 1 RJRHP =&gt; 6 FHTLT
+15 XDBXC, 2 LTCX, 1 VRPVC =&gt; 6 ZLQW
+13 WPTQ, 10 LTCX, 3 RJRHP, 14 XMNCP, 2 MZWV, 1 ZLQW =&gt; 1 ZDVW
+5 BMBT =&gt; 4 WPTQ
+189 ORE =&gt; 9 KTJDG
+1 MZWV, 17 XDBXC, 3 XCVML =&gt; 2 XMNCP
+12 VRPVC, 27 CNZTR =&gt; 2 XDBXC
+15 KTJDG, 12 BHXH =&gt; 5 XCVML
+3 BHXH, 2 VRPVC =&gt; 7 MZWV
+121 ORE =&gt; 7 VRPVC
+7 XCVML =&gt; 6 RJRHP
+5 BHXH, 4 VRPVC =&gt; 5 LTCX
+</code></pre>
+</li>
+</ul>
+<p>Given the list of reactions in your puzzle input, <strong>what is the minimum amount of <code>ORE</code> required
+to produce exactly 1 <code>FUEL</code>?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2019::d14::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2019::d14::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2019::d14::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

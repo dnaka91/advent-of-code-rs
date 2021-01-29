@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `y2019` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, y2019"><title>aoc::y2019 - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a><p class="location">Module y2019</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#modules">Modules</a></li></ul></div><p class="location"><a href="../index.html">aoc</a></p><script>window.sidebarCurrent = {name: "y2019", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../src/aoc/y2019/mod.rs.html#1-96" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../index.html">aoc</a>::<wbr><a class="mod" href="">y2019</a></span></h1><div class="docblock"><h1 id="year-2019" class="section-header"><a href="#year-2019">Year 2019</a></h1><style>
+.calendar {
+  cursor: default;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: -moz-none;
+  -o-user-select: none;
+  user-select: none;
+  color: #666666;
+  background-color: #0f0f23;
+}
+.calendar > span {
+  color: #333333;
+}
+.calendar > a {
+  text-decoration: none !important;
+  color: #666666 !important;
+  outline: none;
+  cursor: default;
+}
+.calendar a:hover, .calendar a:focus {
+  background-color: #1e1e46;
+  background-color: rgba(119,119,165,.2);
+  cursor: pointer;
+}
+.calendar .calendar-day { color: #666666; }
+.calendar a .calendar-day { color: #cccccc; }
+.calendar a .calendar-mark-complete,
+.calendar a .calendar-mark-verycomplete { visibility: hidden; }
+.calendar a.calendar-complete     .calendar-mark-complete,
+.calendar a.calendar-verycomplete .calendar-mark-complete { visibility: visible; color: #ffff66; }
+.calendar a.calendar-verycomplete .calendar-mark-verycomplete { visibility: visible; color: #ffff66; }
+
+.calendar .calendar-s { color: #333; }
+.calendar a .calendar-t { color:#cccccc; }
+</style>
+<pre class="calendar">
+<a href="d25/index.html" class="calendar-day25">             <span class="calendar-s">.</span>     ''..     ':.      <span class="calendar-s">.</span>       '.    <span class="calendar-day">25</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d24/index.html" class="calendar-day24">.......                ''.<span class="calendar-s">.</span>    '.          <span class="calendar-s">.</span>   :   <span class="calendar-day">24</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d23/index.html" class="calendar-day23">       '''''...           ''.    '.             '  <span class="calendar-day">23</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d22/index.html" class="calendar-day22"> <span class="calendar-s">.</span>             ''..          '.    '.       <span class="calendar-s">.</span>      <span class="calendar-day">22</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d21/index.html" class="calendar-day21">......             ''.       <span class="calendar-s">.</span> '.    '.            <span class="calendar-day">21</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d20/index.html" class="calendar-day20">      ''''...     <span class="calendar-s">.</span>   '.        <span class="calendar-s">.</span>'.    :           <span class="calendar-day">20</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d19/index.html" class="calendar-day19">             ''.. <span class="calendar-s">.</span>     '.   <span class="calendar-s">.</span>     '.<span class="calendar-s">.</span>  '.         <span class="calendar-day">19</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d18/index.html" class="calendar-day18">.....            ''.      '. <span class="calendar-s">.</span>      '.   '.        <span class="calendar-day">18</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d17/index.html" class="calendar-day17">     ''''...        '.      '.     <span class="calendar-s">.</span> ':   '.       <span class="calendar-day">17</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d16/index.html" class="calendar-day16">            '..       '.      '.       :    :      <span class="calendar-day">16</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d15/index.html" class="calendar-day15">    <span class="calendar-s">.</span>          '.       '.     '.   <span class="calendar-s">.</span><span class="calendar-s">.</span>  :    :     <span class="calendar-day">15</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d14/index.html" class="calendar-day14">'''''...  <span class="calendar-s">.</span>      '.     <span class="calendar-s">.</span>'.     '.<span class="calendar-s">.</span>     <span class="calendar-s">.</span>:   '.    <span class="calendar-day">14</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d13/index.html" class="calendar-day13">     <span class="calendar-s">.</span>  ''..       '.     '.     '.      '.   :    <span class="calendar-day">13</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d12/index.html" class="calendar-day12">''''...   <span class="calendar-s">.</span> '.      '.     '. <span class="calendar-s">.</span>   '.      :    :   <span class="calendar-day">12</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d11/index.html" class="calendar-day11">       ''.    '.      :     '.     :      '.   :   <span class="calendar-day">11</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d10/index.html" class="calendar-day10">'''''..   '.   '.     <span class="calendar-t">[.]</span> <span class="calendar-s">.</span>  :    <span class="calendar-s">.</span>'.      :   '.  <span class="calendar-day">10</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d09/index.html" class="calendar-day9 calendar-verycomplete">       '.  '.   '.     '.     :     :      :    :  <span class="calendar-day"> 9</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d08/index.html" class="calendar-day8 calendar-verycomplete"><span class="calendar-s">.</span>   <span class="calendar-s">.</span>    :  '.   <span style="text-shadow:0 0 3px #f7a859,0 0 5px #f7a859,0 0 10px #f7a859,0 0 15px #f7a859; color:#f7a859;">.</span>      :   <span class="calendar-s">.</span> :  <span class="calendar-s">.</span>  :       :   :  <span class="calendar-day"> 8</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d07/index.html" class="calendar-day7 calendar-verycomplete">'''.      :  :   :      :     :     :<span class="calendar-s">.</span>      :   :  <span class="calendar-day"> 7</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d06/index.html" class="calendar-day6 calendar-verycomplete">   <span style="text-shadow:0 0 3px #bebcbe,0 0 5px #bebcbe,0 0 10px #bebcbe,0 0 15px #bebcbe; color:#bebcbe;">.</span>    <span class="calendar-s">.</span> :  :   :   <span class="calendar-s">.</span>  :     :     :   <span class="calendar-s">.</span>   :   :  <span class="calendar-day"> 6</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d05/index.html" class="calendar-day5 calendar-verycomplete">...'      :  :<span class="calendar-s">.</span>  :      :     : <span class="calendar-s">.</span>   :       :   :  <span class="calendar-day"> 5</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d04/index.html" class="calendar-day4 calendar-verycomplete">         <span style="text-shadow:0 0 3px #e3e2e0,0 0 5px #e3e2e0,0 0 10px #e3e2e0,0 0 15px #e3e2e0; color:#e3e2e0;">.</span>  .'   :      :     :     :       : <span class="calendar-s">.</span> :  <span class="calendar-day"> 4</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d03/index.html" class="calendar-day3 calendar-verycomplete">       .'<span class="calendar-s">.</span> .'   .' <span class="calendar-s">.</span>   .'  <span class="calendar-s">.</span>  :     :      :    :  <span class="calendar-day"> 3</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d02/index.html" class="calendar-day2 calendar-verycomplete">.....''   <span style="text-shadow:0 0 3px #91a5bd,0 0 5px #91a5bd,0 0 10px #91a5bd,0 0 15px #91a5bd; color:#91a5bd;">.</span>'   .'      : <span class="calendar-s">.</span>   :    <span class="calendar-s">.</span>.'      :   .'  <span class="calendar-day"> 2</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+<a href="d01/index.html" class="calendar-day1 calendar-verycomplete">       ..'    .'   <span class="calendar-s">.</span>  :     .'     :      .'   :   <span class="calendar-day"> 1</span> <span class="calendar-mark-complete">*</span><span class="calendar-mark-verycomplete">*</span></a>
+</pre></div><h2 id="modules" class="section-header"><a href="#modules">Modules</a></h2>
+<table><tr class="module-item"><td><a class="mod" href="d01/index.html" title="aoc::y2019::d01 mod">d01</a></td><td class="docblock-short"><p>Day 1: The Tyranny of the Rocket Equation</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d02/index.html" title="aoc::y2019::d02 mod">d02</a></td><td class="docblock-short"><p>Day 2: 1202 Program Alarm</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d03/index.html" title="aoc::y2019::d03 mod">d03</a></td><td class="docblock-short"><p>Day 3: Crossed Wires</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d04/index.html" title="aoc::y2019::d04 mod">d04</a></td><td class="docblock-short"><p>Day 4: Secure Container</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d05/index.html" title="aoc::y2019::d05 mod">d05</a></td><td class="docblock-short"><p>Day 5: Sunny with a Chance of Asteroids</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d06/index.html" title="aoc::y2019::d06 mod">d06</a></td><td class="docblock-short"><p>Day 6: Universal Orbit Map</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d07/index.html" title="aoc::y2019::d07 mod">d07</a></td><td class="docblock-short"><p>Day 7: Amplification Circuit</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d08/index.html" title="aoc::y2019::d08 mod">d08</a></td><td class="docblock-short"><p>Day 8: Space Image Format</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d09/index.html" title="aoc::y2019::d09 mod">d09</a></td><td class="docblock-short"><p>Day 9: Sensor Boost</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d10/index.html" title="aoc::y2019::d10 mod">d10</a></td><td class="docblock-short"><p>Day 10: Monitoring Station</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d11/index.html" title="aoc::y2019::d11 mod">d11</a></td><td class="docblock-short"><p>Day 11: Space Police</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d12/index.html" title="aoc::y2019::d12 mod">d12</a></td><td class="docblock-short"><p>Day 12: The N-Body Problem</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d13/index.html" title="aoc::y2019::d13 mod">d13</a></td><td class="docblock-short"><p>Day 13: Care Package</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d14/index.html" title="aoc::y2019::d14 mod">d14</a></td><td class="docblock-short"><p>Day 14: Space Stoichiometry</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d15/index.html" title="aoc::y2019::d15 mod">d15</a></td><td class="docblock-short"><p>Day 15: Oxygen System</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d16/index.html" title="aoc::y2019::d16 mod">d16</a></td><td class="docblock-short"><p>Day 16: Flawed Frequency Transmission</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d17/index.html" title="aoc::y2019::d17 mod">d17</a></td><td class="docblock-short"><p>Day 17: Set and Forget</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d18/index.html" title="aoc::y2019::d18 mod">d18</a></td><td class="docblock-short"><p>Day 18: Many-Worlds Interpretation</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d19/index.html" title="aoc::y2019::d19 mod">d19</a></td><td class="docblock-short"><p>Day 19: Tractor Beam</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d20/index.html" title="aoc::y2019::d20 mod">d20</a></td><td class="docblock-short"><p>Day 20: Donut Maze</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d21/index.html" title="aoc::y2019::d21 mod">d21</a></td><td class="docblock-short"><p>Day 21: Springdroid Adventure</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d22/index.html" title="aoc::y2019::d22 mod">d22</a></td><td class="docblock-short"><p>Day 22: Slam Shuffle</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d23/index.html" title="aoc::y2019::d23 mod">d23</a></td><td class="docblock-short"><p>Day 23: Category Six</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d24/index.html" title="aoc::y2019::d24 mod">d24</a></td><td class="docblock-short"><p>Day 24: Planet of Discord</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="d25/index.html" title="aoc::y2019::d25 mod">d25</a></td><td class="docblock-short"><p>Day 25: Cryostasis</p>
+</td></tr><tr class="module-item"><td><a class="mod" href="intcode/index.html" title="aoc::y2019::intcode mod">intcode</a></td><td class="docblock-short"><p>The <strong>Intcode Program</strong> used in solutions for day <a href="../../aoc/y2019/d02/index.html">2</a>, <a href="../../aoc/y2019/d05/index.html">5</a>, <a href="../../aoc/y2019/d07/index.html">7</a> and <a href="../../aoc/y2019/d09/index.html">9</a>.</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "aoc";</script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

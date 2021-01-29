@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d18` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d18"><title>aoc::y2015::d18 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d18</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2015</a></p><script>window.sidebarCurrent = {name: "d18", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2015/d18.rs.html#1-111" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2015</a>::<wbr><a class="mod" href="">d18</a></span></h1><div class="docblock"><h1 id="day-18-like-a-gif-for-your-yard" class="section-header"><a href="#day-18-like-a-gif-for-your-yard">Day 18: Like a GIF For Your Yard</a></h1>
+<p>After the <a href="https://adventofcode.com/2015/day/6">million lights incident</a>, the fire code has gotten stricter: now, at most ten
+thousand lights are allowed. You arrange them in a 100x100 grid.</p>
+<p>Never one to let you down, Santa again mails you instructions on the ideal lighting
+configuration. With so few lights, he says, you'll have to resort to <strong>animation</strong>.</p>
+<p>Start by setting your lights to the included initial configuration (your puzzle input). A <code>#</code>
+means &quot;on&quot;, and a <code>.</code> means &quot;off&quot;.</p>
+<p>Then, animate your grid in steps, where each step decides the next configuration based on the
+current one. Each light's next state (either on or off) depends on its current state and the
+current states of the eight lights adjacent to it (including diagonals). Lights on the edge of
+the grid might have fewer than eight neighbors; the missing ones always count as &quot;off&quot;.</p>
+<p>For example, in a simplified 6x6 grid, the light marked <code>A</code> has the neighbors numbered <code>1</code>
+through <code>8</code>, and the light marked <code>B</code>, which is on an edge, only has the neighbors marked <code>1</code>
+through <code>5</code>:</p>
+<pre><code class="language-txt">1B5...
+234...
+......
+..123.
+..8A4.
+..765.
+</code></pre>
+<p>The state a light should have next is based on its current state (on or off) plus the <strong>number
+of neighbors that are on</strong>:</p>
+<ul>
+<li>A light which is <strong>on</strong> stays on when <code>2</code> or <code>3</code> neighbors are on, and turns off otherwise.</li>
+<li>A light which is <strong>off</strong> turns on if exactly <code>3</code> neighbors are on, and stays off otherwise.</li>
+</ul>
+<p>All of the lights update simultaneously; they all consider the same current state before moving
+to the next.</p>
+<p>Here's a few steps from an example configuration of another 6x6 grid:</p>
+<pre><code class="language-txt">Initial state:
+.#.#.#
+...##.
+#....#
+..#...
+#.#..#
+####..
+
+After 1 step:
+..##..
+..##.#
+...##.
+......
+#.....
+#.##..
+
+After 2 steps:
+..###.
+......
+..###.
+......
+.#....
+.#....
+
+After 3 steps:
+...#..
+......
+...#..
+..##..
+......
+......
+
+After 4 steps:
+......
+......
+..##..
+..##..
+......
+......
+</code></pre>
+<p>After <code>4</code> steps, this example has four lights on.</p>
+<p>In your grid of 100x100 lights, given your initial configuration, <strong>how many lights are on after
+100 steps</strong>?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2015::d18::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2015::d18::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2015::d18::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

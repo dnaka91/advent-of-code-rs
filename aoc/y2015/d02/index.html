@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d02` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d02"><title>aoc::y2015::d02 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d02</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2015</a></p><script>window.sidebarCurrent = {name: "d02", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2015/d02.rs.html#1-104" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2015</a>::<wbr><a class="mod" href="">d02</a></span></h1><div class="docblock"><h1 id="day-2-i-was-told-there-would-be-no-math" class="section-header"><a href="#day-2-i-was-told-there-would-be-no-math">Day 2: I Was Told There Would Be No Math</a></h1>
+<p>The elves are running low on wrapping paper, and so they need to submit an order for more. They
+have a list of the dimensions (length <code>l</code>, width <code>w</code>, and height <code>h</code>) of each present, and only
+want to order exactly as much as they need.</p>
+<p>Fortunately, every present is a box (a perfect <a href="https://en.wikipedia.org/wiki/Cuboid#Rectangular_cuboid">right rectangular prism</a>), which makes
+calculating the required wrapping paper for each gift a little easier: find the surface area of
+the box, which is <code>2*l*w + 2*w*h + 2*h*l</code>. The elves also need a little extra paper for each
+present: the area of the smallest side.</p>
+<p>For example:</p>
+<ul>
+<li>A present with dimensions <code>2x3x4</code> requires <code>2*6 + 2*12 + 2*8 = 52</code> square feet of wrapping
+paper plus <code>6</code> square feet of slack, for a total of <code>58</code> square feet.</li>
+<li>A present with dimensions <code>1x1x10</code> requires <code>2*1 + 2*10 + 2*10 = 42</code> square feet of wrapping
+paper plus <code>1</code> square foot of slack, for a total of <code>43</code> square feet.</li>
+</ul>
+<p>All numbers in the elves' list are in feet. How many total <strong>square feet of wrapping paper</strong>
+should they order?</p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>The elves are also running low on ribbon. Ribbon is all the same width, so they only have to
+worry about the length they need to order, which they would again like to be exact.</p>
+<p>The ribbon required to wrap a present is the shortest distance around its sides, or the smallest
+perimeter of any one face. Each present also requires a bow made out of ribbon as well; the feet
+of ribbon required for the perfect bow is equal to the cubic feet of volume of the present.
+Don't ask how they tie the bow, though; they'll never tell.</p>
+<p>For example:</p>
+<ul>
+<li>A present with dimensions <code>2x3x4</code> requires <code>2+2+3+3 = 10</code> feet of ribbon to wrap the present
+plus <code>2*3*4 = 24</code> feet of ribbon for the bow, for a total of <code>34</code> feet.</li>
+<li>A present with dimensions <code>1x1x10</code> requires <code>1+1+1+1 = 4</code> feet of ribbon to wrap the present
+plus <code>1*1*10 = 10</code> feet of ribbon for the bow, for a total of <code>14</code> feet.</li>
+</ul>
+<p>How many total <strong>feet of ribbon</strong> should they order?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2015::d02::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2015::d02::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2015::d02::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

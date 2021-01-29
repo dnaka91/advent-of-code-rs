@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d09` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d09"><title>aoc::y2019::d09 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d09</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a></p><script>window.sidebarCurrent = {name: "d09", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2019/d09.rs.html#1-116" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a>::<wbr><a class="mod" href="">d09</a></span></h1><div class="docblock"><h1 id="day-9-sensor-boost" class="section-header"><a href="#day-9-sensor-boost">Day 9: Sensor Boost</a></h1>
+<p>You've just said goodbye to the rebooted rover and left Mars when you receive a faint distress
+signal coming from the asteroid belt. It must be the Ceres monitoring station!</p>
+<p>In order to lock on to the signal, you'll need to boost your sensors. The Elves send up the
+latest <strong>BOOST</strong> program - Basic Operation Of System Test.</p>
+<p>While BOOST (your puzzle input) is capable of boosting your sensors, for tenuous safety reasons,
+it refuses to do so until the computer it runs on passes some checks to demonstrate it is a
+<strong>complete Intcode computer</strong>.</p>
+<p><a href="../../../aoc/y2019/d05/index.html">Your existing Intcode computer</a> is missing one key feature: it needs support for parameters in
+<strong>relative mode</strong>.</p>
+<p>Parameters in mode <code>2</code>, <strong>relative mode</strong>, behave very similarly to parameters in <strong>position
+mode</strong>: the parameter is interpreted as a position. Like position mode, parameters in relative
+mode can be read from or written to.</p>
+<p>The important difference is that relative mode parameters don't count from address <code>0</code>. Instead,
+they count from a value called the <strong>relative base</strong>. The <strong>relative base</strong> starts at <code>0</code>.</p>
+<p>The address a relative mode parameter refers to is itself <strong>plus</strong> the current <strong>relative
+base</strong>. When the relative base is <code>0</code>, relative mode parameters and position mode parameters
+with the same value refer to the same address.</p>
+<p>For example, given a relative base of <code>50</code>, a relative mode parameter of <code>-7</code> refers to memory
+address <code>50 + -7 = 43</code>.</p>
+<p>The relative base is modified with the <strong>relative base offset</strong> instruction:</p>
+<ul>
+<li>Opcode <code>9</code> <strong>adjusts the relative base</strong> by the value of its only parameter. The relative base
+increases (or decreases, if the value is negative) by the value of the parameter.</li>
+</ul>
+<p>For example, if the relative base is <code>2000</code>, then after the instruction <code>109,19</code>, the relative
+base would be <code>2019</code>. If the next instruction were <code>204,-34</code>, then the value at address <code>1985</code>
+would be output.</p>
+<p>Your Intcode computer will also need a few other capabilities:</p>
+<ul>
+<li>The computer's available memory should be much larger than the initial program. Memory beyond
+the initial program starts with the value <code>0</code> and can be read or written like any other
+memory. (It is invalid to try to access memory at a negative address, though.)</li>
+<li>The computer should have support for large numbers. Some instructions near the beginning of
+the BOOST program will verify this capability.</li>
+</ul>
+<p>Here are some example programs that use these features:</p>
+<ul>
+<li><code>109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99</code> takes no input and produces a
+<a href="https://en.wikipedia.org/wiki/Quine_(computing)">copy of itself</a> as output.</li>
+<li><code>1102,34915192,34915192,7,4,7,99,0</code> should output a 16-digit number.</li>
+<li><code>104,1125899906842624,99</code> should output the large number in the middle.</li>
+</ul>
+<p>The BOOST program will ask for a single input; run it in test mode by providing it the value
+<code>1</code>. It will perform a series of checks on each opcode, output any opcodes (and the associated
+parameter modes) that seem to be functioning incorrectly, and finally output a BOOST keycode.</p>
+<p>Once your Intcode computer is fully functional, the BOOST program should report no
+malfunctioning opcodes when run in test mode; it should only output a single value, the BOOST
+keycode. <strong>What BOOST keycode does it produce?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p><strong>You now have a complete Intcode computer.</strong></p>
+<p>Finally, you can lock on to the Ceres distress signal! You just need to boost your sensors using
+the BOOST program.</p>
+<p>The program runs in sensor boost mode by providing the input instruction the value <code>2</code>. Once
+run, it will boost the sensors automatically, but it might take a few seconds to complete the
+operation on slower hardware. In sensor boost mode, the program will output a single value:
+<strong>the coordinates of the distress signal</strong>.</p>
+<p>Run the BOOST program in sensor boost mode. <strong>What are the coordinates of the distress signal?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2019::d09::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2019::d09::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2019::d09::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d13` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d13"><title>aoc::y2020::d13 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d13</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2020</a></p><script>window.sidebarCurrent = {name: "d13", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2020/d13.rs.html#1-258" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2020</a>::<wbr><a class="mod" href="">d13</a></span></h1><div class="docblock"><h1 id="day-13-shuttle-search" class="section-header"><a href="#day-13-shuttle-search">Day 13: Shuttle Search</a></h1>
+<p>Your ferry can make it safely to a nearby port, but it won't get much further. When you call to
+book another ship, you discover that no ships embark from that port to your vacation island.
+You'll need to get from the port to the nearest airport.</p>
+<p>Fortunately, a shuttle bus service is available to bring you from the sea port to the airport!
+Each bus has an ID number that also indicates <strong>how often the bus leaves for the airport</strong>.</p>
+<p>Bus schedules are defined based on a <strong>timestamp</strong> that measures the <strong>number of minutes</strong> since
+some fixed reference point in the past. At timestamp <code>0</code>, every bus simultaneously departed from
+the sea port. After that, each bus travels to the airport, then various other locations, and
+finally returns to the sea port to repeat its journey forever.</p>
+<p>The time this loop takes a particular bus is also its ID number: the bus with ID <code>5</code> departs
+from the sea port at timestamps <code>0</code>, <code>5</code>, <code>10</code>, <code>15</code>, and so on. The bus with ID <code>11</code> departs at
+<code>0</code>, <code>11</code>, <code>22</code>, <code>33</code>, and so on. If you are there when the bus departs, you can ride that bus
+to the airport!</p>
+<p>Your notes (your puzzle input) consist of two lines. The first line is your estimate of the
+<strong>earliest timestamp you could depart on a bus</strong>. The second line lists the bus IDs that are in
+service according to the shuttle company; entries that show <code>x</code> must be out of service, so you
+decide to ignore them.</p>
+<p>To save time once you arrive, your goal is to figure out <strong>the earliest bus you can take to the
+airport</strong>. (There will be exactly one such bus.)</p>
+<p>For example, suppose you have the following notes:</p>
+<pre><code class="language-txt">939
+7,13,x,x,59,x,31,19
+</code></pre>
+<p>Here, the earliest timestamp you could depart is <code>939</code>, and the bus IDs in service are <code>7</code>,
+<code>13</code>, <code>59</code>, <code>31</code>, and <code>19</code>. Near timestamp <code>939</code>, these bus IDs depart at the times marked <code>D</code>:</p>
+<pre><code class="language-txt">time   bus 7   bus 13  bus 59  bus 31  bus 19
+929      .       .       .       .       .
+930      .       .       .       D       .
+931      D       .       .       .       D
+932      .       .       .       .       .
+933      .       .       .       .       .
+934      .       .       .       .       .
+935      .       .       .       .       .
+936      .       D       .       .       .
+937      .       .       .       .       .
+938      D       .       .       .       .
+939      .       .       .       .       .
+940      .       .       .       .       .
+941      .       .       .       .       .
+942      .       .       .       .       .
+943      .       .       .       .       .
+944      .       .       D       .       .
+945      D       .       .       .       .
+946      .       .       .       .       .
+947      .       .       .       .       .
+948      .       .       .       .       .
+949      .       D       .       .       .
+</code></pre>
+<p>The earliest bus you could take is bus ID <code>59</code>. It doesn't depart until timestamp <code>944</code>, so you
+would need to wait <code>944 - 939 = 5</code> minutes before it departs. Multiplying the bus ID by the
+number of minutes you'd need to wait gives <strong><code>295</code></strong>.</p>
+<p><strong>What is the ID of the earliest bus you can take to the airport multiplied by the number of
+minutes you'll need to wait for that bus?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>The shuttle company is running a contest: one gold coin for anyone that can find the earliest
+timestamp such that the first bus ID departs at that time and each subsequent listed bus ID
+departs at that subsequent minute. (The first line in your input is no longer relevant.)</p>
+<p>For example, suppose you have the same list of bus IDs as above:</p>
+<pre><code class="language-txt">7,13,x,x,59,x,31,19
+</code></pre>
+<p>An <code>x</code> in the schedule means there are no constraints on what bus IDs must depart at that time.</p>
+<p>This means you are looking for the earliest timestamp (called <code>t</code>) such that:</p>
+<ul>
+<li>Bus ID <code>7</code> departs at timestamp <code>t</code>.</li>
+<li>Bus ID <code>13</code> departs one minute after timestamp <code>t</code>.</li>
+<li>There are no requirements or restrictions on departures at two or three minutes after
+timestamp <code>t</code>.</li>
+<li>Bus ID <code>59</code> departs four minutes after timestamp <code>t</code>.</li>
+<li>There are no requirements or restrictions on departures at five minutes after timestamp <code>t</code>.</li>
+<li>Bus ID <code>31</code> departs six minutes after timestamp <code>t</code>.</li>
+<li>Bus ID <code>19</code> departs seven minutes after timestamp <code>t</code>.</li>
+</ul>
+<p>The only bus departures that matter are the listed bus IDs at their specific offsets from <code>t</code>.
+Those bus IDs can depart at other times, and other bus IDs can depart at those times. For
+example, in the list above, because bus ID <code>19</code> must depart seven minutes after the timestamp at
+which bus ID <code>7</code> departs, bus ID <code>7</code> will always <strong>also</strong> be departing with bus ID <code>19</code> at seven
+minutes after timestamp <code>t</code>.</p>
+<p>In this example, the earliest timestamp at which this occurs is <strong><code>1068781</code></strong>:</p>
+<pre><code class="language-txt">time     bus 7   bus 13  bus 59  bus 31  bus 19
+1068773    .       .       .       .       .
+1068774    D       .       .       .       .
+1068775    .       .       .       .       .
+1068776    .       .       .       .       .
+1068777    .       .       .       .       .
+1068778    .       .       .       .       .
+1068779    .       .       .       .       .
+1068780    .       .       .       .       .
+1068781    D       .       .       .       .
+1068782    .       D       .       .       .
+1068783    .       .       .       .       .
+1068784    .       .       .       .       .
+1068785    .       .       D       .       .
+1068786    .       .       .       .       .
+1068787    .       .       .       D       .
+1068788    D       .       .       .       D
+1068789    .       .       .       .       .
+1068790    .       .       .       .       .
+1068791    .       .       .       .       .
+1068792    .       .       .       .       .
+1068793    .       .       .       .       .
+1068794    .       .       .       .       .
+1068795    D       D       .       .       .
+1068796    .       .       .       .       .
+1068797    .       .       .       .       .
+</code></pre>
+<p>In the above example, bus ID <code>7</code> departs at timestamp <code>1068788</code> (seven minutes after <code>t</code>). This
+is fine; the only requirement on that minute is that bus ID <code>19</code> departs then, and it does.</p>
+<p>Here are some other examples:</p>
+<ul>
+<li>The earliest timestamp that matches the list <code>17,x,13,19</code> is <strong><code>3417</code></strong>.</li>
+<li><code>67,7,59,61</code> first occurs at timestamp <strong><code>754018</code></strong>.</li>
+<li><code>67,x,7,59,61</code> first occurs at timestamp <strong><code>779210</code></strong>.</li>
+<li><code>67,7,x,59,61</code> first occurs at timestamp <strong><code>1261476</code></strong>.</li>
+<li><code>1789,37,47,1889</code> first occurs at timestamp <strong><code>1202161486</code></strong>.</li>
+</ul>
+<p>However, with so many bus IDs in your list, surely the actual earliest timestamp will be larger
+than <code>100000000000000</code>!</p>
+<p><strong>What is the earliest timestamp such that all of the listed bus IDs depart at offsets matching
+their positions in the list?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2020::d13::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2020::d13::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2020::d13::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

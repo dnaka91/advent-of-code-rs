@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d07` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d07"><title>aoc::y2018::d07 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d07</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a></p><script>window.sidebarCurrent = {name: "d07", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2018/d07.rs.html#1-85" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a>::<wbr><a class="mod" href="">d07</a></span></h1><div class="docblock"><h1 id="day-7-the-sum-of-its-parts" class="section-header"><a href="#day-7-the-sum-of-its-parts">Day 7: The Sum of Its Parts</a></h1>
+<p>You find yourself standing on a snow-covered coastline; apparently, you landed a little off
+course. The region is too hilly to see the North Pole from here, but you do spot some Elves that
+seem to be trying to unpack something that washed ashore. It's quite cold out, so you decide to
+risk creating a paradox by asking them for directions.</p>
+<p>&quot;Oh, are you the search party?&quot; Somehow, you can understand whatever Elves from the year 1018
+speak; you assume it's <a href="https://adventofcode.com/2015/day/6">Ancient Nordic Elvish</a>. Could the device on your wrist also be a
+translator? &quot;Those clothes don't look very warm; take this.&quot; They hand you a heavy coat.</p>
+<p>&quot;We do need to find our way back to the North Pole, but we have higher priorities at the moment.
+You see, believe it or not, this box contains something that will solve all of Santa's
+transportation problems - at least, that's what it looks like from the pictures in the
+instructions.&quot; It doesn't seem like they can read whatever language it's in, but you can:
+&quot;Sleigh kit. Some assembly required.&quot;</p>
+<p>&quot;'Sleigh'? What a wonderful name! You must help us assemble this 'sleigh' at once!&quot; They start
+excitedly pulling more parts out of the box.</p>
+<p>The instructions specify a series of <strong>steps</strong> and requirements about which steps must be
+finished before others can begin (your puzzle input). Each step is designated by a single
+letter. For example, suppose you have the following instructions:</p>
+<pre><code class="language-txt">Step C must be finished before step A can begin.
+Step C must be finished before step F can begin.
+Step A must be finished before step B can begin.
+Step A must be finished before step D can begin.
+Step B must be finished before step E can begin.
+Step D must be finished before step E can begin.
+Step F must be finished before step E can begin.
+</code></pre>
+<p>Visually, these requirements look like this:</p>
+<pre><code class="language-txt">  --&gt;A---&gt;B--
+ /    \      \
+C      --&gt;D-----&gt;E
+ \           /
+  ----&gt;F-----
+</code></pre>
+<p>Your first goal is to determine the order in which the steps should be completed. If more than
+one step is ready, choose the step which is first alphabetically. In this example, the steps
+would be completed as follows:</p>
+<ul>
+<li>Only <strong><code>C</code></strong> is available, and so it is done first.</li>
+<li>Next, both <code>A</code> and <code>F</code> are available. <strong><code>A</code></strong> is first alphabetically, so it is done next.</li>
+<li>Then, even though <code>F</code> was available earlier, steps <code>B</code> and <code>D</code> are now also available, and
+<strong><code>B</code></strong> is the first alphabetically of the three.</li>
+<li>After that, only <code>D</code> and <code>F</code> are available. <code>E</code> is not available because only some of its
+prerequisites are complete. Therefore, <strong><code>D</code></strong> is completed next.</li>
+<li><strong><code>F</code></strong> is the only choice, so it is done next.</li>
+<li>Finally, <strong><code>E</code></strong> is completed.</li>
+</ul>
+<p>So, in this example, the correct order is <strong><code>CABDFE</code></strong>.</p>
+<p><strong>In what order should the steps in your instructions be completed?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2018::d07::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2018::d07::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2018::d07::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

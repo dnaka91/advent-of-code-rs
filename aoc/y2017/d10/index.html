@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d10` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d10"><title>aoc::y2017::d10 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d10</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2017</a></p><script>window.sidebarCurrent = {name: "d10", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2017/d10.rs.html#1-231" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2017</a>::<wbr><a class="mod" href="">d10</a></span></h1><div class="docblock"><h1 id="day-10-knot-hash" class="section-header"><a href="#day-10-knot-hash">Day 10: Knot Hash</a></h1>
+<p>You come across some programs that are trying to implement a software emulation of a hash based
+on knot-tying. The hash these programs are implementing isn't very strong, but you decide to
+help them anyway. You make a mental note to remind the Elves later not to invent their own
+cryptographic functions.</p>
+<p>This hash function simulates tying a knot in a circle of string with 256 marks on it. Based on
+the input to be hashed, the function repeatedly selects a span of string, brings the ends
+together, and gives the span a half-twist to reverse the order of the marks within it. After
+doing this many times, the order of the marks is used to build the resulting hash.</p>
+<pre><code class="language-txt">  4--5   pinch   4  5           4   1
+ /    \  5,0,1  / \/ \  twist  / \ / \
+3      0  --&gt;  3      0  --&gt;  3   X   0
+ \    /         \ /\ /         \ / \ /
+  2--1           2  1           2   5
+</code></pre>
+<p>To achieve this, begin with a <strong>list</strong> of numbers from <code>0</code> to <code>255</code>, a <strong>current position</strong>
+which begins at <code>0</code> (the first element in the list), a <strong>skip size</strong> (which starts at <code>0</code>), and
+a sequence of <strong>lengths</strong> (your puzzle input). Then, for each length:</p>
+<ul>
+<li><strong>Reverse</strong> the order of that <strong>length</strong> of elements in the <strong>list</strong>, starting with the
+element at the <strong>current position</strong>.</li>
+<li><strong>Move</strong> the <strong>current position</strong> forward by that <strong>length</strong> plus the <strong>skip size</strong>.</li>
+<li><strong>Increase</strong> the <strong>skip size</strong> by one.</li>
+</ul>
+<p>The <strong>list</strong> is circular; if the <strong>current position</strong> and the <strong>length</strong> try to reverse elements
+beyond the end of the list, the operation reverses using as many extra elements as it needs from
+the front of the list. If the <strong>current position</strong> moves past the end of the list, it wraps
+around to the front. <strong>Lengths</strong> larger than the size of the <strong>list</strong> are invalid.</p>
+<p>Here's an example using a smaller list:</p>
+<p>Suppose we instead only had a circular list containing five elements, <code>0, 1, 2, 3, 4</code>, and were
+given input lengths of <code>3, 4, 1, 5</code>.</p>
+<ul>
+<li>
+<p>The list begins as <code>[0] 1 2 3 4</code> (where square brackets indicate the <strong>current position</strong>).</p>
+</li>
+<li>
+<p>The first length, <code>3</code>, selects <code>([0] 1 2) 3 4</code> (where parentheses indicate the sublist to be
+reversed).</p>
+</li>
+<li>
+<p>After reversing that section (<code>0 1 2</code> into <code>2 1 0</code>), we get <code>([2] 1 0) 3 4</code>.</p>
+</li>
+<li>
+<p>Then, the <strong>current position</strong> moves forward by the <strong>length</strong>, <code>3</code>, plus the skip size, 0:
+<code>2 1 0 [3] 4</code>. Finally, the <strong>skip size</strong> increases to <code>1</code>.</p>
+</li>
+<li>
+<p>The second length, <code>4</code>, selects a section which wraps: <code>2 1) 0 ([3] 4</code>.</p>
+</li>
+<li>
+<p>The sublist <code>3 4 2 1</code> is reversed to form <code>1 2 4 3</code>: <code>4 3) 0 ([1] 2</code>.</p>
+</li>
+<li>
+<p>The <strong>current position</strong> moves forward by the <strong>length</strong> plus the <strong>skip size</strong>, a total of
+<code>5</code>, causing it not to move because it wraps around: <code>4 3 0 [1] 2</code>. The <strong>skip size</strong>
+increases to <code>2</code>.</p>
+</li>
+<li>
+<p>The third length, <code>1</code>, selects a sublist of a single element, and so reversing it has no
+effect.</p>
+</li>
+<li>
+<p>The <strong>current position</strong> moves forward by the <strong>length</strong> (<code>1</code>) plus the <strong>skip size</strong> (<code>2</code>):
+<code>4 [3] 0 1 2</code>. The <strong>skip size</strong> increases to <code>3</code>.</p>
+</li>
+<li>
+<p>The fourth length, <code>5</code>, selects every element starting with the second: <code>4) ([3] 0 1 2</code>.
+Reversing this sublist (<code>3 0 1 2 4</code> into <code>4 2 1 0 3</code>) produces: <code>3) ([4] 2 1 0</code>.</p>
+</li>
+<li>
+<p>Finally, the <strong>current position</strong> moves forward by <code>8</code>: <code>3 4 2 1 [0]</code>. The <strong>skip size</strong>
+increases to <code>4</code>.</p>
+</li>
+</ul>
+<p>In this example, the first two numbers in the list end up being <code>3</code> and <code>4</code>; to check the
+process, you can multiply them together to produce <code>12</code>.</p>
+<p>However, you should instead use the standard list size of <code>256</code> (with values <code>0</code> to <code>255</code>) and
+the sequence of <strong>lengths</strong> in your puzzle input. Once this process is complete, <strong>what is the
+result of multiplying the first two numbers in the list</strong>?</p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>The logic you've constructed forms a single <strong>round</strong> of the <strong>Knot Hash</strong> algorithm; running
+the full thing requires many of these rounds. Some input and output processing is also required.</p>
+<p>First, from now on, your input should be taken not as a list of numbers, but as a string of
+bytes instead. Unless otherwise specified, convert characters to bytes using their
+<a href="https://en.wikipedia.org/wiki/ASCII#Printable_characters">ASCII codes</a>. This will allow you to handle arbitrary ASCII strings, and it also ensures that
+your input lengths are never larger than <code>255</code>. For example, if you are given <code>1,2,3</code>, you
+should convert it to the ASCII codes for each character: <code>49,44,50,44,51</code>.</p>
+<p>Once you have determined the sequence of lengths to use, add the following lengths to the end of
+the sequence: <code>17, 31, 73, 47, 23</code>. For example, if you are given <code>1,2,3</code>, your final sequence
+of lengths should be <code>49,44,50,44,51,17,31,73,47,23</code> (the ASCII codes from the input string
+combined with the standard length suffix values).</p>
+<p>Second, instead of merely running one <strong>round</strong> like you did above, run a total of <code>64</code> rounds,
+using the same <strong>length</strong> sequence in each round. The <strong>current position</strong> and <strong>skip size</strong>
+should be preserved between rounds. For example, if the previous example was your first round,
+you would start your second round with the same <strong>length</strong> sequence
+(<code>3, 4, 1, 5, 17, 31, 73, 47, 23</code>, now assuming they came from ASCII codes and include the
+suffix), but start with the previous round's <strong>current position</strong> (<code>4</code>) and <strong>skip size</strong> (<code>4</code>).</p>
+<p>Once the rounds are complete, you will be left with the numbers from <code>0</code> to <code>255</code> in some order,
+called the <strong>sparse hash</strong>. Your next task is to reduce these to a list of only <code>16</code> numbers
+called the <strong>dense hash</strong>. To do this, use numeric bitwise <a href="https://en.wikipedia.org/wiki/Bitwise_operation#XOR">XOR</a> to combine each consecutive
+block of <code>16</code> numbers in the sparse hash (there are <code>16</code> such blocks in a list of <code>256</code>
+numbers). So, the first element in the dense hash is the first sixteen elements of the sparse
+hash XOR'd together, the second element in the dense hash is the second sixteen elements of the
+sparse hash XOR'd together, etc.</p>
+<p>For example, if the first sixteen elements of your sparse hash are as shown below, and the XOR
+operator is <code>^</code>, you would calculate the first output number like this:</p>
+<pre><code class="language-txt">65 ^ 27 ^ 9 ^ 1 ^ 4 ^ 3 ^ 40 ^ 50 ^ 91 ^ 7 ^ 6 ^ 0 ^ 2 ^ 5 ^ 68 ^ 22 = 64
+</code></pre>
+<p>Perform this operation on each of the sixteen blocks of sixteen numbers in your sparse hash to
+determine the sixteen numbers in your dense hash.</p>
+<p>Finally, the standard way to represent a Knot Hash is as a single <a href="https://en.wikipedia.org/wiki/Hexadecimal">hexadecimal</a> string; the
+final output is the dense hash in hexadecimal notation. Because each number in your dense hash
+will be between <code>0</code> and <code>255</code> (inclusive), always represent each number as two hexadecimal
+digits (including a leading zero as necessary). So, if your first three numbers are
+<code>64, 7, 255</code>, they correspond to the hexadecimal numbers <code>40, 07, ff</code>, and so the first six
+characters of the hash would be <code>4007ff</code>. Because every Knot Hash is sixteen such numbers, the
+hexadecimal representation is always <code>32</code> hexadecimal digits (<code>0</code>-<code>f</code>) long.</p>
+<p>Here are some example hashes:</p>
+<ul>
+<li>The empty string becomes <code>a2582a3a0e66e6e86e3812dcb672a272</code>.</li>
+<li><code>AoC 2017</code> becomes <code>33efeb34ea91902bb2f59c9920caa6cd</code>.</li>
+<li><code>1,2,3</code> becomes <code>3efbe78a8d82f29979031a4aa0b16a9d</code>.</li>
+<li><code>1,2,4</code> becomes <code>63960835bcdc130f0b66d7ff4f6a5a8e</code>.</li>
+</ul>
+<p>Treating your puzzle input as a string of ASCII characters, <strong>what is the Knot Hash of your
+puzzle input?</strong> Ignore any leading or trailing whitespace you might encounter.</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2017::d10::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2017::d10::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2017::d10::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

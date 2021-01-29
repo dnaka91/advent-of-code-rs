@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d25` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d25"><title>aoc::y2019::d25 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d25</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a></p><script>window.sidebarCurrent = {name: "d25", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2019/d25.rs.html#1-64" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a>::<wbr><a class="mod" href="">d25</a></span></h1><div class="docblock"><h1 id="day-25-cryostasis" class="section-header"><a href="#day-25-cryostasis">Day 25: Cryostasis</a></h1>
+<p>As you approach Santa's ship, your sensors report two important details:</p>
+<p>First, that you might be too late: the internal temperature is <code>-40</code> degrees.</p>
+<p>Second, that one faint life signature is somewhere on the ship.</p>
+<p>The airlock door is locked with a code; your best option is to send in a small droid to
+investigate the situation. You attach your ship to Santa's, break a small hole in the hull, and
+let the droid run in before you seal it up again. Before your ship starts freezing, you detach
+your ship and set it to automatically stay within range of Santa's ship.</p>
+<p>This droid can follow basic instructions and report on its surroundings; you can communicate
+with it through an <a href="../../../aoc/y2019/d09/index.html">Intcode</a> program (your puzzle input) running on an <a href="../../../aoc/y2019/d17/index.html">ASCII-capable</a> computer.</p>
+<p>As the droid moves through its environment, it will describe what it encounters. When it says
+<code>Command?</code>, you can give it a single instruction terminated with a newline (ASCII code <code>10</code>).
+Possible instructions are:</p>
+<ul>
+<li><strong>Movement</strong> via <code>north</code>, <code>south</code>, <code>east</code>, or <code>west</code>.</li>
+<li>To <strong>take</strong> an item the droid sees in the environment, use the command <code>take &lt;name of item&gt;</code>.
+For example, if the droid reports seeing a <code>red ball</code>, you can pick it up with
+<code>take red ball</code>.</li>
+<li>To <strong>drop</strong> an item the droid is carrying, use the command <code>drop &lt;name of item&gt;</code>. For example,
+if the droid is carrying a <code>green ball</code>, you can drop it with <code>drop green ball</code>.</li>
+<li>To get a <strong>list of all of the items</strong> the droid is currently carrying, use the command <code>inv</code>
+(for &quot;inventory&quot;).</li>
+</ul>
+<p>Extra spaces or other characters aren't allowed - instructions must be provided precisely.</p>
+<p>Santa's ship is a <strong>Reindeer-class starship</strong>; these ships use pressure-sensitive floors to
+determine the identity of droids and crew members. The standard configuration for these
+starships is for all droids to weigh exactly the same amount to make them easier to detect. If
+you need to get past such a sensor, you might be able to reach the correct weight by carrying
+items from the environment.</p>
+<p>Look around the ship and see if you can find the <strong>password for the main airlock</strong>.</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2019::d25::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2019::d25::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2019::d25::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

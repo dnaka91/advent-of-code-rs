@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d12` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d12"><title>aoc::y2020::d12 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d12</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2020</a></p><script>window.sidebarCurrent = {name: "d12", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2020/d12.rs.html#1-250" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2020</a>::<wbr><a class="mod" href="">d12</a></span></h1><div class="docblock"><h1 id="day-12-rain-risk" class="section-header"><a href="#day-12-rain-risk">Day 12: Rain Risk</a></h1>
+<p>Your ferry made decent progress toward the island, but the storm came in faster than anyone
+expected. The ferry needs to take <strong>evasive actions</strong>!</p>
+<p>Unfortunately, the ship's navigation computer seems to be malfunctioning; rather than giving a
+route directly to safety, it produced extremely circuitous instructions. When the captain uses
+the <a href="https://en.wikipedia.org/wiki/Public_address_system">PA system</a> to ask if anyone can help, you quickly volunteer.</p>
+<p>The navigation instructions (your puzzle input) consists of a sequence of single-character
+<strong>actions</strong> paired with integer input <strong>values</strong>. After staring at them for a few minutes, you
+work out what they probably mean:</p>
+<ul>
+<li>Action <strong><code>N</code></strong> means to move <strong>north</strong> by the given value.</li>
+<li>Action <strong><code>S</code></strong> means to move <strong>south</strong> by the given value.</li>
+<li>Action <strong><code>E</code></strong> means to move <strong>east</strong> by the given value.</li>
+<li>Action <strong><code>W</code></strong> means to move <strong>west</strong> by the given value.</li>
+<li>Action <strong><code>L</code></strong> means to turn <strong>left</strong> the given number of degrees.</li>
+<li>Action <strong><code>R</code></strong> means to turn <strong>right</strong> the given number of degrees.</li>
+<li>Action <strong><code>F</code></strong> means to move <strong>forward</strong> by the given value in the direction the ship is
+currently facing.</li>
+</ul>
+<p>The ship starts by facing <strong>east</strong>. Only the <code>L</code> and <code>R</code> actions change the direction the ship
+is facing. (That is, if the ship is facing east and the next instruction is <code>N10</code>, the ship
+would move north 10 units, but would still move east if the following action were <code>F</code>.)</p>
+<p>For example:</p>
+<pre><code class="language-txt">F10
+N3
+F7
+R90
+F11
+</code></pre>
+<p>These instructions would be handled as follows:</p>
+<ul>
+<li><code>F10</code> would move the ship 10 units east (because the ship starts by facing east) to <strong>east 10,
+north 0</strong>.</li>
+<li><code>N3</code> would move the ship 3 units north to <strong>east 10, north 3</strong>.</li>
+<li><code>F7</code> would move the ship another 7 units east (because the ship is still facing east) to
+<strong>east 17, north 3</strong>.</li>
+<li><code>R90</code> would cause the ship to turn right by 90 degrees and face <strong>south</strong>; it remains at
+<strong>east 17, north 3</strong>.</li>
+<li><code>F11</code> would move the ship 11 units south to <strong>east 17, south 8</strong>.</li>
+</ul>
+<p>At the end of these instructions, the ship's <a href="https://en.wikipedia.org/wiki/Manhattan_distance">Manhattan distance</a> (sum of the absolute values of
+its east/west position and its north/south position) from its starting position is <code>17 + 8</code> =
+<strong><code>25</code></strong>.</p>
+<p>Figure out where the navigation instructions lead. <strong>What is the Manhattan distance between that
+location and the ship's starting position?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>Before you can give the destination to the captain, you realize that the actual action meanings
+were printed on the back of the instructions the whole time.</p>
+<p>Almost all of the actions indicate how to move a <strong>waypoint</strong> which is relative to the ship's
+position:</p>
+<ul>
+<li>Action <strong><code>N</code></strong> means to move the waypoint <strong>north</strong> by the given value.</li>
+<li>Action <strong><code>S</code></strong> means to move the waypoint <strong>south</strong> by the given value.</li>
+<li>Action <strong><code>E</code></strong> means to move the waypoint <strong>east</strong> by the given value.</li>
+<li>Action <strong><code>W</code></strong> means to move the waypoint <strong>west</strong> by the given value.</li>
+<li>Action <strong><code>L</code></strong> means to rotate the waypoint around the ship <strong>left</strong> (<strong>counter-clockwise</strong>)
+the given number of degrees.</li>
+<li>Action <strong><code>R</code></strong> means to rotate the waypoint around the ship <strong>right</strong> (<strong>clockwise</strong>) the
+given number of degrees.</li>
+<li>Action <strong><code>F</code></strong> means to move <strong>forward</strong> to the waypoint a number of times equal to the given
+value.</li>
+</ul>
+<p>The waypoint starts <strong>10 units east and 1 unit north</strong> relative to the ship. The waypoint is
+relative to the ship; that is, if the ship moves, the waypoint moves with it.</p>
+<p>For example, using the same instructions as above:</p>
+<ul>
+<li><code>F10</code> moves the ship to the waypoint 10 times (a total of <strong>100 units east and 10 units
+north</strong>), leaving the ship at <strong>east 100, north 10</strong>. The waypoint stays 10 units east and 1
+unit north of the ship.</li>
+<li><code>N3</code> moves the waypoint 3 units north to <strong>10 units east and 4 units north of the ship</strong>. The
+ship remains at <strong>east 100, north 10</strong>.</li>
+<li><code>F7</code> moves the ship to the waypoint 7 times (a total of <strong>70 units east and 28 units north</strong>),
+leaving the ship at <strong>east 170, north 38</strong>. The waypoint stays 10 units east and 4 units north
+of the ship.</li>
+<li><code>R90</code> rotates the waypoint around the ship clockwise 90 degrees, moving it to <strong>4 units east
+and 10 units south of the ship</strong>. The ship remains at <strong>east 170, north 38</strong>.</li>
+<li><code>F11</code> moves the ship to the waypoint 11 times (a total of <strong>44 units east and 110 units
+south</strong>), leaving the ship at <strong>east 214, south 72</strong>. The waypoint stays 4 units east and 10
+units south of the ship.</li>
+</ul>
+<p>After these operations, the ship's Manhattan distance from its starting position is <code>214 + 72</code> =
+<strong><code>286</code></strong>.</p>
+<p>Figure out where the navigation instructions actually lead. <strong>What is the Manhattan distance
+between that location and the ship's starting position?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2020::d12::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2020::d12::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2020::d12::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

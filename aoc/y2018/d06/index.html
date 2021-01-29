@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d06` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d06"><title>aoc::y2018::d06 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d06</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a></p><script>window.sidebarCurrent = {name: "d06", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2018/d06.rs.html#1-234" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a>::<wbr><a class="mod" href="">d06</a></span></h1><div class="docblock"><h1 id="day-6-chronal-coordinates" class="section-header"><a href="#day-6-chronal-coordinates">Day 6: Chronal Coordinates</a></h1>
+<p>The device on your wrist beeps several times, and once again you feel like you're falling.</p>
+<p>&quot;Situation critical,&quot; the device announces. &quot;Destination indeterminate. Chronal interference
+detected. Please specify new target coordinates.&quot;</p>
+<p>The device then produces a list of coordinates (your puzzle input). Are they places it thinks
+are safe or dangerous? It recommends you check manual page 729. The Elves did not give you a
+manual.</p>
+<p><strong>If they're dangerous,</strong> maybe you can minimize the danger by finding the coordinate that gives
+the largest distance from the other points.</p>
+<p>Using only the <a href="https://en.wikipedia.org/wiki/Taxicab_geometry">Manhattan distance</a>, determine the <strong>area</strong> around each coordinate by counting
+the number of <a href="https://en.wikipedia.org/wiki/Integer">integer</a> X,Y locations that are <strong>closest</strong> to that coordinate (and aren't <strong>tied
+in distance</strong> to any other coordinate).</p>
+<p>Your goal is to find the size of the <strong>largest area</strong> that isn't infinite. For example, consider
+the following list of coordinates:</p>
+<pre><code class="language-txt">1, 1
+1, 6
+8, 3
+3, 4
+5, 5
+8, 9
+</code></pre>
+<p>If we name these coordinates <code>A</code> through <code>F</code>, we can draw them on a grid, putting<code> 0,0</code> at the
+top left:</p>
+<pre><code class="language-txt">..........
+.A........
+..........
+........C.
+...D......
+.....E....
+.B........
+..........
+..........
+........F.
+</code></pre>
+<p>This view is partial - the actual grid extends infinitely in all directions. Using the Manhattan
+distance, each location's closest coordinate can be determined, shown here in lowercase:</p>
+<pre><code class="language-txt">aaaaa.cccc
+aAaaa.cccc
+aaaddecccc
+aadddeccCc
+..dDdeeccc
+bb.deEeecc
+bBb.eeee..
+bbb.eeefff
+bbb.eeffff
+bbb.ffffFf
+</code></pre>
+<p>Locations shown as <code>.</code> are equally far from two or more coordinates, and so they don't count as
+being closest to any.</p>
+<p>In this example, the areas of coordinates A, B, C, and F are infinite - while not shown here,
+their areas extend forever outside the visible grid. However, the areas of coordinates D and E
+are finite: D is closest to 9 locations, and E is closest to 17 (both including the coordinate's
+location itself). Therefore, in this example, the size of the largest area is <strong>17</strong>.</p>
+<p><strong>What is the size of the largest area</strong> that isn't infinite?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2018::d06::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2018::d06::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2018::d06::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

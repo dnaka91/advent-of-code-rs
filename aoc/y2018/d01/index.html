@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d01` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d01"><title>aoc::y2018::d01 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d01</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a></p><script>window.sidebarCurrent = {name: "d01", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2018/d01.rs.html#1-122" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a>::<wbr><a class="mod" href="">d01</a></span></h1><div class="docblock"><h1 id="day-1-chronal-calibration" class="section-header"><a href="#day-1-chronal-calibration">Day 1: Chronal Calibration</a></h1>
+<p>&quot;We've detected some temporal anomalies,&quot; one of Santa's Elves at the Temporal Anomaly Research
+and Detection Instrument Station tells you. She sounded pretty worried when she called you down
+here. &quot;At 500-year intervals into the past, someone has been changing Santa's history!&quot;</p>
+<p>&quot;The good news is that the changes won't propagate to our time stream for another 25 days, and
+we have a device&quot; - she attaches something to your wrist - &quot;that will let you fix the changes
+with no such propagation delay. It's configured to send you 500 years further into the past
+every few days; that was the best we could do on such short notice.&quot;</p>
+<p>&quot;The bad news is that we are detecting roughly <strong>fifty</strong> anomalies throughout time; the device
+will indicate fixed anomalies with <strong>stars</strong>. The other bad news is that we only have one device
+and you're the best person for the job! Good lu--&quot; She taps a button on the device and you
+suddenly feel like you're falling. To save Christmas, you need to get all <strong>fifty stars</strong> by
+December 25th.</p>
+<p>Collect stars by solving puzzles. Two puzzles will be made available on each day in the Advent
+calendar; the second puzzle is unlocked when you complete the first. Each puzzle grants <strong>one
+star</strong>. Good luck!</p>
+<p>After feeling like you've been falling for a few minutes, you look at the device's tiny screen.
+&quot;Error: Device must be calibrated before first use. Frequency drift detected. Cannot maintain
+destination lock.&quot; Below the message, the device shows a sequence of changes in frequency (your
+puzzle input). A value like <code>+6</code> means the current frequency increases by <code>6</code>; a value like <code>-3</code>
+means the current frequency decreases by <code>3</code>.</p>
+<p>For example, if the device displays frequency changes of <code>+1, -2, +3, +1</code>, then starting from a
+frequency of zero, the following changes would occur:</p>
+<ul>
+<li>Current frequency <code> 0</code>, change of <code>+1</code>; resulting frequency <code> 1</code>.</li>
+<li>Current frequency <code> 1</code>, change of <code>-2</code>; resulting frequency <code>-1</code>.</li>
+<li>Current frequency <code>-1</code>, change of <code>+3</code>; resulting frequency <code> 2</code>.</li>
+<li>Current frequency <code> 2</code>, change of <code>+1</code>; resulting frequency <code> 3</code>.</li>
+</ul>
+<p>In this example, the resulting frequency is <code>3</code>.</p>
+<p>Here are other example situations:</p>
+<ul>
+<li><code>+1, +1, +1</code> results in <code> 3</code></li>
+<li><code>+1, +1, -2</code> results in <code> 0</code></li>
+<li><code>-1, -2, -3</code> results in <code>-6</code></li>
+</ul>
+<p>Starting with a frequency of zero, <strong>what is the resulting frequency</strong> after all of the changes
+in frequency have been applied?</p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>You notice that the device repeats the same frequency change list over and over. To calibrate
+the device, you need to find the first frequency it reaches <strong>twice</strong>.</p>
+<p>For example, using the same list of changes above, the device would loop as follows:</p>
+<ul>
+<li>Current frequency <code> 0</code>, change of <code>+1</code>; resulting frequency <code> 1</code>.</li>
+<li>Current frequency <code> 1</code>, change of <code>-2</code>; resulting frequency <code>-1</code>.</li>
+<li>Current frequency <code>-1</code>, change of <code>+3</code>; resulting frequency <code> 2</code>.</li>
+<li>Current frequency <code> 2</code>, change of <code>+1</code>; resulting frequency <code> 3</code>.</li>
+<li>(At this point, the device continues from the start of the list.)</li>
+<li>Current frequency <code> 3</code>, change of <code>+1</code>; resulting frequency <code> 4</code>.</li>
+<li>Current frequency <code> 4</code>, change of <code>-2</code>; resulting frequency <code> 2</code>, which has already been seen.</li>
+</ul>
+<p>In this example, the first frequency reached twice is <code>2</code>. Note that your device might need to
+repeat its list of frequency changes many times before a duplicate frequency is found, and that
+duplicates might be found while in the middle of processing the list.</p>
+<p>Here are other examples:</p>
+<ul>
+<li><code>+1, -1</code> first reaches <code>0</code> twice.</li>
+<li><code>+3, +3, +4, -2, -4</code> first reaches <code>10</code> twice.</li>
+<li><code>-6, +3, +8, +5, -6</code> first reaches <code>5</code> twice.</li>
+<li><code>+7, +7, -2, -7, -4</code> first reaches <code>14</code> twice.</li>
+</ul>
+<p><strong>What is the first frequency your device reaches twice?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2018::d01::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2018::d01::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2018::d01::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

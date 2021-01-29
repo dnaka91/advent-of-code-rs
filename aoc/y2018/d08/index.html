@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d08` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d08"><title>aoc::y2018::d08 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d08</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a></p><script>window.sidebarCurrent = {name: "d08", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2018/d08.rs.html#1-177" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a>::<wbr><a class="mod" href="">d08</a></span></h1><div class="docblock"><h1 id="day-8-memory-maneuver" class="section-header"><a href="#day-8-memory-maneuver">Day 8: Memory Maneuver</a></h1>
+<p>The sleigh is much easier to pull than you'd expect for something its weight. Unfortunately,
+neither you nor the Elves know which way the North Pole is from here.</p>
+<p>You check your wrist device for anything that might help. It seems to have some kind of
+navigation system! Activating the navigation system produces more bad news: &quot;Failed to start
+navigation system. Could not read software license file.&quot;</p>
+<p>The navigation system's license file consists of a list of numbers (your puzzle input). The
+numbers define a data structure which, when processed, produces some kind of <a href="https://en.wikipedia.org/wiki/Tree_(data_structure)">tree</a> that can be
+used to calculate the license number.</p>
+<p>The <strong>tree</strong> is made up of <strong>nodes</strong>; a single, outermost node forms the tree's <strong>root</strong>, and it
+contains all other nodes in the tree (or contains nodes that contain nodes, and so on).</p>
+<p>Specifically, a node consists of:</p>
+<ul>
+<li>A <strong>header</strong>, which is always exactly two numbers:
+<ul>
+<li>The quantity of child nodes.</li>
+<li>The quantity of metadata entries.</li>
+</ul>
+</li>
+<li>Zero or more <strong>child nodes</strong> (as specified in the header).</li>
+<li>One or more <strong>metadata entries</strong> (as specified in the header).</li>
+</ul>
+<p>Each child node is itself a node that has its own header, child nodes, and metadata. For
+example:</p>
+<pre><code class="language-txt">2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2
+A----------------------------------
+    B----------- C-----------
+                     D-----
+</code></pre>
+<p>In this example, each node of the tree is also marked with an underline starting with a letter
+for easier identification. In it, there are four nodes:</p>
+<ul>
+<li><code>A</code>, which has <code>2</code> child nodes (<code>B</code>, <code>C</code>) and <code>3</code> metadata entries (<code>1</code>, <code>1</code>, <code>2</code>).</li>
+<li><code>B</code>, which has <code>0</code> child nodes and <code>3</code> metadata entries (<code>10</code>, <code>11</code>, <code>12</code>).</li>
+<li><code>C</code>, which has <code>1</code> child node (<code>D</code>) and <code>1</code> metadata entry (<code>2</code>).</li>
+<li><code>D</code>, which has <code>0</code> child nodes and <code>1</code> metadata entry (<code>99</code>).</li>
+</ul>
+<p>The first check done on the license file is to simply add up all of the metadata entries. In
+this example, that sum is <code>1+1+2+10+11+12+2+99=138</code>.</p>
+<p><strong>What is the sum of all metadata entries?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>The second check is slightly more complicated: you need to find the value of the root node (<code>A</code>
+in the example above).</p>
+<p>The <strong>value of a node</strong> depends on whether it has child nodes.</p>
+<p>If a node has <strong>no child nodes</strong>, its value is the sum of its metadata entries. So, the value of
+node <code>B</code> is <code>10+11+12=33</code>, and the value of node <code>D</code> is <code>99</code>.</p>
+<p>However, if a node <strong>does have child nodes</strong>, the metadata entries become indexes which refer to
+those child nodes. A metadata entry of <code>1</code> refers to the first child node, <code>2</code> to the second,
+<code>3</code> to the third, and so on. The value of this node is the sum of the values of the child nodes
+referenced by the metadata entries. If a referenced child node does not exist, that reference is
+skipped. A child node can be referenced multiple time and counts each time it is referenced. A
+metadata entry of <code>0</code> does not refer to any child node.</p>
+<p>For example, again using the above nodes:</p>
+<ul>
+<li>Node <code>C</code> has one metadata entry, <code>2</code>. Because node <code>C</code> has only one child node, <code>2</code> references
+a child node which does not exist, and so the value of node <code>C</code> is <code>0</code>.</li>
+<li>Node <code>A</code> has three metadata entries: <code>1</code>, <code>1</code>, and <code>2</code>. The <code>1</code> references node <code>A</code>'s first
+child node, <code>B</code>, and the <code>2</code> references node <code>A</code>'s second child node, <code>C</code>. Because node <code>B</code>
+has a value of <code>33</code> and node <code>C</code> has a value of <code>0</code>, the value of node <code>A</code> is <code>33+33+0=66</code>.</li>
+</ul>
+<p>So, in this example, the value of the root node is <code>66</code>.</p>
+<p><strong>What is the value of the root node?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2018::d08::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2018::d08::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2018::d08::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

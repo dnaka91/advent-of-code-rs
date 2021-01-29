@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d09` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d09"><title>aoc::y2018::d09 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d09</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a></p><script>window.sidebarCurrent = {name: "d09", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2018/d09.rs.html#1-161" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a>::<wbr><a class="mod" href="">d09</a></span></h1><div class="docblock"><h1 id="day-9-marble-mania" class="section-header"><a href="#day-9-marble-mania">Day 9: Marble Mania</a></h1>
+<p>You talk to the Elves while you wait for your navigation system to initialize. To pass the time,
+they introduce you to their favorite <a href="https://en.wikipedia.org/wiki/Marble_(toy)">marble</a> game.</p>
+<p>The Elves play this game by taking turns arranging the marbles in a <strong>circle</strong> according to very
+particular rules. The marbles are numbered starting with <code>0</code> and increasing by <code>1</code> until every
+marble has a number.</p>
+<p>First, the marble numbered <code>0</code> is placed in the circle. At this point, while it contains only a
+single marble, it is still a circle: the marble is both clockwise from itself and
+counter-clockwise from itself. This marble is designated the <strong>current marble</strong>.</p>
+<p>Then, each Elf takes a turn placing the <strong>lowest-numbered remaining marble</strong> into the circle
+between the marbles that are <code>1</code> and <code>2</code> marbles <strong>clockwise</strong> of the current marble. (When the
+circle is large enough, this means that there is one marble between the marble that was just
+placed and the current marble.) The marble that was just placed then becomes the <strong>current
+marble</strong>.</p>
+<p>However, if the marble that is about to be placed has a number which is a multiple of <code>23</code>,
+<strong>something entirely different happens</strong>. First, the current player keeps the marble they would
+have placed, adding it to their <strong>score</strong>. In addition, the marble <code>7</code> marbles
+<strong>counter-clockwise</strong> from the current marble is <strong>removed</strong> from the circle and <strong>also</strong> added
+to the current player's score. The marble located immediately <strong>clockwise</strong> of the marble that
+was removed becomes the new <strong>current marble</strong>.</p>
+<p>For example, suppose there are 9 players. After the marble with value <code>0</code> is placed in the
+middle, each player (shown in square brackets) takes a turn. The result of each of those turns
+would produce circles of marbles like this, where clockwise is to the right and the resulting
+current marble is in parentheses:</p>
+<pre><code class="language-txt">[-] (0)
+[1]  0 (1)
+[2]  0 (2) 1
+[3]  0  2  1 (3)
+[4]  0 (4) 2  1  3
+[5]  0  4  2 (5) 1  3
+[6]  0  4  2  5  1 (6) 3
+[7]  0  4  2  5  1  6  3 (7)
+[8]  0 (8) 4  2  5  1  6  3  7
+[9]  0  8  4 (9) 2  5  1  6  3  7
+[1]  0  8  4  9  2(10) 5  1  6  3  7
+[2]  0  8  4  9  2 10  5(11) 1  6  3  7
+[3]  0  8  4  9  2 10  5 11  1(12) 6  3  7
+[4]  0  8  4  9  2 10  5 11  1 12  6(13) 3  7
+[5]  0  8  4  9  2 10  5 11  1 12  6 13  3(14) 7
+[6]  0  8  4  9  2 10  5 11  1 12  6 13  3 14  7(15)
+[7]  0(16) 8  4  9  2 10  5 11  1 12  6 13  3 14  7 15
+[8]  0 16  8(17) 4  9  2 10  5 11  1 12  6 13  3 14  7 15
+[9]  0 16  8 17  4(18) 9  2 10  5 11  1 12  6 13  3 14  7 15
+[1]  0 16  8 17  4 18  9(19) 2 10  5 11  1 12  6 13  3 14  7 15
+[2]  0 16  8 17  4 18  9 19  2(20)10  5 11  1 12  6 13  3 14  7 15
+[3]  0 16  8 17  4 18  9 19  2 20 10(21) 5 11  1 12  6 13  3 14  7 15
+[4]  0 16  8 17  4 18  9 19  2 20 10 21  5(22)11  1 12  6 13  3 14  7 15
+[5]  0 16  8 17  4 18(19) 2 20 10 21  5 22 11  1 12  6 13  3 14  7 15
+[6]  0 16  8 17  4 18 19  2(24)20 10 21  5 22 11  1 12  6 13  3 14  7 15
+[7]  0 16  8 17  4 18 19  2 24 20(25)10 21  5 22 11  1 12  6 13  3 14  7 15
+</code></pre>
+<p>The goal is to be the <strong>player with the highest score</strong> after the last marble is used up.
+Assuming the example above ends after the marble numbered <code>25</code>, the winning score is <code>23+9=32</code>
+(because player 5 kept marble <code>23</code> and removed marble <code>9</code>, while no other player got any points
+in this very short example game).</p>
+<p>Here are a few more examples:</p>
+<ul>
+<li><code>10</code> players; last marble is worth <code>1618</code> points: high score is <strong><code>8317</code></strong></li>
+<li><code>13</code> players; last marble is worth <code>7999</code> points: high score is <strong><code>146373</code></strong></li>
+<li><code>17</code> players; last marble is worth <code>1104</code> points: high score is <strong><code>2764</code></strong></li>
+<li><code>21</code> players; last marble is worth <code>6111</code> points: high score is <strong><code>54718</code></strong></li>
+<li><code>30</code> players; last marble is worth <code>5807</code> points: high score is <strong><code>37305</code></strong></li>
+</ul>
+<p><strong>What is the winning Elf's score?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>Amused by the speed of your answer, the Elves are curious:</p>
+<p><strong>What would the new winning Elf's score be if the number of the last marble were 100 times
+larger?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2018::d09::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2018::d09::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2018::d09::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

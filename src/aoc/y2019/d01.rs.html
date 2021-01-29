@@ -1,0 +1,222 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/y2019/d01.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>d01.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<span id="2">  2</span>
+<span id="3">  3</span>
+<span id="4">  4</span>
+<span id="5">  5</span>
+<span id="6">  6</span>
+<span id="7">  7</span>
+<span id="8">  8</span>
+<span id="9">  9</span>
+<span id="10"> 10</span>
+<span id="11"> 11</span>
+<span id="12"> 12</span>
+<span id="13"> 13</span>
+<span id="14"> 14</span>
+<span id="15"> 15</span>
+<span id="16"> 16</span>
+<span id="17"> 17</span>
+<span id="18"> 18</span>
+<span id="19"> 19</span>
+<span id="20"> 20</span>
+<span id="21"> 21</span>
+<span id="22"> 22</span>
+<span id="23"> 23</span>
+<span id="24"> 24</span>
+<span id="25"> 25</span>
+<span id="26"> 26</span>
+<span id="27"> 27</span>
+<span id="28"> 28</span>
+<span id="29"> 29</span>
+<span id="30"> 30</span>
+<span id="31"> 31</span>
+<span id="32"> 32</span>
+<span id="33"> 33</span>
+<span id="34"> 34</span>
+<span id="35"> 35</span>
+<span id="36"> 36</span>
+<span id="37"> 37</span>
+<span id="38"> 38</span>
+<span id="39"> 39</span>
+<span id="40"> 40</span>
+<span id="41"> 41</span>
+<span id="42"> 42</span>
+<span id="43"> 43</span>
+<span id="44"> 44</span>
+<span id="45"> 45</span>
+<span id="46"> 46</span>
+<span id="47"> 47</span>
+<span id="48"> 48</span>
+<span id="49"> 49</span>
+<span id="50"> 50</span>
+<span id="51"> 51</span>
+<span id="52"> 52</span>
+<span id="53"> 53</span>
+<span id="54"> 54</span>
+<span id="55"> 55</span>
+<span id="56"> 56</span>
+<span id="57"> 57</span>
+<span id="58"> 58</span>
+<span id="59"> 59</span>
+<span id="60"> 60</span>
+<span id="61"> 61</span>
+<span id="62"> 62</span>
+<span id="63"> 63</span>
+<span id="64"> 64</span>
+<span id="65"> 65</span>
+<span id="66"> 66</span>
+<span id="67"> 67</span>
+<span id="68"> 68</span>
+<span id="69"> 69</span>
+<span id="70"> 70</span>
+<span id="71"> 71</span>
+<span id="72"> 72</span>
+<span id="73"> 73</span>
+<span id="74"> 74</span>
+<span id="75"> 75</span>
+<span id="76"> 76</span>
+<span id="77"> 77</span>
+<span id="78"> 78</span>
+<span id="79"> 79</span>
+<span id="80"> 80</span>
+<span id="81"> 81</span>
+<span id="82"> 82</span>
+<span id="83"> 83</span>
+<span id="84"> 84</span>
+<span id="85"> 85</span>
+<span id="86"> 86</span>
+<span id="87"> 87</span>
+<span id="88"> 88</span>
+<span id="89"> 89</span>
+<span id="90"> 90</span>
+<span id="91"> 91</span>
+<span id="92"> 92</span>
+<span id="93"> 93</span>
+<span id="94"> 94</span>
+<span id="95"> 95</span>
+<span id="96"> 96</span>
+<span id="97"> 97</span>
+<span id="98"> 98</span>
+<span id="99"> 99</span>
+<span id="100">100</span>
+<span id="101">101</span>
+<span id="102">102</span>
+<span id="103">103</span>
+<span id="104">104</span>
+<span id="105">105</span>
+<span id="106">106</span>
+<span id="107">107</span>
+<span id="108">108</span>
+</pre><div class="example-wrap"><pre class="rust ">
+<span class="doccomment">//! # Day 1: The Tyranny of the Rocket Equation</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Santa has become stranded at the edge of the Solar System while delivering presents to other</span>
+<span class="doccomment">//! planets! To accurately calculate his position in space, safely align his warp drive, and return</span>
+<span class="doccomment">//! to Earth in time to save Christmas, he needs you to bring him measurements from **fifty stars**.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Collect stars by solving puzzles. Two puzzles will be made available on each day in the Advent</span>
+<span class="doccomment">//! calendar; the second puzzle is unlocked when you complete the first. Each puzzle grants **one</span>
+<span class="doccomment">//! star**. Good luck!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The Elves quickly load you into a spacecraft and prepare to launch.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! At the first Go / No Go poll, every Elf is Go until the Fuel Counter-Upper. They haven&#39;t</span>
+<span class="doccomment">//! determined the amount of fuel required yet.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Fuel required to launch a given **module** is based on its **mass**. Specifically, to find the</span>
+<span class="doccomment">//! fuel required for a module, take its mass, divide by three, round down, and subtract 2.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! For example:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - For a mass of `12`, divide by `3` and round down to get `4`, then subtract `2` to get `2`.</span>
+<span class="doccomment">//! - For a mass of `14`, dividing by `3` and rounding down still yields `4`, so the fuel required</span>
+<span class="doccomment">//!   is also `2`.</span>
+<span class="doccomment">//! - For a mass of `1969`, the fuel required is `654`.</span>
+<span class="doccomment">//! - For a mass of `100756`, the fuel required is `33583`.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! The Fuel Counter-Upper needs to know the total fuel requirement. To find it, individually</span>
+<span class="doccomment">//! calculate the fuel needed for the mass of each module (your puzzle input), then add together all</span>
+<span class="doccomment">//! the fuel values.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! **What is the sum of the fuel requirements** for all of the modules on your spacecraft?</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Part Two</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! During the second Go / No Go poll, the Elf in charge of the Rocket Equation Double-Checker stops</span>
+<span class="doccomment">//! the launch sequence. Apparently, you forgot to include additional fuel for the fuel you just</span>
+<span class="doccomment">//! added.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Fuel itself requires fuel just like a module - take its mass, divide by three, round down, and</span>
+<span class="doccomment">//! subtract 2. However, that fuel **also** requires fuel, and **that** fuel requires fuel, and so</span>
+<span class="doccomment">//! on. Any mass that would require **negative** fuel should instead be treated as if it requires</span>
+<span class="doccomment">//! zero fuel; the remaining mass, if any, is instead handled by **wishing really hard**, which has</span>
+<span class="doccomment">//! no mass and is outside the scope of this calculation.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! So, for each module mass, calculate its fuel and add it to the total. Then, treat the fuel</span>
+<span class="doccomment">//! amount you just calculated as the input mass and repeat the process, continuing until a fuel</span>
+<span class="doccomment">//! requirement is zero or negative. For example:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - A module of mass `14` requires `2` fuel. This fuel requires no further fuel (`2` divided by</span>
+<span class="doccomment">//!   `3` and rounded down is `0`, which would call for a negative fuel), so the total fuel required</span>
+<span class="doccomment">//!   is still just `2`.</span>
+<span class="doccomment">//! - At first, a module of mass `1969` requires `654` fuel. Then, this fuel requires `216` more</span>
+<span class="doccomment">//!   fuel (`654 / 3 - 2`). `216` then requires `70` more fuel, which requires `21` fuel, which</span>
+<span class="doccomment">//!   requires `5` fuel, which requires no further fuel. So, the total fuel required for a module of</span>
+<span class="doccomment">//!   mass `1969` is `654 + 216 + 70 + 21 + 5 = 966`.</span>
+<span class="doccomment">//! - The fuel required by a module of mass `100756` and its fuel is:</span>
+<span class="doccomment">//!   `33583 + 11192 + 3728 + 1240 + 411 + 135 + 43 + 12 + 2 = 50346`.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! **What is the sum of the fuel requirements** for all of the modules on your spacecraft when also</span>
+<span class="doccomment">//! taking into account the mass of the added fuel? (Calculate the fuel requirements for each module</span>
+<span class="doccomment">//! separately, then add them all up at the end.)</span>
+
+<span class="kw">use</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span>;
+
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">INPUT</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="macro">include_str</span><span class="macro">!</span>(<span class="string">&quot;d01.txt&quot;</span>);
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve_part_one</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Ok</span>(<span class="ident">input</span>.<span class="ident">lines</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">l</span><span class="op">|</span> <span class="ident">l</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>()).<span class="ident">map</span>(<span class="ident">fuel_for_mass</span>).<span class="ident">sum</span>())
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve_part_two</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">total</span> <span class="op">=</span> <span class="number">0</span>;
+
+    <span class="kw">for</span> <span class="ident">module</span> <span class="kw">in</span> <span class="ident">input</span>.<span class="ident">lines</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">l</span><span class="op">|</span> <span class="ident">l</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>()) {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fuel</span> <span class="op">=</span> <span class="ident">fuel_for_mass</span>(<span class="ident">module</span>);
+        <span class="kw">while</span> <span class="ident">fuel</span> <span class="op">&gt;</span> <span class="number">0</span> {
+            <span class="ident">total</span> <span class="op">+</span><span class="op">=</span> <span class="ident">fuel</span>;
+            <span class="ident">fuel</span> <span class="op">=</span> <span class="ident">fuel_for_mass</span>(<span class="ident">fuel</span>);
+        }
+    }
+
+    <span class="prelude-val">Ok</span>(<span class="ident">total</span>)
+}
+
+<span class="attribute">#[<span class="ident">inline</span>]</span>
+<span class="kw">const</span> <span class="kw">fn</span> <span class="ident">fuel_for_mass</span>(<span class="ident">mass</span>: <span class="ident">i64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">i64</span> {
+    <span class="ident">mass</span> <span class="op">/</span> <span class="number">3</span> <span class="op">-</span> <span class="number">2</span>
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">part_one</span>() {
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">2</span>, <span class="ident">solve_part_one</span>(<span class="string">&quot;12&quot;</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">2</span>, <span class="ident">solve_part_one</span>(<span class="string">&quot;14&quot;</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">654</span>, <span class="ident">solve_part_one</span>(<span class="string">&quot;1969&quot;</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">33583</span>, <span class="ident">solve_part_one</span>(<span class="string">&quot;100756&quot;</span>).<span class="ident">unwrap</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">part_two</span>() {
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">2</span>, <span class="ident">solve_part_two</span>(<span class="string">&quot;12&quot;</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">966</span>, <span class="ident">solve_part_two</span>(<span class="string">&quot;1969&quot;</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="number">50346</span>, <span class="ident">solve_part_two</span>(<span class="string">&quot;100756&quot;</span>).<span class="ident">unwrap</span>());
+    }
+}
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

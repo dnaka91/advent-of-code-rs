@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d23` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d23"><title>aoc::y2016::d23 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d23</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a></p><script>window.sidebarCurrent = {name: "d23", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2016/d23.rs.html#1-90" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a>::<wbr><a class="mod" href="">d23</a></span></h1><div class="docblock"><h1 id="day-23-safe-cracking" class="section-header"><a href="#day-23-safe-cracking">Day 23: Safe Cracking</a></h1>
+<p>This is one of the top floors of the nicest tower in EBHQ. The Easter Bunny's private office is
+here, complete with a safe hidden behind a painting, and who <strong>wouldn't</strong> hide a star in a safe
+behind a painting?</p>
+<p>The safe has a digital screen and keypad for code entry. A sticky note attached to the safe has
+a password hint on it: &quot;eggs&quot;. The painting is of a large rabbit coloring some eggs. You see
+<code>7</code>.</p>
+<p>When you go to type the code, though, nothing appears on the display; instead, the keypad comes
+apart in your hands, apparently having been smashed. Behind it is some kind of socket - one that
+matches a connector in your <a href="https://adventofcode.com/2016/day/11">prototype computer</a>! You pull apart the smashed keypad and extract
+the logic circuit, plug it into your computer, and plug your computer into the safe.</p>
+<p>Now, you just need to figure out what output the keypad would have sent to the safe. You extract
+the <a href="https://adventofcode.com/2016/day/12">assembunny code</a> from the logic chip (your puzzle input).</p>
+<p>The code looks like it uses <strong>almost</strong> the same architecture and instruction set that the
+<a href="https://adventofcode.com/2016/day/12">monorail computer</a> used! You should be able to <strong>use the same assembunny interpreter</strong> for this
+as you did there, but with one new instruction:</p>
+<p><code>tgl x</code> <strong>toggles</strong> the instruction <code>x</code> away (pointing at instructions like <code>jnz</code> does: positive
+means forward; negative means backward):</p>
+<ul>
+<li>For <strong>one-argument</strong> instructions, <code>inc</code> becomes <code>dec</code>, and all other one-argument
+instructions become <code>inc</code>.</li>
+<li>For <strong>two-argument</strong> instructions, <code>jnz</code> becomes <code>cpy</code>, and all other two-instructions become
+<code>jnz</code>.</li>
+<li>The arguments of a toggled instruction are <strong>not affected</strong>.</li>
+<li>If an attempt is made to toggle an instruction outside the program, <strong>nothing happens</strong>.</li>
+<li>If toggling produces an <strong>invalid instruction</strong> (like <code>cpy 1 2</code>) and an attempt is later made
+to execute that instruction, <strong>skip it instead</strong>.</li>
+<li>If <code>tgl</code> toggles <strong>itself</strong> (for example, if <code>a</code> is <code>0</code>, <code>tgl a</code> would target itself and
+become <code>inc a</code>), the resulting instruction is not executed until the next time it is reached.</li>
+</ul>
+<p>For example, given this program:</p>
+<pre><code class="language-txt">cpy 2 a
+tgl a
+tgl a
+tgl a
+cpy 1 a
+dec a
+dec a
+</code></pre>
+<ul>
+<li><code>cpy 2 a</code> initializes register <code>a</code> to <code>2</code>.</li>
+<li>The first <code>tgl a</code> toggles an instruction <code>a</code> (<code>2</code>) away from it, which changes the third
+<code>tgl a</code> into <code>inc a</code>.</li>
+<li>The second <code>tgl a</code> also modifies an instruction <code>2</code> away from it, which changes the <code>cpy 1 a</code>
+into <code>jnz 1 a</code>.</li>
+<li>The fourth line, which is now <code>inc a</code>, increments <code>a</code> to <code>3</code>.</li>
+<li>Finally, the fifth line, which is now <code>jnz 1 a</code>, jumps <code>a</code> (<code>3</code>) instructions ahead, skipping
+the <code>dec a</code> instructions.</li>
+</ul>
+<p>In this example, the final value in register <code>a</code> is <code>3</code>.</p>
+<p>The rest of the electronics seem to place the keypad entry (the number of eggs, <code>7</code>) in register
+<code>a</code>, run the code, and then send the value left in register <code>a</code> to the safe.</p>
+<p><strong>What value</strong> should be sent to the safe?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2016::d23::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2016::d23::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2016::d23::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

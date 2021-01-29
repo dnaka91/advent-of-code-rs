@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d11` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d11"><title>aoc::y2018::d11 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d11</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a></p><script>window.sidebarCurrent = {name: "d11", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2018/d11.rs.html#1-97" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a>::<wbr><a class="mod" href="">d11</a></span></h1><div class="docblock"><h1 id="day-11-chronal-charge" class="section-header"><a href="#day-11-chronal-charge">Day 11: Chronal Charge</a></h1>
+<p>You watch the Elves and their sleigh fade into the distance as they head toward the North Pole.</p>
+<p>Actually, you're the one fading. The falling sensation returns.</p>
+<p>The low fuel warning light is illuminated on your wrist-mounted device. Tapping it once causes
+it to project a hologram of the situation: a <strong>300x300</strong> grid of fuel cells and their current
+power levels, some negative. You're not sure what negative power means in the context of time
+travel, but it can't be good.</p>
+<p>Each fuel cell has a coordinate ranging from <strong>1 to 300</strong> in both the X (horizontal) and Y
+(vertical) direction. In <code>X,Y</code> notation, the top-left cell is <code>1,1</code>, and the top-right cell is
+<code>300,1</code>.</p>
+<p>The interface lets you select <strong>any 3x3 square</strong> of fuel cells. To increase your chances of
+getting to your destination, you decide to choose the 3x3 square with the <strong>largest total
+power</strong>.</p>
+<p>The power level in a given fuel cell can be found through the following process:</p>
+<ul>
+<li>Find the fuel cell's <strong>rack ID</strong>, which is its <strong>X coordinate plus 10</strong>.</li>
+<li>Begin with a power level of the <strong>rack ID</strong> times the <strong>Y coordinate</strong>.</li>
+<li>Increase the power level by the value of the <strong>grid serial number</strong> (your puzzle input).</li>
+<li>Set the power level to itself multiplied by the <strong>rack ID</strong>.</li>
+<li>Keep only the <strong>hundreds digit</strong> of the power level (so <code>12345</code> becomes <code>3</code>; numbers with no
+hundreds digit become <code>0</code>).</li>
+<li><strong>Subtract 5</strong> from the power level.</li>
+</ul>
+<p>For example, to find the power level of the fuel cell at <code>3,5</code> in a grid with serial number <code>8</code>:</p>
+<ul>
+<li>The rack ID is <code>3 + 10 = 13</code>.</li>
+<li>The power level starts at <code>13 * 5 = 65</code>.</li>
+<li>Adding the serial number produces <code>65 + 8 = 73</code>.</li>
+<li>Multiplying by the rack ID produces <code>73 * 13 = 949</code>.</li>
+<li>The hundreds digit of <code>949</code> is <strong><code>9</code></strong>.</li>
+<li>Subtracting 5 produces <code>9 - 5 = 4</code>.</li>
+</ul>
+<p>So, the power level of this fuel cell is <strong><code>4</code></strong>.</p>
+<p>Here are some more example power levels:</p>
+<ul>
+<li>Fuel cell at  <code>122,79</code>, grid serial number <code>57</code>: power level <code>-5</code>.</li>
+<li>Fuel cell at <code>217,196</code>, grid serial number <code>39</code>: power level  <code>0</code>.</li>
+<li>Fuel cell at <code>101,153</code>, grid serial number <code>71</code>: power level  <code>4</code>.</li>
+</ul>
+<p>Your goal is to find the 3x3 square which has the largest total power. The square must be
+entirely within the 300x300 grid. Identify this square using the <code>X,Y</code> coordinate of its
+<strong>top-left fuel cell</strong>. For example:</p>
+<p>For grid serial number <code>18</code>, the largest total 3x3 square has a top-left corner of <strong><code>33,45</code></strong>
+(with a total power of <code>29</code>); these fuel cells appear in the middle of this 5x5 region:</p>
+<pre><code class="language-txt">-2  -4   4   4   4
+-4   4   4   4  -5
+ 4   3   3   4  -4
+ 1   1   2   4  -3
+-1   0   2  -5  -2
+</code></pre>
+<p>For grid serial number <code>42</code>, the largest 3x3 square's top-left is <strong><code>21,61</code></strong> (with a total
+power of <code>30</code>); they are in the middle of this region:</p>
+<pre><code class="language-txt">-3   4   2   2   2
+-4   4   3   3   4
+-5   3   3   4  -4
+ 4   3   3   4  -3
+ 3   3   3  -5  -1
+</code></pre>
+<p><strong>What is the <code>X,Y</code> coordinate of the top-left fuel cell of the 3x3 square with the largest
+total power?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2018::d11::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2018::d11::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2018::d11::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

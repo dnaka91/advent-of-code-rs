@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d22` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d22"><title>aoc::y2018::d22 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d22</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a></p><script>window.sidebarCurrent = {name: "d22", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2018/d22.rs.html#1-118" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a>::<wbr><a class="mod" href="">d22</a></span></h1><div class="docblock"><h1 id="day-22-mode-maze" class="section-header"><a href="#day-22-mode-maze">Day 22: Mode Maze</a></h1>
+<p>This is it, your final stop: the year -483. It's snowing and dark outside; the only light you
+can see is coming from a small cottage in the distance. You make your way there and knock on the
+door.</p>
+<p>A portly man with a large, white beard answers the door and invites you inside. For someone
+living near the North Pole in -483, he must not get many visitors, but he doesn't act surprised
+to see you. Instead, he offers you some milk and cookies.</p>
+<p>After talking for a while, he asks a favor of you. His friend hasn't come back in a few hours,
+and he's not sure where he is. Scanning the region briefly, you discover one life signal in a
+cave system nearby; his friend must have taken shelter there. The man asks if you can go there
+to retrieve his friend.</p>
+<p>The cave is divided into square <strong>regions</strong> which are either dominantly <strong>rocky</strong>, <strong>narrow</strong>,
+or <strong>wet</strong> (called its <strong>type</strong>). Each region occupies exactly one <strong>coordinate</strong> in <code>X,Y</code>
+format where <code>X</code> and <code>Y</code> are integers and zero or greater. (Adjacent regions can be the same
+type.)</p>
+<p>The scan (your puzzle input) is not very detailed: it only reveals the <strong>depth</strong> of the cave
+system and the <strong>coordinates of the target</strong>. However, it does not reveal the type of each
+region. The mouth of the cave is at <code>0,0</code>.</p>
+<p>The man explains that due to the unusual geology in the area, there is a method to determine any
+region's type based on its <strong>erosion level</strong>. The erosion level of a region can be determined
+from its <strong>geologic index</strong>. The geologic index can be determined using the first rule that
+applies from the list below:</p>
+<ul>
+<li>The region at <code>0,0</code> (the mouth of the cave) has a geologic index of <code>0</code>.</li>
+<li>The region at the coordinates of the target has a geologic index of <code>0</code>.</li>
+<li>If the region's <code>Y</code> coordinate is <code>0</code>, the geologic index is its <code>X</code> coordinate times <code>16807</code>.</li>
+<li>If the region's <code>X</code> coordinate is <code>0</code>, the geologic index is its <code>Y</code> coordinate times <code>48271</code>.</li>
+<li>Otherwise, the region's geologic index is the result of multiplying the erosion <strong>levels</strong> of
+the regions at <code>X-1,Y</code> and <code>X,Y-1</code>.</li>
+</ul>
+<p>A region's <strong>erosion level</strong> is its <strong>geologic index</strong> plus the cave system's <strong>depth</strong>, all
+<a href="https://en.wikipedia.org/wiki/Modulo_operation">modulo</a> <code>20183</code>. Then:</p>
+<ul>
+<li>If the <strong>erosion level modulo <code>3</code></strong> is <code>0</code>, the region's type is <strong>rocky</strong>.</li>
+<li>If the <strong>erosion level modulo <code>3</code></strong> is <code>1</code>, the region's type is <strong>wet</strong>.</li>
+<li>If the <strong>erosion level modulo <code>3</code></strong> is <code>2</code>, the region's type is <strong>narrow</strong>.</li>
+</ul>
+<p>For example, suppose the cave system's depth is <code>510</code> and the target's coordinates are <code>10,10</code>.
+Using <code>%</code> to represent the modulo operator, the cavern would look as follows:</p>
+<ul>
+<li>At <code>0,0</code>, the geologic index is <code>0</code>. The erosion level is <code>(0 + 510) % 20183 = 510</code>. The type
+is <code>510 % 3 = 0</code>, <strong>rocky</strong>.</li>
+<li>At <code>1,0</code>, because the <code>Y</code> coordinate is <code>0</code>, the geologic index is <code>1 * 16807 = 16807</code>. The
+erosion level is <code>(16807 + 510) % 20183 = 17317</code>. The type is <code>17317 % 3 = 1</code>, <strong>wet</strong>.</li>
+<li>At <code>0,1</code>, because the <code>X</code> coordinate is <code>0</code>, the geologic index is <code>1 * 48271 = 48271</code>. The
+erosion level is <code>(48271 + 510) % 20183 = 8415</code>. The type is <code>8415 % 3 = 0</code>, <strong>rocky</strong>.</li>
+<li>At <code>1,1</code>, neither coordinate is <code>0</code> and it is not the coordinate of the target, so the
+geologic index is the erosion level of <code>0,1</code> (<code>8415</code>) times the erosion level of <code>1,0</code>
+(<code>17317</code>), <code>8415 * 17317 = 145722555</code>. The erosion level is
+<code>(145722555 + 510) % 20183 = 1805</code>. The type is <code>1805 % 3 = 2</code>, <strong>narrow</strong>.</li>
+<li>At <code>10,10</code>, because they are the target's coordinates, the geologic index is <code>0</code>. The erosion
+level is <code>(0 + 510) % 20183 = 510</code>. The type is <code>510 % 3 = 0</code>, <strong>rocky</strong>.</li>
+</ul>
+<p>Drawing this same cave system with rocky as <code>.</code>, wet as <code>=</code>, narrow as <code>|</code>, the mouth as <code>M</code>,
+the target as <code>T</code>, with <code>0,0</code> in the top-left corner, <code>X</code> increasing to the right, and <code>Y</code>
+increasing downward, the top-left corner of the map looks like this:</p>
+<pre><code class="language-txt">M=.|=.|.|=.|=|=.
+.|=|=|||..|.=...
+.==|....||=..|==
+=.|....|.==.|==.
+=|..==...=.|==..
+=||.=.=||=|=..|=
+|.=.===|||..=..|
+|..==||=.|==|===
+.=..===..=|.|||.
+.======|||=|=.|=
+.===|=|===T===||
+=|||...|==..|=.|
+=.=|=.=..=.||==|
+||=|=...|==.=|==
+|=.=||===.|||===
+||.|==.|.|.||=||
+</code></pre>
+<p>Before you go in, you should determine the <strong>risk level</strong> of the area. For the rectangle that
+has a top-left corner of region <code>0,0</code> and a bottom-right corner of the region containing the
+target, add up the risk level of each individual region: <code>0</code> for rocky regions, <code>1</code> for wet
+regions, and <code>2</code> for narrow regions.</p>
+<p>In the cave system above, because the mouth is at <code>0,0</code> and the target is at <code>10,10</code>, adding up
+the risk level of all regions with an <code>X</code> coordinate from <code>0</code> to <code>10</code> and a <code>Y</code> coordinate from
+<code>0</code> to <code>10</code>, this total is <strong><code>114</code></strong>.</p>
+<p><strong>What is the total risk level for the smallest rectangle that includes <code>0,0</code> and the target's
+coordinates?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2018::d22::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2018::d22::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2018::d22::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

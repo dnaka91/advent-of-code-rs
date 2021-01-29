@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d23` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d23"><title>aoc::y2018::d23 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d23</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a></p><script>window.sidebarCurrent = {name: "d23", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2018/d23.rs.html#1-83" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a>::<wbr><a class="mod" href="">d23</a></span></h1><div class="docblock"><h1 id="day-23-experimental-emergency-teleportation" class="section-header"><a href="#day-23-experimental-emergency-teleportation">Day 23: Experimental Emergency Teleportation</a></h1>
+<p>Using your torch to search the darkness of the rocky cavern, you finally locate the man's
+friend: a small <strong>reindeer</strong>.</p>
+<p>You're not sure how it got so far in this cave. It looks sick - too sick to walk - and too heavy
+for you to carry all the way back. Sleighs won't be invented for another 1500 years, of course.</p>
+<p>The only option is <strong>experimental emergency teleportation</strong>.</p>
+<p>You hit the &quot;experimental emergency teleportation&quot; button on the device and push <strong>I accept the
+risk</strong> on no fewer than 18 different warning messages. Immediately, the device deploys hundreds
+of tiny <strong>nanobots</strong> which fly around the cavern, apparently assembling themselves into a very
+specific <strong>formation</strong>. The device lists the <code>X,Y,Z</code> position (<code>pos</code>) for each nanobot as well
+as its <strong>signal radius</strong> (<code>r</code>) on its tiny screen (your puzzle input).</p>
+<p>Each nanobot can transmit signals to any integer coordinate which is a distance away from it
+<strong>less than or equal to</strong> its signal radius (as measured by <a href="https://en.wikipedia.org/wiki/Taxicab_geometry">Manhattan distance</a>). Coordinates a
+distance away of less than or equal to a nanobot's signal radius are said to be <strong>in range</strong> of
+that nanobot.</p>
+<p>Before you start the teleportation process, you should determine which nanobot is the
+<strong>strongest</strong> (that is, which has the largest signal radius) and then, for that nanobot, the
+<strong>total number of nanobots that are in range</strong> of it, <strong>including itself</strong>.</p>
+<p>For example, given the following nanobots:</p>
+<pre><code class="language-txt">pos=&lt;0,0,0&gt;, r=4
+pos=&lt;1,0,0&gt;, r=1
+pos=&lt;4,0,0&gt;, r=3
+pos=&lt;0,2,0&gt;, r=1
+pos=&lt;0,5,0&gt;, r=3
+pos=&lt;0,0,3&gt;, r=1
+pos=&lt;1,1,1&gt;, r=1
+pos=&lt;1,1,2&gt;, r=1
+pos=&lt;1,3,1&gt;, r=1
+</code></pre>
+<p>The strongest nanobot is the first one (position <code>0,0,0</code>) because its signal radius, <code>4</code> is the
+largest. Using that nanobot's location and signal radius, the following nanobots are in or out
+of range:</p>
+<ul>
+<li>The nanobot at <code>0,0,0</code> is distance <code>0</code> away, and so it is <strong>in range</strong>.</li>
+<li>The nanobot at <code>1,0,0</code> is distance <code>1</code> away, and so it is <strong>in range</strong>.</li>
+<li>The nanobot at <code>4,0,0</code> is distance <code>4</code> away, and so it is <strong>in range</strong>.</li>
+<li>The nanobot at <code>0,2,0</code> is distance <code>2</code> away, and so it is <strong>in range</strong>.</li>
+<li>The nanobot at <code>0,5,0</code> is distance <code>5</code> away, and so it is <strong>not</strong> in range.</li>
+<li>The nanobot at <code>0,0,3</code> is distance <code>3</code> away, and so it is <strong>in range</strong>.</li>
+<li>The nanobot at <code>1,1,1</code> is distance <code>3</code> away, and so it is <strong>in range</strong>.</li>
+<li>The nanobot at <code>1,1,2</code> is distance <code>4</code> away, and so it is <strong>in range</strong>.</li>
+<li>The nanobot at <code>1,3,1</code> is distance <code>5</code> away, and so it is <strong>not</strong> in range.</li>
+</ul>
+<p>In this example, in total, <strong><code>7</code></strong> nanobots are in range of the nanobot with the largest signal
+radius.</p>
+<p>Find the nanobot with the largest signal radius. <strong>How many nanobots are in range</strong> of its
+signals?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2018::d23::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2018::d23::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2018::d23::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

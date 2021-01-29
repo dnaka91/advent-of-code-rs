@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d21` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d21"><title>aoc::y2016::d21 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d21</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a></p><script>window.sidebarCurrent = {name: "d21", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2016/d21.rs.html#1-72" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a>::<wbr><a class="mod" href="">d21</a></span></h1><div class="docblock"><h1 id="day-21-scrambled-letters-and-hash" class="section-header"><a href="#day-21-scrambled-letters-and-hash">Day 21: Scrambled Letters and Hash</a></h1>
+<p>The computer system you're breaking into uses a weird scrambling function to store its
+passwords. It shouldn't be much trouble to create your own scrambled password so you can add it
+to the system; you just have to implement the scrambler.</p>
+<p>The scrambling function is a series of operations (the exact list is provided in your puzzle
+input). Starting with the password to be scrambled, apply each operation in succession to the
+string. The individual operations behave as follows:</p>
+<ul>
+<li><code>swap position X with position Y</code> means that the letters at indexes <code>X</code> and <code>Y</code> (counting from
+<code>0</code>) should be <strong>swapped</strong>.</li>
+<li><code>swap letter X with letter Y</code> means that the letters <code>X</code> and <code>Y</code> should be <strong>swapped</strong>
+(regardless of where they appear in the string).</li>
+<li><code>rotate left/right X steps</code> means that the whole string should be <strong>rotated</strong>; for example,
+one right rotation would turn <code>abcd</code> into <code>dabc</code>.</li>
+<li><code>rotate based on position of letter X</code> means that the whole string should be <strong>rotated to the
+right</strong> based on the <strong>index</strong> of letter <code>X</code> (counting from <code>0</code>) as determined <strong>before</strong> this
+instruction does any rotations. Once the index is determined, rotate the string to the right
+one time, plus a number of times equal to that index, plus one additional time if the index
+was at least <code>4</code>.</li>
+<li><code>reverse positions X through Y</code> means that the span of letters at indexes <code>X</code> through <code>Y</code>
+(including the letters at <code>X</code> and <code>Y</code>) should be <strong>reversed in order</strong>.</li>
+<li><code>move position X to position Y</code> means that the letter which is at index <code>X</code> should be
+<strong>removed</strong> from the string, then <strong>inserted</strong> such that it ends up at index <code>Y</code>.</li>
+</ul>
+<p>For example, suppose you start with <code>abcde</code> and perform the following operations:</p>
+<ul>
+<li><code>swap position 4 with position 0</code> swaps the first and last letters, producing the input for
+the next step, <code>ebcda</code>.</li>
+<li><code>swap letter d with letter b</code> swaps the positions of <code>d</code> and <code>b</code>: <code>edcba</code>.</li>
+<li><code>reverse positions 0 through 4</code> causes the entire string to be reversed, producing <code>abcde</code>.</li>
+<li><code>rotate left 1 step</code> shifts all letters left one position, causing the first letter to wrap to
+the end of the string: <code>bcdea</code>.</li>
+<li><code>move position 1 to position 4</code> removes the letter at position <code>1</code> (<code>c</code>), then inserts it at
+position <code>4</code> (the end of the string): <code>bdeac</code>.</li>
+<li><code>move position 3 to position 0</code> removes the letter at position <code>3</code> (<code>a</code>), then inserts it at
+position <code>0</code> (the front of the string): <code>abdec</code>.</li>
+<li><code>rotate based on position of letter b</code> finds the index of letter <code>b</code> (<code>1</code>), then rotates the
+string right once plus a number of times equal to that index (<code>2</code>): <code>ecabd</code>.</li>
+<li><code>rotate based on position of letter d</code> finds the index of letter <code>d</code> (<code>4</code>), then rotates the
+string right once, plus a number of times equal to that index, plus an additional time because
+the index was at least <code>4</code>, for a total of <code>6</code> right rotations: <code>decab</code>.</li>
+</ul>
+<p>After these steps, the resulting scrambled password is <code>decab</code>.</p>
+<p>Now, you just need to generate a new scrambled password and you can access the system. Given the
+list of scrambling operations in your puzzle input, <strong>what is the result of scrambling
+<code>abcdefgh</code>?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2016::d21::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2016::d21::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2016::d21::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

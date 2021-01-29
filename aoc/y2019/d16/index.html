@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d16` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d16"><title>aoc::y2019::d16 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d16</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a></p><script>window.sidebarCurrent = {name: "d16", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2019/d16.rs.html#1-119" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a>::<wbr><a class="mod" href="">d16</a></span></h1><div class="docblock"><h1 id="day-16-flawed-frequency-transmission" class="section-header"><a href="#day-16-flawed-frequency-transmission">Day 16: Flawed Frequency Transmission</a></h1>
+<p>You're 3/4ths of the way through the <a href="https://en.wikipedia.org/wiki/Gas_giant">gas giants</a>. Not only do roundtrip signals to Earth take
+five hours, but the signal quality is quite bad as well. You can clean up the signal with the
+Flawed Frequency Transmission algorithm, or <strong>FFT</strong>.</p>
+<p>As input, FFT takes a list of numbers. In the signal you received (your puzzle input), each
+number is a single digit: data like <code>15243</code> represents the sequence <code>1</code>, <code>5</code>, <code>2</code>, <code>4</code>, <code>3</code>.</p>
+<p>FFT operates in repeated <strong>phases</strong>. In each phase, a new list is constructed with the same
+length as the input list. This new list is also used as the input for the next phase.</p>
+<p>Each element in the new list is built by multiplying every value in the input list by a value in
+a repeating <strong>pattern</strong> and then adding up the results. So, if the input list were
+<code>9, 8, 7, 6, 5</code> and the pattern for a given element were <code>1, 2, 3</code>, the result would be
+<code>9*1 + 8*2 + 7*3 + 6*1 + 5*2</code> (with each input element on the left and each value in the
+repeating pattern on the right of each multiplication). Then, only the ones digit is kept: <code>38</code>
+becomes <code>8</code>, <code>-17</code> becomes <code>7</code>, and so on.</p>
+<p>While each element in the output array uses all of the same input array elements, the actual
+repeating pattern to use depends on <strong>which output element</strong> is being calculated. The base
+pattern is <code>0, 1, 0, -1</code>. Then, repeat each value in the pattern a number of times equal to the
+<strong>position in the output list</strong> being considered. Repeat once for the first element, twice for
+the second element, three times for the third element, and so on. So, if the third element of
+the output list is being calculated, repeating the values would produce:
+<code>0, 0, 0, 1, 1, 1, 0, 0, 0, -1, -1, -1</code>.</p>
+<p>When applying the pattern, skip the very first value exactly once. (In other words, offset the
+whole pattern left by one.) So, for the second element of the output list, the actual pattern
+used would be: <code>0, 1, 1, 0, 0, -1, -1, 0, 0, 1, 1, 0, 0, -1, -1, ...</code>.</p>
+<p>After using this process to calculate each element of the output list, the phase is complete,
+and the output list of this phase is used as the new input list for the next phase, if any.</p>
+<p>Given the input signal <code>12345678</code>, below are four phases of FFT. Within each phase, each output
+digit is calculated on a single line with the result at the far right; each multiplication
+operation shows the input digit on the left and the pattern value on the right:</p>
+<pre><code class="language-txt">Input signal: 12345678
+
+1*1  + 2*0  + 3*-1 + 4*0  + 5*1  + 6*0  + 7*-1 + 8*0  = 4
+1*0  + 2*1  + 3*1  + 4*0  + 5*0  + 6*-1 + 7*-1 + 8*0  = 8
+1*0  + 2*0  + 3*1  + 4*1  + 5*1  + 6*0  + 7*0  + 8*0  = 2
+1*0  + 2*0  + 3*0  + 4*1  + 5*1  + 6*1  + 7*1  + 8*0  = 2
+1*0  + 2*0  + 3*0  + 4*0  + 5*1  + 6*1  + 7*1  + 8*1  = 6
+1*0  + 2*0  + 3*0  + 4*0  + 5*0  + 6*1  + 7*1  + 8*1  = 1
+1*0  + 2*0  + 3*0  + 4*0  + 5*0  + 6*0  + 7*1  + 8*1  = 5
+1*0  + 2*0  + 3*0  + 4*0  + 5*0  + 6*0  + 7*0  + 8*1  = 8
+
+After 1 phase: 48226158
+
+4*1  + 8*0  + 2*-1 + 2*0  + 6*1  + 1*0  + 5*-1 + 8*0  = 3
+4*0  + 8*1  + 2*1  + 2*0  + 6*0  + 1*-1 + 5*-1 + 8*0  = 4
+4*0  + 8*0  + 2*1  + 2*1  + 6*1  + 1*0  + 5*0  + 8*0  = 0
+4*0  + 8*0  + 2*0  + 2*1  + 6*1  + 1*1  + 5*1  + 8*0  = 4
+4*0  + 8*0  + 2*0  + 2*0  + 6*1  + 1*1  + 5*1  + 8*1  = 0
+4*0  + 8*0  + 2*0  + 2*0  + 6*0  + 1*1  + 5*1  + 8*1  = 4
+4*0  + 8*0  + 2*0  + 2*0  + 6*0  + 1*0  + 5*1  + 8*1  = 3
+4*0  + 8*0  + 2*0  + 2*0  + 6*0  + 1*0  + 5*0  + 8*1  = 8
+
+After 2 phases: 34040438
+
+3*1  + 4*0  + 0*-1 + 4*0  + 0*1  + 4*0  + 3*-1 + 8*0  = 0
+3*0  + 4*1  + 0*1  + 4*0  + 0*0  + 4*-1 + 3*-1 + 8*0  = 3
+3*0  + 4*0  + 0*1  + 4*1  + 0*1  + 4*0  + 3*0  + 8*0  = 4
+3*0  + 4*0  + 0*0  + 4*1  + 0*1  + 4*1  + 3*1  + 8*0  = 1
+3*0  + 4*0  + 0*0  + 4*0  + 0*1  + 4*1  + 3*1  + 8*1  = 5
+3*0  + 4*0  + 0*0  + 4*0  + 0*0  + 4*1  + 3*1  + 8*1  = 5
+3*0  + 4*0  + 0*0  + 4*0  + 0*0  + 4*0  + 3*1  + 8*1  = 1
+3*0  + 4*0  + 0*0  + 4*0  + 0*0  + 4*0  + 3*0  + 8*1  = 8
+
+After 3 phases: 03415518
+
+0*1  + 3*0  + 4*-1 + 1*0  + 5*1  + 5*0  + 1*-1 + 8*0  = 0
+0*0  + 3*1  + 4*1  + 1*0  + 5*0  + 5*-1 + 1*-1 + 8*0  = 1
+0*0  + 3*0  + 4*1  + 1*1  + 5*1  + 5*0  + 1*0  + 8*0  = 0
+0*0  + 3*0  + 4*0  + 1*1  + 5*1  + 5*1  + 1*1  + 8*0  = 2
+0*0  + 3*0  + 4*0  + 1*0  + 5*1  + 5*1  + 1*1  + 8*1  = 9
+0*0  + 3*0  + 4*0  + 1*0  + 5*0  + 5*1  + 1*1  + 8*1  = 4
+0*0  + 3*0  + 4*0  + 1*0  + 5*0  + 5*0  + 1*1  + 8*1  = 9
+0*0  + 3*0  + 4*0  + 1*0  + 5*0  + 5*0  + 1*0  + 8*1  = 8
+
+After 4 phases: 01029498
+</code></pre>
+<p>Here are the first eight digits of the final output list after 100 phases for some larger
+inputs:</p>
+<ul>
+<li><code>80871224585914546619083218645595</code> becomes <code>24176176</code>.</li>
+<li><code>19617804207202209144916044189917</code> becomes <code>73745418</code>.</li>
+<li><code>69317163492948606335995924319873</code> becomes <code>52432133</code>.</li>
+</ul>
+<p>After <strong>100</strong> phases of FFT, <strong>what are the first eight digits in the final output list?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2019::d16::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2019::d16::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2019::d16::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

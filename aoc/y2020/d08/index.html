@@ -1,0 +1,101 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d08` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d08"><title>aoc::y2020::d08 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d08</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2020</a></p><script>window.sidebarCurrent = {name: "d08", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2020/d08.rs.html#1-250" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2020</a>::<wbr><a class="mod" href="">d08</a></span></h1><div class="docblock"><h1 id="day-8-handheld-halting" class="section-header"><a href="#day-8-handheld-halting">Day 8: Handheld Halting</a></h1>
+<p>Your flight to the major airline hub reaches cruising altitude without incident. While you
+consider checking the in-flight menu for one of those drinks that come with a little umbrella,
+you are interrupted by the kid sitting next to you.</p>
+<p>Their <a href="https://en.wikipedia.org/wiki/Handheld_game_console">handheld game console</a> won't turn on! They ask if you can take a look.</p>
+<p>You narrow the problem down to a strange <strong>infinite loop</strong> in the boot code (your puzzle input)
+of the device. You should be able to fix it, but first you need to be able to run the code in
+isolation.</p>
+<p>The boot code is represented as a text file with one <strong>instruction</strong> per line of text. Each
+instruction consists of an <strong>operation</strong> (<code>acc</code>, <code>jmp</code>, or <code>nop</code>) and an <strong>argument</strong> (a signed
+number like <code>+4</code> or <code>-20</code>).</p>
+<ul>
+<li><code>acc</code> increases or decreases a single global value called the <strong>accumulator</strong> by the value
+given in the argument. For example, <code>acc +7</code> would increase the accumulator by 7. The
+accumulator starts at <code>0</code>. After an <code>acc</code> instruction, the instruction immediately below it is
+executed next.</li>
+<li><code>jmp</code> <strong>jumps</strong> to a new instruction relative to itself. The next instruction to execute is
+found using the argument as an <strong>offset</strong> from the <code>jmp</code> instruction; for example, <code>jmp +2</code>
+would skip the next instruction, <code>jmp +1</code> would continue to the instruction immediately below
+it, and <code>jmp -20</code> would cause the instruction 20 lines above to be executed next.</li>
+<li><code>nop</code> stands for <strong>No OPeration</strong> - it does nothing. The instruction immediately below it is
+executed next.</li>
+</ul>
+<p>For example, consider the following program:</p>
+<pre><code class="language-txt">nop +0
+acc +1
+jmp +4
+acc +3
+jmp -3
+acc -99
+acc +1
+jmp -4
+acc +6
+</code></pre>
+<p>These instructions are visited in this order:</p>
+<pre><code class="language-txt">nop +0  | 1
+acc +1  | 2, 8(!)
+jmp +4  | 3
+acc +3  | 6
+jmp -3  | 7
+acc -99 |
+acc +1  | 4
+jmp -4  | 5
+acc +6  |
+</code></pre>
+<p>First, the <code>nop +0</code> does nothing. Then, the accumulator is increased from 0 to 1 (<code>acc +1</code>) and
+<code>jmp +4</code> sets the next instruction to the other <code>acc +1</code> near the bottom. After it increases the
+accumulator from 1 to 2, <code>jmp -4</code> executes, setting the next instruction to the only <code>acc +3</code>.
+It sets the accumulator to 5, and <code>jmp -3</code> causes the program to continue back at the first
+<code>acc +1</code>.</p>
+<p>This is an <strong>infinite loop</strong>: with this sequence of jumps, the program will run forever. The
+moment the program tries to run any instruction a second time, you know it will never terminate.</p>
+<p>Immediately <strong>before</strong> the program would run an instruction a second time, the value in the
+accumulator is <strong><code>5</code></strong>.</p>
+<p>Run your copy of the boot code. Immediately before any instruction is executed a second time,
+<strong>what value is in the accumulator?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>After some careful analysis, you believe that <strong>exactly one instruction is corrupted</strong>.</p>
+<p>Somewhere in the program, <strong>either</strong> a <code>jmp</code> is supposed to be a <code>nop</code>, <strong>or</strong> a <code>nop</code> is
+supposed to be a <code>jmp</code>. (No <code>acc</code> instructions were harmed in the corruption of this boot code.)</p>
+<p>The program is supposed to terminate by <strong>attempting to execute an instruction immediately after
+the last instruction in the file</strong>. By changing exactly one <code>jmp</code> or <code>nop</code>, you can repair the
+boot code and make it terminate correctly.</p>
+<p>For example, consider the same program from above:</p>
+<pre><code class="language-txt">nop +0
+acc +1
+jmp +4
+acc +3
+jmp -3
+acc -99
+acc +1
+jmp -4
+acc +6
+</code></pre>
+<p>If you change the first instruction from <code>nop +0</code> to <code>jmp +0</code>, it would create a
+single-instruction infinite loop, never leaving that instruction. If you change almost any of
+the <code>jmp</code> instructions, the program will still eventually find another <code>jmp</code> instruction and
+loop forever.</p>
+<p>However, if you change the second-to-last instruction (from <code>jmp -4</code> to <code>nop -4</code>), the program
+terminates! The instructions are visited in this order:</p>
+<pre><code class="language-txt">nop +0  | 1
+acc +1  | 2
+jmp +4  | 3
+acc +3  |
+jmp -3  |
+acc -99 |
+acc +1  | 4
+nop -4  | 5
+acc +6  | 6
+</code></pre>
+<p>After the last instruction (<code>acc +6</code>), the program terminates by attempting to run the
+instruction below the last instruction in the file. With this change, after the program
+terminates, the accumulator contains the value 8 (<code>acc +1</code>, <code>acc +1</code>, <code>acc +6</code>).</p>
+<p>Fix the program so that it terminates normally by changing exactly one <code>jmp</code> (to <code>nop</code>) or <code>nop</code>
+(to <code>jmp</code>). <strong>What is the value of the accumulator after the program terminates?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2020::d08::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2020::d08::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2020::d08::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

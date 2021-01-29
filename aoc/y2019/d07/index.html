@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d07` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d07"><title>aoc::y2019::d07 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d07</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a></p><script>window.sidebarCurrent = {name: "d07", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2019/d07.rs.html#1-231" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a>::<wbr><a class="mod" href="">d07</a></span></h1><div class="docblock"><h1 id="day-7-amplification-circuit" class="section-header"><a href="#day-7-amplification-circuit">Day 7: Amplification Circuit</a></h1>
+<p>Based on the navigational maps, you're going to need to send more power to your ship's thrusters
+to reach Santa in time. To do this, you'll need to configure a series of <a href="https://en.wikipedia.org/wiki/Amplifier">amplifiers</a> already
+installed on the ship.</p>
+<p>There are five amplifiers connected in series; each one receives an input signal and produces an
+output signal. They are connected such that the first amplifier's output leads to the second
+amplifier's input, the second amplifier's output leads to the third amplifier's input, and so
+on. The first amplifier's input value is <code>0</code>, and the last amplifier's output leads to your
+ship's thrusters.</p>
+<pre><code class="language-txt">    O-------O  O-------O  O-------O  O-------O  O-------O
+0 -&gt;| Amp A |-&gt;| Amp B |-&gt;| Amp C |-&gt;| Amp D |-&gt;| Amp E |-&gt; (to thrusters)
+    O-------O  O-------O  O-------O  O-------O  O-------O
+</code></pre>
+<p>The Elves have sent you some <strong>Amplifier Controller Software</strong> (your puzzle input), a program
+that should run on your <a href="../../../aoc/y2019/d05/index.html">existing Intcode computer</a>. Each amplifier will need to run a copy of
+the program.</p>
+<p>When a copy of the program starts running on an amplifier, it will first use an input
+instruction to ask the amplifier for its current <strong>phase setting</strong> (an integer from 0 to 4).
+Each phase setting is used <strong>exactly once</strong>, but the Elves can't remember which amplifier needs
+which phase setting.</p>
+<p>The program will then call another input instruction to get the amplifier's input signal,
+compute the correct output signal, and supply it back to the amplifier with an output
+instruction. (If the amplifier has not yet received an input signal, it waits until one
+arrives.)</p>
+<p>Your job is to <strong>find the largest output signal that can be sent to the thrusters</strong> by trying
+every possible combination of phase settings on the amplifiers. Make sure that memory is not
+shared or reused between copies of the program.</p>
+<p>For example, suppose you want to try the phase setting sequence <code>3,1,2,4,0</code>, which would mean
+setting amplifier <code>A</code> to phase setting <code>3</code>, amplifier <code>B</code> to setting <code>1</code>, <code>C</code> to <code>2</code>, <code>D</code> to
+<code>4</code>, and <code>E</code> to <code>0</code>. Then, you could determine the output signal that gets sent from amplifier
+<code>E</code> to the thrusters with the following steps:</p>
+<ul>
+<li>Start the copy of the amplifier controller software that will run on amplifier <code>A</code>. At its
+first input instruction, provide it the amplifier's phase setting, <code>3</code>. At its second input
+instruction, provide it the input signal, <code>0</code>. After some calculations, it will use an output
+instruction to indicate the amplifier's output signal.</li>
+<li>Start the software for amplifier <code>B</code>. Provide it the phase setting (<code>1</code>) and then whatever
+output signal was produced from amplifier <code>A</code>. It will then produce a new output signal
+destined for amplifier <code>C</code>.</li>
+<li>Start the software for amplifier <code>C</code>, provide the phase setting (<code>2</code>) and the value from
+amplifier <code>B</code>, then collect its output signal.</li>
+<li>Run amplifier <code>D</code>'s software, provide the phase setting (<code>4</code>) and input value, and collect its
+output signal.</li>
+<li>Run amplifier <code>E</code>'s software, provide the phase setting (<code>0</code>) and input value, and collect its
+output signal.</li>
+</ul>
+<p>The final output signal from amplifier <code>E</code> would be sent to the thrusters. However, this phase
+setting sequence may not have been the best one; another sequence might have sent a higher
+signal to the thrusters.</p>
+<p>Here are some example programs:</p>
+<ul>
+<li>Max thruster signal <strong><code>43210</code></strong> (from phase setting sequence <code>4,3,2,1,0</code>):</li>
+</ul>
+<pre><code class="language-txt">3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0
+</code></pre>
+<ul>
+<li>Max thruster signal <strong><code>54321</code></strong> (from phase setting sequence <code>0,1,2,3,4</code>):</li>
+</ul>
+<pre><code class="language-txt">3,23,3,24,1002,24,10,24,1002,23,-1,23,
+101,5,23,23,1,24,23,23,4,23,99,0,0
+</code></pre>
+<ul>
+<li>Max thruster signal <strong><code>65210</code></strong> (from phase setting sequence <code>1,0,4,3,2</code>):</li>
+</ul>
+<pre><code class="language-txt">3,31,3,32,1002,32,10,32,1001,31,-2,31,1007,31,0,33,
+1002,33,7,33,1,33,31,31,1,32,31,31,4,31,99,0,0,0
+</code></pre>
+<p>Try every combination of phase settings on the amplifiers. <strong>What is the highest signal that can
+be sent to the thrusters?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>It's no good - in this configuration, the amplifiers can't generate a large enough output signal
+to produce the thrust you'll need. The Elves quickly talk you through rewiring the amplifiers
+into a <strong>feedback loop</strong>:</p>
+<pre><code class="language-txt">      O-------O  O-------O  O-------O  O-------O  O-------O
+0 -+-&gt;| Amp A |-&gt;| Amp B |-&gt;| Amp C |-&gt;| Amp D |-&gt;| Amp E |-.
+   |  O-------O  O-------O  O-------O  O-------O  O-------O |
+   |                                                        |
+   '--------------------------------------------------------+
+                                                            |
+                                                            v
+                                                     (to thrusters)
+</code></pre>
+<p>Most of the amplifiers are connected as they were before; amplifier <code>A</code>'s output is connected to
+amplifier <code>B</code>'s input, and so on. <strong>However</strong>, the output from amplifier <code>E</code> is now connected
+into amplifier <code>A</code>'s input. This creates the feedback loop: the signal will be sent through the
+amplifiers <strong>many times</strong>.</p>
+<p>In feedback loop mode, the amplifiers need <strong>totally different phase</strong> settings: integers from
+<code>5</code> to <code>9</code>, again each used exactly once. These settings will cause the Amplifier Controller
+Software to repeatedly take input and produce output many times before halting. Provide each
+amplifier its phase setting at its first input instruction; all further input/output
+instructions are for signals.</p>
+<p>Don't restart the Amplifier Controller Software on any amplifier during this process. Each one
+should continue receiving and sending signals until it halts.</p>
+<p>All signals sent or received in this process will be between pairs of amplifiers except the very
+first signal and the very last signal. To start the process, a <code>0</code> signal is sent to amplifier
+<code>A</code>'s input <strong>exactly once</strong>.</p>
+<p>Eventually, the software on the amplifiers will halt after they have processed the final loop.
+When this happens, the last output signal from amplifier <code>E</code> is sent to the thrusters. Your job
+is to <strong>find the largest output signal that can be sent to the thrusters</strong> using the new phase
+settings and feedback loop arrangement.</p>
+<p>Here are some example programs:</p>
+<ul>
+<li>Max thruster signal <strong><code>139629729</code></strong> (from phase setting sequence <code>9,8,7,6,5</code>):</li>
+</ul>
+<pre><code class="language-txt">3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,
+27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5
+</code></pre>
+<ul>
+<li>Max thruster signal <strong><code>18216</code></strong> (from phase setting sequence <code>9,7,8,5,6</code>):</li>
+</ul>
+<pre><code class="language-txt">3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,54,
+-5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,53,4,
+53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10
+</code></pre>
+<p>Try every combination of the new phase settings on the amplifier feedback loop. <strong>What is the
+highest signal that can be sent to the thrusters?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2019::d07::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2019::d07::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2019::d07::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

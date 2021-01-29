@@ -1,0 +1,104 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d21` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d21"><title>aoc::y2019::d21 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d21</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a></p><script>window.sidebarCurrent = {name: "d21", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2019/d21.rs.html#1-150" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a>::<wbr><a class="mod" href="">d21</a></span></h1><div class="docblock"><h1 id="day-21-springdroid-adventure" class="section-header"><a href="#day-21-springdroid-adventure">Day 21: Springdroid Adventure</a></h1>
+<p>You lift off from Pluto and start flying in the direction of Santa.</p>
+<p>While experimenting further with the tractor beam, you accidentally pull an asteroid directly
+into your ship! It deals significant damage to your hull and causes your ship to begin tumbling
+violently.</p>
+<p>You can send a droid out to investigate, but the tumbling is causing enough <a href="https://en.wikipedia.org/wiki/Artificial_gravity">artificial gravity</a>
+that one wrong step could send the droid through a hole in the hull and flying out into space.</p>
+<p>The clear choice for this mission is a droid that can <strong>jump</strong> over the holes in the hull - a
+<strong>springdroid</strong>.</p>
+<p>You can use an <a href="../../../aoc/y2019/d09/index.html">Intcode</a> program (your puzzle input) running on an <a href="../../../aoc/y2019/d17/index.html">ASCII-capable</a> computer to
+<a href="https://en.wikipedia.org/wiki/Programmable_read-only_memory">program</a> the springdroid. However, springdroids don't run Intcode; instead, they run a
+simplified assembly language called <strong>springscript</strong>.</p>
+<p>While a springdroid is certainly capable of navigating the artificial gravity and giant holes,
+it has one downside: it can only remember at most <strong>15</strong> springscript instructions.</p>
+<p>The springdroid will move forward automatically, constantly thinking about <strong>whether to jump</strong>.
+The springscript program defines the logic for this decision.</p>
+<p>Springscript programs only use <a href="https://en.wikipedia.org/wiki/Boolean_data_type">Boolean values</a>, not numbers or strings. Two registers are
+available: <code>T</code>, the <strong>temporary value</strong> register, and <code>J</code>, the <strong>jump register</strong>. If the jump
+register is <strong>true</strong> at the end of the springscript program, the springdroid will try to jump.
+Both of these registers start with the value <strong>false</strong>.</p>
+<p>Springdroids have a sensor that can detect <strong>whether there is ground</strong> at various distances in
+the direction it is facing; these values are provided in <strong>read-only registers</strong>. Your
+springdroid can detect ground at four distances: one tile away (<code>A</code>), two tiles away (<code>B</code>),
+three tiles away (<code>C</code>), and four tiles away (<code>D</code>). If there is ground at the given distance, the
+register will be <strong>true</strong>; if there is a hole, the register will be <strong>false</strong>.</p>
+<p>There are only <strong>three instructions</strong> available in springscript:</p>
+<ul>
+<li><code>AND X Y</code> sets <code>Y</code> to <strong>true</strong> if both <code>X</code> and <code>Y</code> are <strong>true</strong>; otherwise, it sets <code>Y</code> to
+<strong>false</strong>.</li>
+<li><code>OR X Y</code> sets <code>Y</code> to <strong>true</strong> if at least one of <code>X</code> or <code>Y</code> is <strong>true</strong>; otherwise, it sets
+<code>Y</code> to <strong>false</strong>.</li>
+<li><code>NOT X Y</code> sets <code>Y</code> to <strong>true</strong> if <code>X</code> is <strong>false</strong>; otherwise, it sets <code>Y</code> to <strong>false</strong>.</li>
+</ul>
+<p>In all three instructions, the second argument (<code>Y</code>) needs to be a <strong>writable register</strong> (either
+<code>T</code> or <code>J</code>). The first argument (<code>X</code>) can be <strong>any register</strong> (including <code>A</code>, <code>B</code>, <code>C</code>, or <code>D</code>).</p>
+<p>For example, the one-instruction program <code>NOT A J</code> means &quot;if the tile immediately in front of me
+is not ground, jump&quot;.</p>
+<p>Or, here is a program that jumps if a three-tile-wide hole (with ground on the other side of the
+hole) is detected:</p>
+<pre><code class="language-txt">NOT A J
+NOT B T
+AND T J
+NOT C T
+AND T J
+AND D J
+</code></pre>
+<p>The Intcode program expects ASCII inputs and outputs. It will begin by displaying a prompt;
+then, input the desired instructions one per line. End each line with a newline (ASCII code
+<code>10</code>). <strong>When you have finished entering your program</strong>, provide the command <code>WALK</code> followed by
+a newline to instruct the springdroid to begin surveying the hull.</p>
+<p>If the springdroid <strong>falls into space</strong>, an ASCII rendering of the last moments of its life will
+be produced. In these, <code>@</code> is the springdroid, <code>#</code> is hull, and <code>.</code> is empty space. For example,
+suppose you program the springdroid like this:</p>
+<pre><code class="language-txt">NOT D J
+WALK
+</code></pre>
+<p>This one-instruction program sets <code>J</code> to <strong>true</strong> if and only if there is no ground four tiles
+away. In other words, it attempts to jump into any hole it finds:</p>
+<pre><code class="language-txt">.................
+.................
+@................
+#####.###########
+
+.................
+.................
+.@...............
+#####.###########
+
+.................
+..@..............
+.................
+#####.###########
+
+...@.............
+.................
+.................
+#####.###########
+
+.................
+....@............
+.................
+#####.###########
+
+.................
+.................
+.....@...........
+#####.###########
+
+.................
+.................
+.................
+#####@###########
+</code></pre>
+<p>However, if the springdroid successfully makes it across, it will use an output instruction to
+indicate the <strong>amount of damage to the hull</strong> as a single giant integer outside the normal ASCII
+range.</p>
+<p>Program the springdroid with logic that allows it to survey the hull without falling into space.
+<strong>What amount of hull damage does it report?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2019::d21::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2019::d21::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2019::d21::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

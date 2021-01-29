@@ -1,0 +1,158 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d11` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d11"><title>aoc::y2016::d11 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d11</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a></p><script>window.sidebarCurrent = {name: "d11", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2016/d11.rs.html#1-205" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a>::<wbr><a class="mod" href="">d11</a></span></h1><div class="docblock"><h1 id="day-11-radioisotope-thermoelectric-generators" class="section-header"><a href="#day-11-radioisotope-thermoelectric-generators">Day 11: Radioisotope Thermoelectric Generators</a></h1>
+<p>You come upon a column of four floors that have been entirely sealed off from the rest of the
+building except for a small dedicated lobby. There are some radiation warnings and a big sign
+which reads &quot;Radioisotope Testing Facility&quot;.</p>
+<p>According to the project status board, this facility is currently being used to experiment with
+<a href="https://en.wikipedia.org/wiki/Radioisotope_thermoelectric_generator">Radioisotope Thermoelectric Generators</a> (RTGs, or simply &quot;generators&quot;) that are designed to be
+paired with specially-constructed microchips. Basically, an RTG is a highly radioactive rock
+that generates electricity through heat.</p>
+<p>The experimental RTGs have poor radiation containment, so they're dangerously radioactive. The
+chips are prototypes and don't have normal radiation shielding, but they do have the ability to
+<strong>generate an electromagnetic radiation shield when powered</strong>. Unfortunately, they can <strong>only</strong>
+be powered by their corresponding RTG. An RTG powering a microchip is still dangerous to other
+microchips.</p>
+<p>In other words, if a chip is ever left in the same area as another RTG, and it's not connected
+to its own RTG, the chip will be <strong>fried</strong>. Therefore, it is assumed that you will follow
+procedure and keep chips connected to their corresponding RTG when they're in the same room, and
+away from other RTGs otherwise.</p>
+<p>These microchips sound very interesting and useful to your current activities, and you'd like to
+try to retrieve them. The fourth floor of the facility has an assembling machine which can make
+a self-contained, shielded computer for you to take with you - that is, if you can bring it all
+of the RTGs and microchips.</p>
+<p>Within the radiation-shielded part of the facility (in which it's safe to have these
+pre-assembly RTGs), there is an elevator that can move between the four floors. Its capacity
+rating means it can carry at most yourself and two RTGs or microchips in any combination.
+(They're rigged to some heavy diagnostic equipment - the assembling machine will detach it for
+you.) As a security measure, the elevator will only function if it contains at least one RTG or
+microchip. The elevator always stops on each floor to recharge, and this takes long enough that
+the items within it and the items on that floor can irradiate each other. (You can prevent this
+if a Microchip and its Generator end up on the same floor in this way, as they can be connected
+while the elevator is recharging.)</p>
+<p>You make some notes of the locations of each component of interest (your puzzle input). Before
+you don a hazmat suit and start moving things around, you'd like to have an idea of what you
+need to do.</p>
+<p>When you enter the containment area, you and the elevator will start on the first floor.</p>
+<p>For example, suppose the isolated area has the following arrangement:</p>
+<pre><code class="language-txt">The first floor contains a hydrogen-compatible microchip and a lithium-compatible microchip.
+The second floor contains a hydrogen generator.
+The third floor contains a lithium generator.
+The fourth floor contains nothing relevant.
+</code></pre>
+<p>As a diagram (<code>F#</code> for a Floor number, <code>E</code> for Elevator, <code>H</code> for Hydrogen, <code>L</code> for Lithium, <code>M</code>
+for Microchip, and <code>G</code> for Generator), the initial state looks like this:</p>
+<pre><code class="language-txt">F4 .  .  .  .  .
+F3 .  .  .  LG .
+F2 .  HG .  .  .
+F1 E  .  HM .  LM
+</code></pre>
+<p>Then, to get everything up to the assembling machine on the fourth floor, the following steps
+could be taken:</p>
+<ul>
+<li>Bring the Hydrogen-compatible Microchip to the second floor, which is safe because it can get
+power from the Hydrogen Generator:</li>
+</ul>
+<pre><code class="language-txt">F4 .  .  .  .  .
+F3 .  .  .  LG .
+F2 E  HG HM .  .
+F1 .  .  .  .  LM
+</code></pre>
+<ul>
+<li>Bring both Hydrogen-related items to the third floor, which is safe because the
+Hydrogen-compatible microchip is getting power from its generator:</li>
+</ul>
+<pre><code class="language-txt">F4 .  .  .  .  .
+F3 E  HG HM LG .
+F2 .  .  .  .  .
+F1 .  .  .  .  LM
+</code></pre>
+<ul>
+<li>Leave the Hydrogen Generator on floor three, but bring the Hydrogen-compatible Microchip back
+down with you so you can still use the elevator:</li>
+</ul>
+<pre><code class="language-txt">F4 .  .  .  .  .
+F3 .  HG .  LG .
+F2 E  .  HM .  .
+F1 .  .  .  .  LM
+</code></pre>
+<ul>
+<li>At the first floor, grab the Lithium-compatible Microchip, which is safe because Microchips
+don't affect each other:</li>
+</ul>
+<pre><code class="language-txt">F4 .  .  .  .  .
+F3 .  HG .  LG .
+F2 .  .  .  .  .
+F1 E  .  HM .  LM
+</code></pre>
+<ul>
+<li>Bring both Microchips up one floor, where there is nothing to fry them:</li>
+</ul>
+<pre><code class="language-txt">F4 .  .  .  .  .
+F3 .  HG .  LG .
+F2 E  .  HM .  LM
+F1 .  .  .  .  .
+</code></pre>
+<ul>
+<li>Bring both Microchips up again to floor three, where they can be temporarily connected to
+their corresponding generators while the elevator recharges, preventing either of them from
+being fried:</li>
+</ul>
+<pre><code class="language-txt">F4 .  .  .  .  .
+F3 E  HG HM LG LM
+F2 .  .  .  .  .
+F1 .  .  .  .  .
+</code></pre>
+<ul>
+<li>Bring both Microchips to the fourth floor:</li>
+</ul>
+<pre><code class="language-txt">F4 E  .  HM .  LM
+F3 .  HG .  LG .
+F2 .  .  .  .  .
+F1 .  .  .  .  .
+</code></pre>
+<ul>
+<li>Leave the Lithium-compatible microchip on the fourth floor, but bring the Hydrogen-compatible
+one so you can still use the elevator; this is safe because although the Lithium Generator is
+on the destination floor, you can connect Hydrogen-compatible microchip to the Hydrogen
+Generator there:</li>
+</ul>
+<pre><code class="language-txt">F4 .  .  .  .  LM
+F3 E  HG HM LG .
+F2 .  .  .  .  .
+F1 .  .  .  .  .
+</code></pre>
+<ul>
+<li>Bring both Generators up to the fourth floor, which is safe because you can connect the
+Lithium-compatible Microchip to the Lithium Generator upon arrival:</li>
+</ul>
+<pre><code class="language-txt">F4 E  HG .  LG LM
+F3 .  .  HM .  .
+F2 .  .  .  .  .
+F1 .  .  .  .  .
+</code></pre>
+<ul>
+<li>Bring the Lithium Microchip with you to the third floor so you can use the elevator:</li>
+</ul>
+<pre><code class="language-txt">F4 .  HG .  LG .
+F3 E  .  HM .  LM
+F2 .  .  .  .  .
+F1 .  .  .  .  .
+</code></pre>
+<ul>
+<li>Bring both Microchips to the fourth floor:</li>
+</ul>
+<pre><code class="language-txt">F4 E  HG HM LG LM
+F3 .  .  .  .  .
+F2 .  .  .  .  .
+F1 .  .  .  .  .
+</code></pre>
+<p>In this arrangement, it takes <code>11</code> steps to collect all of the objects at the fourth floor for
+assembly. (Each elevator stop counts as one step, even if nothing is added to or removed from
+it.)</p>
+<p>In your situation, what is the <strong>minimum number of steps</strong> required to bring all of the objects
+to the fourth floor?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2016::d11::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2016::d11::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2016::d11::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

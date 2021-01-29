@@ -1,0 +1,189 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d24` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d24"><title>aoc::y2018::d24 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d24</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a></p><script>window.sidebarCurrent = {name: "d24", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2018/d24.rs.html#1-247" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a>::<wbr><a class="mod" href="">d24</a></span></h1><div class="docblock"><h1 id="day-24-immune-system-simulator-20xx" class="section-header"><a href="#day-24-immune-system-simulator-20xx">Day 24: Immune System Simulator 20XX</a></h1>
+<p>After <a href="https://www.youtube.com/watch?v=NDVjLt_QHL8&amp;t=7">a weird buzzing noise</a>, you appear back at the man's cottage. He seems relieved to see
+his friend, but quickly notices that the little reindeer caught some kind of cold while out
+exploring.</p>
+<p>The portly man explains that this reindeer's immune system isn't similar to regular reindeer
+immune systems:</p>
+<p>The <strong>immune system</strong> and the <strong>infection</strong> each have an army made up of several <strong>groups</strong>;
+each <strong>group</strong> consists of one or more identical <strong>units</strong>. The armies repeatedly <strong>fight</strong>
+until only one army has units remaining.</p>
+<p><strong>Units</strong> within a group all have the same <strong>hit points</strong> (amount of damage a unit can take
+before it is destroyed), <strong>attack damage</strong> (the amount of damage each unit deals), an <strong>attack
+type</strong>, an <strong>initiative</strong> (higher initiative units attack first and win ties), and sometimes
+<strong>weaknesses</strong> or <strong>immunities</strong>. Here is an example group:</p>
+<pre><code class="language-txt">18 units each with 729 hit points (weak to fire; immune to cold, slashing)
+ with an attack that does 8 radiation damage at initiative 10
+</code></pre>
+<p>Each group also has an <strong>effective power</strong>: the number of units in that group multiplied by
+their attack damage. The above group has an effective power of <code>18 * 8 = 144</code>. Groups never have
+zero or negative units; instead, the group is removed from combat.</p>
+<p>Each <strong>fight</strong> consists of two phases: <strong>target selection</strong> and <strong>attacking</strong>.</p>
+<p>During the <strong>target selection</strong> phase, each group attempts to choose one target. In decreasing
+order of effective power, groups choose their targets; in a tie, the group with the higher
+initiative chooses first. The attacking group chooses to target the group in the enemy army to
+which it would deal the most damage (after accounting for weaknesses and immunities, but not
+accounting for whether the defending group has enough units to actually receive all of that
+damage).</p>
+<p>If an attacking group is considering two defending groups to which it would deal equal damage,
+it chooses to target the defending group with the largest effective power; if there is still a
+tie, it chooses the defending group with the highest initiative. If it cannot deal any defending
+groups damage, it does not choose a target. Defending groups can only be chosen as a target by
+one attacking group.</p>
+<p>At the end of the target selection phase, each group has selected zero or one groups to attack,
+and each group is being attacked by zero or one groups.</p>
+<p>During the <strong>attacking</strong> phase, each group deals damage to the target it selected, if any.
+Groups attack in decreasing order of initiative, regardless of whether they are part of the
+infection or the immune system. (If a group contains no units, it cannot attack.)</p>
+<p>The damage an attacking group deals to a defending group depends on the attacking group's attack
+type and the defending group's immunities and weaknesses. By default, an attacking group would
+deal damage equal to its <strong>effective power</strong> to the defending group. However, if the defending
+group is <strong>immune</strong> to the attacking group's attack type, the defending group instead takes <strong>no
+damage</strong>; if the defending group is <strong>weak</strong> to the attacking group's attack type, the defending
+group instead takes <strong>double damage</strong>.</p>
+<p>The defending group only loses <strong>whole units</strong> from damage; damage is always dealt in such a way
+that it kills the most units possible, and any remaining damage to a unit that does not
+immediately kill it is ignored. For example, if a defending group contains <code>10</code> units with <code>10</code>
+hit points each and receives <code>75</code> damage, it loses exactly <code>7</code> units and is left with <code>3</code> units
+at full health.</p>
+<p>After the fight is over, if both armies still contain units, a new fight begins; combat only
+ends once one army has lost all of its units.</p>
+<p>For example, consider the following armies:</p>
+<pre><code class="language-txt">Immune System:
+17 units each with 5390 hit points (weak to radiation, bludgeoning) with
+ an attack that does 4507 fire damage at initiative 2
+989 units each with 1274 hit points (immune to fire; weak to bludgeoning,
+ slashing) with an attack that does 25 slashing damage at initiative 3
+
+Infection:
+801 units each with 4706 hit points (weak to radiation) with an attack
+ that does 116 bludgeoning damage at initiative 1
+4485 units each with 2961 hit points (immune to radiation; weak to fire,
+ cold) with an attack that does 12 slashing damage at initiative 4
+</code></pre>
+<p>If these armies were to enter combat, the following fights, including details during the target
+selection and attacking phases, would take place:</p>
+<pre><code class="language-txt">Immune System:
+Group 1 contains 17 units
+Group 2 contains 989 units
+Infection:
+Group 1 contains 801 units
+Group 2 contains 4485 units
+
+Infection group 1 would deal defending group 1 185832 damage
+Infection group 1 would deal defending group 2 185832 damage
+Infection group 2 would deal defending group 2 107640 damage
+Immune System group 1 would deal defending group 1 76619 damage
+Immune System group 1 would deal defending group 2 153238 damage
+Immune System group 2 would deal defending group 1 24725 damage
+
+Infection group 2 attacks defending group 2, killing 84 units
+Immune System group 2 attacks defending group 1, killing 4 units
+Immune System group 1 attacks defending group 2, killing 51 units
+Infection group 1 attacks defending group 1, killing 17 units
+</code></pre>
+<pre><code class="language-txt">Immune System:
+Group 2 contains 905 units
+Infection:
+Group 1 contains 797 units
+Group 2 contains 4434 units
+
+Infection group 1 would deal defending group 2 184904 damage
+Immune System group 2 would deal defending group 1 22625 damage
+Immune System group 2 would deal defending group 2 22625 damage
+
+Immune System group 2 attacks defending group 1, killing 4 units
+Infection group 1 attacks defending group 2, killing 144 units
+</code></pre>
+<pre><code class="language-txt">Immune System:
+Group 2 contains 761 units
+Infection:
+Group 1 contains 793 units
+Group 2 contains 4434 units
+
+Infection group 1 would deal defending group 2 183976 damage
+Immune System group 2 would deal defending group 1 19025 damage
+Immune System group 2 would deal defending group 2 19025 damage
+
+Immune System group 2 attacks defending group 1, killing 4 units
+Infection group 1 attacks defending group 2, killing 143 units
+</code></pre>
+<pre><code class="language-txt">Immune System:
+Group 2 contains 618 units
+Infection:
+Group 1 contains 789 units
+Group 2 contains 4434 units
+
+Infection group 1 would deal defending group 2 183048 damage
+Immune System group 2 would deal defending group 1 15450 damage
+Immune System group 2 would deal defending group 2 15450 damage
+
+Immune System group 2 attacks defending group 1, killing 3 units
+Infection group 1 attacks defending group 2, killing 143 units
+</code></pre>
+<pre><code class="language-txt">Immune System:
+Group 2 contains 475 units
+Infection:
+Group 1 contains 786 units
+Group 2 contains 4434 units
+
+Infection group 1 would deal defending group 2 182352 damage
+Immune System group 2 would deal defending group 1 11875 damage
+Immune System group 2 would deal defending group 2 11875 damage
+
+Immune System group 2 attacks defending group 1, killing 2 units
+Infection group 1 attacks defending group 2, killing 142 units
+</code></pre>
+<pre><code class="language-txt">Immune System:
+Group 2 contains 333 units
+Infection:
+Group 1 contains 784 units
+Group 2 contains 4434 units
+
+Infection group 1 would deal defending group 2 181888 damage
+Immune System group 2 would deal defending group 1 8325 damage
+Immune System group 2 would deal defending group 2 8325 damage
+
+Immune System group 2 attacks defending group 1, killing 1 unit
+Infection group 1 attacks defending group 2, killing 142 units
+</code></pre>
+<pre><code class="language-txt">Immune System:
+Group 2 contains 191 units
+Infection:
+Group 1 contains 783 units
+Group 2 contains 4434 units
+
+Infection group 1 would deal defending group 2 181656 damage
+Immune System group 2 would deal defending group 1 4775 damage
+Immune System group 2 would deal defending group 2 4775 damage
+
+Immune System group 2 attacks defending group 1, killing 1 unit
+Infection group 1 attacks defending group 2, killing 142 units
+</code></pre>
+<pre><code class="language-txt">Immune System:
+Group 2 contains 49 units
+Infection:
+Group 1 contains 782 units
+Group 2 contains 4434 units
+
+Infection group 1 would deal defending group 2 181424 damage
+Immune System group 2 would deal defending group 1 1225 damage
+Immune System group 2 would deal defending group 2 1225 damage
+
+Immune System group 2 attacks defending group 1, killing 0 units
+Infection group 1 attacks defending group 2, killing 49 units
+</code></pre>
+<pre><code class="language-txt">Immune System:
+No groups remain.
+Infection:
+Group 1 contains 782 units
+Group 2 contains 4434 units
+</code></pre>
+<p>In the example above, the winning army ends up with <code>782 + 4434 = 5216</code> units.</p>
+<p>You scan the reindeer's condition (your puzzle input); the white-bearded man looks nervous. As
+it stands now, <strong>how many units would the winning army have</strong>?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2018::d24::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2018::d24::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2018::d24::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

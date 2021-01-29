@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d14` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d14"><title>aoc::y2016::d14 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d14</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a></p><script>window.sidebarCurrent = {name: "d14", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2016/d14.rs.html#1-66" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a>::<wbr><a class="mod" href="">d14</a></span></h1><div class="docblock"><h1 id="day-14-one-time-pad" class="section-header"><a href="#day-14-one-time-pad">Day 14: One-Time Pad</a></h1>
+<p>In order to communicate securely with Santa while you're on this mission, you've been using a
+<a href="https://en.wikipedia.org/wiki/One-time_pad">one-time pad</a> that you <a href="https://en.wikipedia.org/wiki/Security_through_obscurity">generate</a> using a pre-agreed algorithm. Unfortunately, you've run out
+of keys in your one-time pad, and so you need to generate some more.</p>
+<p>To generate keys, you first get a stream of random data by taking the <a href="https://en.wikipedia.org/wiki/MD5">MD5</a> of a pre-arranged
+<a href="https://en.wikipedia.org/wiki/Salt_(cryptography)">salt</a> (your puzzle input) and an increasing integer index (starting with <code>0</code>, and represented
+in decimal); the resulting MD5 hash should be represented as a string of <strong>lowercase</strong>
+hexadecimal digits.</p>
+<p>However, not all of these MD5 hashes are <strong>keys</strong>, and you need <code>64</code> new keys for your one-time
+pad. A hash is a key <strong>only if</strong>:</p>
+<ul>
+<li>It contains <strong>three</strong> of the same character in a row, like <code>777</code>. Only consider the first such
+triplet in a hash.</li>
+<li>One of the next <code>1000</code> hashes in the stream contains that same character <strong>five</strong> times in a
+row, like <code>77777</code>.</li>
+</ul>
+<p>Considering future hashes for five-of-a-kind sequences does not cause those hashes to be
+skipped; instead, regardless of whether the current hash is a key, always resume testing for
+keys starting with the very next hash.</p>
+<p>For example, if the pre-arranged salt is <code>abc</code>:</p>
+<ul>
+<li>The first index which produces a triple is <code>18</code>, because the MD5 hash of <code>abc18</code> contains
+<code>...cc38887a5....</code> However, index <code>18</code> does not count as a key for your one-time pad, because
+none of the next thousand hashes (index <code>19</code> through index <code>1018</code>) contain <code>88888</code>.</li>
+<li>The next index which produces a triple is <code>39</code>; the hash of <code>abc39</code> contains <code>eee</code>. It is also
+the first key: one of the next thousand hashes (the one at index 816) contains <code>eeeee</code>.</li>
+<li>None of the next six triples are keys, but the one after that, at index <code>92</code>, is: it contains
+<code>999</code> and index <code>200</code> contains <code>99999</code>.</li>
+<li>Eventually, index <code>22728</code> meets all of the criteria to generate the <code>64</code>th key.</li>
+</ul>
+<p>So, using our example salt of <code>abc</code>, index <code>22728</code> produces the <code>64</code>th key.</p>
+<p>Given the actual salt in your puzzle input, <strong>what index</strong> produces your <code>64</code>th one-time pad
+key?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2016::d14::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2016::d14::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2016::d14::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

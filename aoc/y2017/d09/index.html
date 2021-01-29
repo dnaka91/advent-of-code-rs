@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d09` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d09"><title>aoc::y2017::d09 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d09</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2017</a></p><script>window.sidebarCurrent = {name: "d09", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2017/d09.rs.html#1-167" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2017</a>::<wbr><a class="mod" href="">d09</a></span></h1><div class="docblock"><h1 id="day-9-stream-processing" class="section-header"><a href="#day-9-stream-processing">Day 9: Stream Processing</a></h1>
+<p>A large stream blocks your path. According to the locals, it's not safe to cross the stream at
+the moment because it's full of <strong>garbage</strong>. You look down at the stream; rather than water, you
+discover that it's a <strong>stream of characters</strong>.</p>
+<p>You sit for a while and record part of the stream (your puzzle input). The characters represent
+<strong>groups</strong> - sequences that begin with <code>{</code> and end with <code>}</code>. Within a group, there are zero or
+more other things, separated by commas: either another <strong>group</strong> or <strong>garbage</strong>. Since groups
+can contain other groups, a <code>}</code> only closes the <strong>most-recently-opened unclosed group</strong> - that
+is, they are nestable. Your puzzle input represents a single, large group which itself contains
+many smaller ones.</p>
+<p>Sometimes, instead of a group, you will find <strong>garbage</strong>. Garbage begins with <code>&lt;</code> and ends with
+<code>&gt;</code>. Between those angle brackets, almost any character can appear, including <code>{</code> and <code>}</code>.
+<strong>Within</strong> garbage, <code>&lt;</code> has no special meaning.</p>
+<p>In a futile attempt to clean up the garbage, some program has <strong>canceled</strong> some of the
+characters within it using <code>!</code>: inside garbage, any character that comes after <code>!</code> should be
+ignored, including <code>&lt;</code>, <code>&gt;</code>, and even another <code>!</code>.</p>
+<p>You don't see any characters that deviate from these rules. Outside garbage, you only find
+well-formed groups, and garbage always terminates according to the rules above.</p>
+<p>Here are some self-contained pieces of garbage:</p>
+<ul>
+<li><code>&lt;&gt;</code>, empty garbage.</li>
+<li><code>&lt;random characters&gt;</code>, garbage containing random characters.</li>
+<li><code>&lt;&lt;&lt;&lt;&gt;</code>, because the extra <code>&lt;</code> are ignored.</li>
+<li><code>&lt;{!&gt;}&gt;</code>, because the first <code>&gt;</code> is canceled.</li>
+<li><code>&lt;!!&gt;</code>, because the second <code>!</code> is canceled, allowing the <code>&gt;</code> to terminate the garbage.</li>
+<li><code>&lt;!!!&gt;&gt;</code>, because the second <code>!</code> and the first <code>&gt;</code> are canceled.</li>
+<li><code>&lt;{o&quot;i!a,&lt;{i&lt;a&gt;</code>, which ends at the first <code>&gt;</code>.</li>
+</ul>
+<p>Here are some examples of whole streams and the number of groups they contain:</p>
+<ul>
+<li><code>{}</code>, <code>1</code> group.</li>
+<li><code>{{{}}}</code>, <code>3</code> groups.</li>
+<li><code>{{},{}}</code>, also <code>3</code> groups.</li>
+<li><code>{{{},{},{{}}}}</code>, <code>6</code> groups.</li>
+<li><code>{&lt;{},{},{{}}&gt;}</code>, <code>1</code> group (which itself contains garbage).</li>
+<li><code>{&lt;a&gt;,&lt;a&gt;,&lt;a&gt;,&lt;a&gt;}</code>, <code>1</code> group.</li>
+<li><code>{{&lt;a&gt;},{&lt;a&gt;},{&lt;a&gt;},{&lt;a&gt;}}</code>, <code>5</code> groups.</li>
+<li><code>{{&lt;!&gt;},{&lt;!&gt;},{&lt;!&gt;},{&lt;a&gt;}}</code>, <code>2</code> groups (since all but the last <code>&gt;</code> are canceled).</li>
+</ul>
+<p>Your goal is to find the total score for all groups in your input. Each group is assigned a
+<strong>score</strong> which is one more than the score of the group that immediately contains it. (The
+outermost group gets a score of <code>1</code>.)</p>
+<ul>
+<li><code>{}</code>, score of <code>1</code>.</li>
+<li><code>{{{}}}</code>, score of <code>1 + 2 + 3 = 6</code>.</li>
+<li><code>{{},{}}</code>, score of <code>1 + 2 + 2 = 5</code>.</li>
+<li><code>{{{},{},{{}}}}</code>, score of <code>1 + 2 + 3 + 3 + 3 + 4 = 16</code>.</li>
+<li><code>{&lt;a&gt;,&lt;a&gt;,&lt;a&gt;,&lt;a&gt;}</code>, score of <code>1</code>.</li>
+<li><code>{{&lt;ab&gt;},{&lt;ab&gt;},{&lt;ab&gt;},{&lt;ab&gt;}}</code>, score of <code>1 + 2 + 2 + 2 + 2 = 9</code>.</li>
+<li><code>{{&lt;!!&gt;},{&lt;!!&gt;},{&lt;!!&gt;},{&lt;!!&gt;}}</code>, score of <code>1 + 2 + 2 + 2 + 2 = 9</code>.</li>
+<li><code>{{&lt;a!&gt;},{&lt;a!&gt;},{&lt;a!&gt;},{&lt;ab&gt;}}</code>, score of <code>1 + 2 = 3</code>.</li>
+</ul>
+<p><strong>What is the total score</strong> for all groups in your input?</p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>Now, you're ready to remove the garbage.</p>
+<p>To prove you've removed it, you need to count all of the characters within the garbage. The
+leading and trailing <code>&lt;</code> and <code>&gt;</code> don't count, nor do any canceled characters or the <code>!</code> doing
+the canceling.</p>
+<ul>
+<li><code>&lt;&gt;</code>, <code>0</code> characters.</li>
+<li><code>&lt;random characters&gt;</code>, <code>17</code> characters.</li>
+<li><code>&lt;&lt;&lt;&lt;&gt;</code>, <code>3</code> characters.</li>
+<li><code>&lt;{!&gt;}&gt;</code>, <code>2</code> characters.</li>
+<li><code>&lt;!!&gt;</code>, <code>0</code> characters.</li>
+<li><code>&lt;!!!&gt;&gt;</code>, <code>0</code> characters.</li>
+<li><code>&lt;{o&quot;i!a,&lt;{i&lt;a&gt;</code>, <code>10</code> characters.</li>
+</ul>
+<p><strong>How many non-canceled characters are within the garbage</strong> in your puzzle input?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2017::d09::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2017::d09::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2017::d09::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

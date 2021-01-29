@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d21` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d21"><title>aoc::y2017::d21 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d21</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2017</a></p><script>window.sidebarCurrent = {name: "d21", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2017/d21.rs.html#1-144" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2017</a>::<wbr><a class="mod" href="">d21</a></span></h1><div class="docblock"><h1 id="day-21-fractal-art" class="section-header"><a href="#day-21-fractal-art">Day 21: Fractal Art</a></h1>
+<p>You find a program trying to generate some art. It uses a strange process that involves
+repeatedly enhancing the detail of an image through a set of rules.</p>
+<p>The image consists of a two-dimensional square grid of pixels that are either on (<code>#</code>) or off
+(<code>.</code>). The program always begins with this pattern:</p>
+<pre><code class="language-txt">.#.
+..#
+###
+</code></pre>
+<p>Because the pattern is both <code>3</code> pixels wide and <code>3</code> pixels tall, it is said to have a <strong>size</strong>
+of <code>3</code>.</p>
+<p>Then, the program repeats the following process:</p>
+<ul>
+<li>If the size is evenly divisible by <code>2</code>, break the pixels up into <code>2x2</code> squares, and convert
+each <code>2x2</code> square into a <code>3x3</code> square by following the corresponding <strong>enhancement rule</strong>.</li>
+<li>Otherwise, the size is evenly divisible by <code>3</code>; break the pixels up into <code>3x3</code> squares, and
+convert each <code>3x3</code> square into a <code>4x4</code> square by following the corresponding <strong>enhancement
+rule</strong>.</li>
+</ul>
+<p>Because each square of pixels is replaced by a larger one, the image gains pixels and so its
+<strong>size</strong> increases.</p>
+<p>The artist's book of enhancement rules is nearby (your puzzle input); however, it seems to be
+missing rules. The artist explains that sometimes, one must <strong>rotate</strong> or <strong>flip</strong> the input
+pattern to find a match. (Never rotate or flip the output pattern, though.) Each pattern is
+written concisely: rows are listed as single units, ordered top-down, and separated by slashes.
+For example, the following rules correspond to the adjacent patterns:</p>
+<pre><code class="language-txt">../.#  =  ..
+          .#
+
+                .#.
+.#./..#/###  =  ..#
+                ###
+
+                        #..#
+#..#/..../#..#/.##.  =  ....
+                        #..#
+                        .##.
+</code></pre>
+<p>When searching for a rule to use, rotate and flip the pattern as necessary. For example, all of
+the following patterns match the same rule:</p>
+<pre><code class="language-txt">.#.   .#.   #..   ###
+..#   #..   #.#   ..#
+###   ###   ##.   .#.
+</code></pre>
+<p>Suppose the book contained the following two rules:</p>
+<pre><code class="language-txt">../.# =&gt; ##./#../...
+.#./..#/### =&gt; #..#/..../..../#..#
+</code></pre>
+<p>As before, the program begins with this pattern:</p>
+<pre><code class="language-txt">.#.
+..#
+###
+</code></pre>
+<p>The size of the grid (<code>3</code>) is not divisible by <code>2</code>, but it is divisible by <code>3</code>. It divides
+evenly into a single square; the square matches the second rule, which produces:</p>
+<pre><code class="language-txt">#..#
+....
+....
+#..#
+</code></pre>
+<p>The size of this enhanced grid (<code>4</code>) is evenly divisible by <code>2</code>, so that rule is used. It
+divides evenly into four squares:</p>
+<pre><code class="language-txt">#.|.#
+..|..
+--+--
+..|..
+#.|.#
+</code></pre>
+<p>Each of these squares matches the same rule (<code>../.# =&gt; ##./#../...</code>), three of which require
+some flipping and rotation to line up with the rule. The output for the rule is the same in all
+four cases:</p>
+<pre><code class="language-txt">##.|##.
+#..|#..
+...|...
+---+---
+##.|##.
+#..|#..
+...|...
+</code></pre>
+<p>Finally, the squares are joined into a new grid:</p>
+<pre><code class="language-txt">##.##.
+#..#..
+......
+##.##.
+#..#..
+......
+</code></pre>
+<p>Thus, after <code>2</code> iterations, the grid contains <code>12</code> pixels that are on.</p>
+<p><strong>How many pixels stay on</strong> after <code>5</code> iterations?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2017::d21::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2017::d21::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2017::d21::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

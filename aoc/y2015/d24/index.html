@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d24` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d24"><title>aoc::y2015::d24 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d24</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2015</a></p><script>window.sidebarCurrent = {name: "d24", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2015/d24.rs.html#1-79" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2015</a>::<wbr><a class="mod" href="">d24</a></span></h1><div class="docblock"><h1 id="day-24-it-hangs-in-the-balance" class="section-header"><a href="#day-24-it-hangs-in-the-balance">Day 24: It Hangs in the Balance</a></h1>
+<p>It's Christmas Eve, and Santa is loading up the sleigh for this year's deliveries. However,
+there's one small problem: he can't get the sleigh to balance. If it isn't balanced, he can't
+defy physics, and nobody gets presents this year.</p>
+<p>No pressure.</p>
+<p>Santa has provided you a list of the weights of every package he needs to fit on the sleigh. The
+packages need to be split into <strong>three groups of exactly the same weight</strong>, and every package
+has to fit. The first group goes in the passenger compartment of the sleigh, and the second and
+third go in containers on either side. Only when all three groups weigh exactly the same amount
+will the sleigh be able to fly. Defying physics has rules, you know!</p>
+<p>Of course, that's not the only problem. The first group - the one going in the passenger
+compartment - needs <strong>as few packages as possible</strong> so that Santa has some legroom left over. It
+doesn't matter how many packages are in either of the other two groups, so long as all of the
+groups weigh the same.</p>
+<p>Furthermore, Santa tells you, if there are multiple ways to arrange the packages such that the
+fewest possible are in the first group, you need to choose the way where the first group has
+<strong>the smallest quantum entanglement</strong> to reduce the chance of any &quot;complications&quot;. The quantum
+entanglement of a group of packages is the <a href="https://en.wikipedia.org/wiki/Product_%28mathematics%29">product</a> of their weights, that is, the value you
+get when you multiply their weights together. Only consider quantum entanglement if the first
+group has the fewest possible number of packages in it and all groups weigh the same amount.</p>
+<p>For example, suppose you have ten packages with weights <code>1</code> through <code>5</code> and <code>7</code> through <code>11</code>.
+For this situation, some of the unique first groups, their quantum entanglements, and a way to
+divide the remaining packages are as follows:</p>
+<pre><code class="language-txt">Group 1;             Group 2; Group 3
+11 9       (QE= 99); 10 8 2;  7 5 4 3 1
+10 9 1     (QE= 90); 11 7 2;  8 5 4 3
+10 8 2     (QE=160); 11 9;    7 5 4 3 1
+10 7 3     (QE=210); 11 9;    8 5 4 2 1
+10 5 4 1   (QE=200); 11 9;    8 7 3 2
+10 5 3 2   (QE=300); 11 9;    8 7 4 1
+10 4 3 2 1 (QE=240); 11 9;    8 7 5
+9 8 3      (QE=216); 11 7 2;  10 5 4 1
+9 7 4      (QE=252); 11 8 1;  10 5 3 2
+9 5 4 2    (QE=360); 11 8 1;  10 7 3
+8 7 5      (QE=280); 11 9;    10 4 3 2 1
+8 5 4 3    (QE=480); 11 9;    10 7 2 1
+7 5 4 3 1  (QE=420); 11 9;    10 8 2
+</code></pre>
+<p>Of these, although <code>10 9 1</code> has the smallest quantum entanglement (<code>90</code>), the configuration with
+only two packages, <code>11 9</code>, in the passenger compartment gives Santa the most legroom and wins.
+In this situation, the quantum entanglement for the ideal configuration is therefore <code>99</code>. Had
+there been two configurations with only two packages in the first group, the one with the
+smaller quantum entanglement would be chosen.</p>
+<p>What is the <strong>quantum entanglement</strong> of the first group of packages in the ideal configuration?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2015::d24::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2015::d24::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2015::d24::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

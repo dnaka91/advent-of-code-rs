@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d15` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d15"><title>aoc::y2016::d15 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d15</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a></p><script>window.sidebarCurrent = {name: "d15", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2016/d15.rs.html#1-72" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a>::<wbr><a class="mod" href="">d15</a></span></h1><div class="docblock"><h1 id="day-15-timing-is-everything" class="section-header"><a href="#day-15-timing-is-everything">Day 15: Timing is Everything</a></h1>
+<p>The halls open into an interior plaza containing a large kinetic sculpture. The sculpture is in
+a sealed enclosure and seems to involve a set of identical spherical capsules that are carried
+to the top and allowed to <a href="https://youtu.be/IxDoO9oODOk?t=177">bounce through the maze</a> of spinning pieces.</p>
+<p>Part of the sculpture is even interactive! When a button is pressed, a capsule is dropped and
+tries to fall through slots in a set of rotating discs to finally go through a little hole at
+the bottom and come out of the sculpture. If any of the slots aren't aligned with the capsule as
+it passes, the capsule bounces off the disc and soars away. You feel compelled to get one of
+those capsules.</p>
+<p>The discs pause their motion each second and come in different sizes; they seem to each have a
+fixed number of positions at which they stop. You decide to call the position with the slot <code>0</code>,
+and count up for each position it reaches next.</p>
+<p>Furthermore, the discs are spaced out so that after you push the button, one second elapses
+before the first disc is reached, and one second elapses as the capsule passes from one disc to
+the one below it. So, if you push the button at <code>time=100</code>, then the capsule reaches the top
+disc at <code>time=101</code>, the second disc at <code>time=102</code>, the third disc at <code>time=103</code>, and so on.</p>
+<p>The button will only drop a capsule at an integer time - no fractional seconds allowed.</p>
+<p>For example, at <code>time=0</code>, suppose you see the following arrangement:</p>
+<pre><code class="language-txt">Disc #1 has 5 positions; at time=0, it is at position 4.
+Disc #2 has 2 positions; at time=0, it is at position 1.
+</code></pre>
+<p>If you press the button exactly at <code>time=0</code>, the capsule would start to fall; it would reach the
+first disc at <code>time=1</code>. Since the first disc was at position <code>4</code> at <code>time=0</code>, by <code>time=1</code> it has
+ticked one position forward. As a five-position disc, the next position is <code>0</code>, and the capsule
+falls through the slot.</p>
+<p>Then, at <code>time=2</code>, the capsule reaches the second disc. The second disc has ticked forward two
+positions at this point: it started at position <code>1</code>, then continued to position <code>0</code>, and finally
+ended up at position <code>1</code> again. Because there's only a slot at position <code>0</code>, the capsule bounces
+away.</p>
+<p>If, however, you wait until <code>time=5</code> to push the button, then when the capsule reaches each
+disc, the first disc will have ticked forward <code>5+1 = 6</code> times (to position <code>0</code>), and the second
+disc will have ticked forward <code>5+2 = 7</code> times (also to position <code>0</code>). In this case, the capsule
+would fall through the discs and come out of the machine.</p>
+<p>However, your situation has more than two discs; you've noted their positions in your puzzle
+input. What is the <strong>first time you can press the button</strong> to get a capsule?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2016::d15::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2016::d15::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2016::d15::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

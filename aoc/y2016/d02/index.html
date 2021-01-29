@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d02` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d02"><title>aoc::y2016::d02 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d02</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a></p><script>window.sidebarCurrent = {name: "d02", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2016/d02.rs.html#1-67" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a>::<wbr><a class="mod" href="">d02</a></span></h1><div class="docblock"><h1 id="day-2-bathroom-security" class="section-header"><a href="#day-2-bathroom-security">Day 2: Bathroom Security</a></h1>
+<p>You arrive at <strong>Easter Bunny Headquarters</strong> under cover of darkness. However, you left in such a
+rush that you forgot to use the bathroom! Fancy office buildings like this one usually have
+keypad locks on their bathrooms, so you search the front desk for the code.</p>
+<p>&quot;In order to improve security,&quot; the document you find says, &quot;bathroom codes will no longer be
+written down. Instead, please memorize and follow the procedure below to access the bathrooms.&quot;</p>
+<p>The document goes on to explain that each button to be pressed can be found by starting on the
+previous button and moving to adjacent buttons on the keypad: <code>U</code> moves up, <code>D</code> moves down, <code>L</code>
+moves left, and <code>R</code> moves right. Each line of instructions corresponds to one button, starting
+at the previous button (or, for the first line, <strong>the &quot;5&quot; button</strong>); press whatever button
+you're on at the end of each line. If a move doesn't lead to a button, ignore it.</p>
+<p>You can't hold it much longer, so you decide to figure out the code as you walk to the bathroom.
+You picture a keypad like this:</p>
+<pre><code class="language-txt">1 2 3
+4 5 6
+7 8 9
+</code></pre>
+<p>Suppose your instructions are:</p>
+<pre><code class="language-txt">ULL
+RRDDD
+LURDL
+UUUUD
+</code></pre>
+<ul>
+<li>You start at &quot;5&quot; and move up (to &quot;2&quot;), left (to &quot;1&quot;), and left (you can't, and stay on &quot;1&quot;),
+so the first button is <code>1</code>.</li>
+<li>Starting from the previous button (&quot;1&quot;), you move right twice (to &quot;3&quot;) and then down three
+times (stopping at &quot;9&quot; after two moves and ignoring the third), ending up with <code>9</code>.</li>
+<li>Continuing from &quot;9&quot;, you move left, up, right, down, and left, ending with <code>8</code>.</li>
+<li>Finally, you move up four times (stopping at &quot;2&quot;), then down once, ending with <code>5</code>.</li>
+</ul>
+<p>So, in this example, the bathroom code is <code>1985</code>.</p>
+<p>Your puzzle input is the instructions from the document you found at the front desk. What is the
+<strong>bathroom code</strong>?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2016::d02::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2016::d02::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2016::d02::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

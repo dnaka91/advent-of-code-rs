@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d03` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d03"><title>aoc::y2019::d03 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d03</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a></p><script>window.sidebarCurrent = {name: "d03", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2019/d03.rs.html#1-253" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a>::<wbr><a class="mod" href="">d03</a></span></h1><div class="docblock"><h1 id="day-3-crossed-wires" class="section-header"><a href="#day-3-crossed-wires">Day 3: Crossed Wires</a></h1>
+<p>The gravity assist was successful, and you're well on your way to the Venus refuelling station.
+During the rush back on Earth, the fuel management system wasn't completely installed, so that's
+next on the priority list.</p>
+<p>Opening the front panel reveals a jumble of wires. Specifically, <strong>two wires</strong> are connected to
+a central port and extend outward on a grid. You trace the path each wire takes as it leaves the
+central port, one wire per line of text (your puzzle input).</p>
+<p>The wires twist and turn, but the two wires occasionally cross paths. To fix the circuit, you
+need to <strong>find the intersection point closest to the central port</strong>. Because the wires are on a
+grid, use the <a href="https://en.wikipedia.org/wiki/Taxicab_geometry">Manhattan distance</a> for this measurement. While the wires do technically cross
+right at the central port where they both start, this point does not count, nor does a wire
+count as crossing with itself.</p>
+<p>For example, if the first wire's path is <code>R8,U5,L5,D3</code>, then starting from the central port
+(<code>o</code>), it goes right <code>8</code>, up <code>5</code>, left <code>5</code>, and finally down <code>3</code>:</p>
+<pre><code class="language-txt">...........
+...........
+...........
+....+----+.
+....|....|.
+....|....|.
+....|....|.
+.........|.
+.o-------+.
+...........
+</code></pre>
+<p>Then, if the second wire's path is <code>U7,R6,D4,L4</code>, it goes up <code>7</code>, right <code>6</code>, down <code>4</code>, and left
+<code>4</code>:</p>
+<pre><code class="language-txt">...........
+.+-----+...
+.|.....|...
+.|..+--X-+.
+.|..|..|.|.
+.|.-X--+.|.
+.|..|....|.
+.|.......|.
+.o-------+.
+...........
+</code></pre>
+<p>These wires cross at two locations (marked <code>X</code>), but the lower-left one is closer to the central
+port: its distance is <code>3 + 3 = 6</code>.</p>
+<p>Here are a few more examples:</p>
+<ul>
+<li><code>R75,D30,R83,U83,L12,D49,R71,U7,L72</code><br/>
+<code>U62,R66,U55,R34,D71,R55,D58,R83   </code> = distance <code>159</code></li>
+<li><code>R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51</code><br/>
+<code>U98,R91,D20,R16,D67,R40,U7,R15,U6,R7       </code> = distance <code>135</code></li>
+</ul>
+<p><strong>What is the Manhattan distance</strong> from the central port to the closest intersection?</p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>It turns out that this circuit is very timing-sensitive; you actually need to <strong>minimize the
+signal delay</strong>.</p>
+<p>To do this, calculate the <strong>number of steps</strong> each wire takes to reach each intersection; choose
+the intersection where the <strong>sum of both wires' steps</strong> is lowest. If a wire visits a position
+on the grid multiple times, use the steps value from the <strong>first</strong> time it visits that position
+when calculating the total value of a specific intersection.</p>
+<p>The number of steps a wire takes is the total number of grid squares the wire has entered to get
+to that location, including the intersection being considered. Again consider the example from
+above:</p>
+<pre><code class="language-txt">...........
+.+-----+...
+.|.....|...
+.|..+--X-+.
+.|..|..|.|.
+.|.-X--+.|.
+.|..|....|.
+.|.......|.
+.o-------+.
+...........
+</code></pre>
+<p>In the above example, the intersection closest to the central port is reached after
+<code>8+5+5+2 = 20</code> steps by the first wire and <code>7+6+4+3 = 20</code> steps by the second wire for a total
+of <code>20+20 = 40</code> steps.</p>
+<p>However, the top-right intersection is better: the first wire takes only<code> 8+5+2 = 15</code> and the
+second wire takes only <code>7+6+2 = 15</code>, a total of <code>15+15 = 30</code> steps.</p>
+<p>Here are the best steps for the extra examples from above:</p>
+<ul>
+<li><code>R75,D30,R83,U83,L12,D49,R71,U7,L72</code><br/>
+<code>U62,R66,U55,R34,D71,R55,D58,R83   </code> = <code>610</code> steps</li>
+<li><code>R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51</code><br/>
+<code>U98,R91,D20,R16,D67,R40,U7,R15,U6,R7       </code> = <code>410</code> steps</li>
+</ul>
+<p><strong>What is the fewest combined steps the wires must take to reach an intersection?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2019::d03::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2019::d03::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2019::d03::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/y2015/d15.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>d15.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1"> 1</span>
+<span id="2"> 2</span>
+<span id="3"> 3</span>
+<span id="4"> 4</span>
+<span id="5"> 5</span>
+<span id="6"> 6</span>
+<span id="7"> 7</span>
+<span id="8"> 8</span>
+<span id="9"> 9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+</pre><div class="example-wrap"><pre class="rust ">
+<span class="doccomment">//! # Day 15: Science for Hungry People</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Today, you set out on the task of perfecting your milk-dunking cookie recipe. All you have to do</span>
+<span class="doccomment">//! is find the right balance of ingredients.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Your recipe leaves room for exactly `100` teaspoons of ingredients. You make a list of the</span>
+<span class="doccomment">//! **remaining ingredients you could use to finish the recipe** (your puzzle input) and their</span>
+<span class="doccomment">//! **properties per teaspoon**:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - `capacity` (how well it helps the cookie absorb milk)</span>
+<span class="doccomment">//! - `durability` (how well it keeps the cookie intact when full of milk)</span>
+<span class="doccomment">//! - `flavor` (how tasty it makes the cookie)</span>
+<span class="doccomment">//! - `texture` (how it improves the feel of the cookie)</span>
+<span class="doccomment">//! - `calories` (how many calories it adds to the cookie)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! You can only measure ingredients in whole-teaspoon amounts accurately, and you have to be</span>
+<span class="doccomment">//! accurate so you can reproduce your results in the future. The **total score** of a cookie can be</span>
+<span class="doccomment">//! found by adding up each of the properties (negative totals become `0`) and then multiplying</span>
+<span class="doccomment">//! together everything except calories.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! For instance, suppose you have these two ingredients:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```txt</span>
+<span class="doccomment">//! Butterscotch: capacity -1, durability -2, flavor 6, texture 3, calories 8</span>
+<span class="doccomment">//! Cinnamon: capacity 2, durability 3, flavor -2, texture -1, calories 3</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Then, choosing to use `44` teaspoons of butterscotch and `56` teaspoons of cinnamon (because the</span>
+<span class="doccomment">//! amounts of each ingredient must add up to `100`) would result in a cookie with the following</span>
+<span class="doccomment">//! properties:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! - A `capacity` of `44*-1 + 56*2 = 68`</span>
+<span class="doccomment">//! - A `durability` of `44*-2 + 56*3 = 80`</span>
+<span class="doccomment">//! - A `flavor` of `44*6 + 56*-2 = 152`</span>
+<span class="doccomment">//! - A `texture` of `44*3 + 56*-1 = 76`</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Multiplying these together (`68 * 80 * 152 * 76`, ignoring `calories` for now) results in a</span>
+<span class="doccomment">//! total score of `62842880`, which happens to be the best score possible given these ingredients.</span>
+<span class="doccomment">//! If any properties had produced a negative total, it would have instead become zero, causing the</span>
+<span class="doccomment">//! whole score to multiply to zero.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Given the ingredients in your kitchen and their properties, what is the **total score** of the</span>
+<span class="doccomment">//! highest-scoring cookie you can make?</span>
+
+<span class="kw">use</span> <span class="ident">anyhow</span>::<span class="prelude-ty">Result</span>;
+
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">INPUT</span>: <span class="kw-2">&amp;</span><span class="ident">str</span> <span class="op">=</span> <span class="macro">include_str</span><span class="macro">!</span>(<span class="string">&quot;d15.txt&quot;</span>);
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve_part_one</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Ok</span>(<span class="number">0</span>)
+}
+
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">solve_part_two</span>(<span class="ident">input</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i64</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Ok</span>(<span class="number">0</span>)
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="kw">mod</span> <span class="ident">tests</span> {
+    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">part_one</span>() {}
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">part_two</span>() {}
+}
+</pre></div>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

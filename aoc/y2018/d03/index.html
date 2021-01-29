@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d03` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d03"><title>aoc::y2018::d03 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d03</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a></p><script>window.sidebarCurrent = {name: "d03", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2018/d03.rs.html#1-96" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a>::<wbr><a class="mod" href="">d03</a></span></h1><div class="docblock"><h1 id="day-3-no-matter-how-you-slice-it" class="section-header"><a href="#day-3-no-matter-how-you-slice-it">Day 3: No Matter How You Slice It</a></h1>
+<p>The Elves managed to locate the chimney-squeeze prototype fabric for Santa's suit (thanks to
+someone who helpfully wrote its box IDs on the wall of the warehouse in the middle of the
+night). Unfortunately, anomalies are still affecting them - nobody can even agree on how to
+<strong>cut</strong> the fabric.</p>
+<p>The whole piece of fabric they're working on is a very large square - at least <code>1000</code> inches on
+each side.</p>
+<p>Each Elf has made a <strong>claim</strong> about which area of fabric would be ideal for Santa's suit. All
+claims have an ID and consist of a single rectangle with edges parallel to the edges of the
+fabric. Each claim's rectangle is defined as follows:</p>
+<ul>
+<li>The number of inches between the left edge of the fabric and the left edge of the rectangle.</li>
+<li>The number of inches between the top edge of the fabric and the top edge of the rectangle.</li>
+<li>The width of the rectangle in inches.</li>
+<li>The height of the rectangle in inches.</li>
+</ul>
+<p>A claim like <code>#123 @ 3,2: 5x4</code> means that claim ID <code>123</code> specifies a rectangle <code>3</code> inches from
+the left edge, <code>2</code> inches from the top edge, <code>5</code> inches wide, and <code>4</code> inches tall. Visually, it
+claims the square inches of fabric represented by <code>#</code> (and ignores the square inches of fabric
+represented by <code>.</code>) in the diagram below:</p>
+<pre><code class="language-txt">...........
+...........
+...#####...
+...#####...
+...#####...
+...#####...
+...........
+...........
+...........
+</code></pre>
+<p>The problem is that many of the claims <strong>overlap</strong>, causing two or more claims to cover part of
+the same areas. For example, consider the following claims:</p>
+<pre><code class="language-txt">#1 @ 1,3: 4x4
+#2 @ 3,1: 4x4
+#3 @ 5,5: 2x2
+</code></pre>
+<p>Visually, these claim the following areas:</p>
+<pre><code class="language-txt">........
+...2222.
+...2222.
+.11XX22.
+.11XX22.
+.111133.
+.111133.
+........
+</code></pre>
+<p>The four square inches marked with <code>X</code> are claimed by <strong>both <code>1</code> and <code>2</code></strong>. (Claim <code>3</code>, while
+adjacent to the others, does not overlap either of them.)</p>
+<p>If the Elves all proceed with their own plans, none of them will have enough fabric. <strong>How many
+square inches of fabric are within two or more claims?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>Amidst the chaos, you notice that exactly one claim doesn't overlap by even a single square inch
+of fabric with any other claim. If you can somehow draw attention to it, maybe the Elves will be
+able to make Santa's suit after all!</p>
+<p>For example, in the claims above, only claim <code>3</code> is intact after all claims are made.</p>
+<p><strong>What is the ID of the only claim that doesn't overlap?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2018::d03::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2018::d03::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2018::d03::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

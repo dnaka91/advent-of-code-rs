@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d12` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d12"><title>aoc::y2018::d12 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d12</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a></p><script>window.sidebarCurrent = {name: "d12", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2018/d12.rs.html#1-122" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a>::<wbr><a class="mod" href="">d12</a></span></h1><div class="docblock"><h1 id="day-12-subterranean-sustainability" class="section-header"><a href="#day-12-subterranean-sustainability">Day 12: Subterranean Sustainability</a></h1>
+<p>The year 518 is significantly more underground than your history books implied. Either that, or
+you've arrived in a vast cavern network under the North Pole.</p>
+<p>After exploring a little, you discover a long tunnel that contains a row of small pots as far as
+you can see to your left and right. A few of them contain plants - someone is trying to grow
+things in these geothermally-heated caves.</p>
+<p>The pots are numbered, with <code>0</code> in front of you. To the left, the pots are numbered <code>-1</code>, <code>-2</code>,
+<code>-3</code>, and so on; to the right, <code>1</code>, <code>2</code>, <code>3</code>.... Your puzzle input contains a list of pots from
+<code>0</code> to the right and whether they do (<code>#</code>) or do not (<code>.</code>) currently contain a plant, the
+<strong>initial state</strong>. (No other pots currently contain plants.) For example, an initial state of
+<code>#..##....</code> indicates that pots <code>0</code>, <code>3</code>, and <code>4</code> currently contain plants.</p>
+<p>Your puzzle input also contains some notes you find on a nearby table: someone has been trying
+to figure out how these plants <strong>spread</strong> to nearby pots. Based on the notes, for each
+generation of plants, a given pot has or does not have a plant based on whether that pot (and
+the two pots on either side of it) had a plant in the last generation. These are written as
+<code>LLCRR =&gt; N</code>, where <code>L</code> are pots to the left, <code>C</code> is the current pot being considered, <code>R</code> are
+the pots to the right, and <code>N</code> is whether the current pot will have a plant in the next
+generation. For example:</p>
+<ul>
+<li>A note like <code>..#.. =&gt; .</code> means that a pot that contains a plant but with no plants within two
+pots of it will not have a plant in it during the next generation.</li>
+<li>A note like <code>##.## =&gt; .</code> means that an empty pot with two plants on each side of it will
+remain empty in the next generation.</li>
+<li>A note like <code>.##.# =&gt; #</code> means that a pot has a plant in a given generation if, in the
+previous generation, there were plants in that pot, the one immediately to the left, and the
+one two pots to the right, but not in the ones immediately to the right and two to the left.</li>
+</ul>
+<p>It's not clear what these plants are for, but you're sure it's important, so you'd like to make
+sure the current configuration of plants is sustainable by determining what will happen after
+<strong><code>20</code> generations</strong>.</p>
+<p>For example, given the following input:</p>
+<pre><code class="language-txt">initial state: #..#.#..##......###...###
+
+...## =&gt; #
+..#.. =&gt; #
+.#... =&gt; #
+.#.#. =&gt; #
+.#.## =&gt; #
+.##.. =&gt; #
+.#### =&gt; #
+#.#.# =&gt; #
+#.### =&gt; #
+##.#. =&gt; #
+##.## =&gt; #
+###.. =&gt; #
+###.# =&gt; #
+####. =&gt; #
+</code></pre>
+<p>For brevity, in this example, only the combinations which do produce a plant are listed. (Your
+input includes all possible combinations.) Then, the next 20 generations will look like this:</p>
+<pre><code class="language-txt">                 1         2         3
+       0         0         0         0
+ 0: ...#..#.#..##......###...###...........
+ 1: ...#...#....#.....#..#..#..#...........
+ 2: ...##..##...##....#..#..#..##..........
+ 3: ..#.#...#..#.#....#..#..#...#..........
+ 4: ...#.#..#...#.#...#..#..##..##.........
+ 5: ....#...##...#.#..#..#...#...#.........
+ 6: ....##.#.#....#...#..##..##..##........
+ 7: ...#..###.#...##..#...#...#...#........
+ 8: ...#....##.#.#.#..##..##..##..##.......
+ 9: ...##..#..#####....#...#...#...#.......
+10: ..#.#..#...#.##....##..##..##..##......
+11: ...#...##...#.#...#.#...#...#...#......
+12: ...##.#.#....#.#...#.#..##..##..##.....
+13: ..#..###.#....#.#...#....#...#...#.....
+14: ..#....##.#....#.#..##...##..##..##....
+15: ..##..#..#.#....#....#..#.#...#...#....
+16: .#.#..#...#.#...##...#...#.#..##..##...
+17: ..#...##...#.#.#.#...##...#....#...#...
+18: ..##.#.#....#####.#.#.#...##...##..##..
+19: .#..###.#..#.#.#######.#.#.#..#.#...#..
+20: .#....##....#####...#######....#.#..##.
+</code></pre>
+<p>The generation is shown along the left, where <code>0</code> is the initial state. The pot numbers are
+shown along the top, where <code>0</code> labels the center pot, negative-numbered pots extend to the left,
+and positive pots extend toward the right. Remember, the initial state begins at pot <code>0</code>, which
+is not the leftmost pot used in this example.</p>
+<p>After one generation, only seven plants remain. The one in pot <code>0</code> matched the rule looking for
+<code>..#..</code>, the one in pot <code>4</code> matched the rule looking for <code>.#.#.</code>, pot <code>9</code> matched <code>.##..</code>, and
+so on.</p>
+<p>In this example, after 20 generations, the pots shown as <code>#</code> contain plants, the furthest left
+of which is pot <code>-2</code>, and the furthest right of which is pot <code>34</code>. Adding up all the numbers of
+plant-containing pots after the 20th generation produces <strong><code>325</code></strong>.</p>
+<p><strong>After <code>20</code> generations, what is the sum of the numbers of all pots which contain a plant?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2018::d12::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2018::d12::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2018::d12::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d14` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d14"><title>aoc::y2018::d14 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d14</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a></p><script>window.sidebarCurrent = {name: "d14", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2018/d14.rs.html#1-90" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a>::<wbr><a class="mod" href="">d14</a></span></h1><div class="docblock"><h1 id="day-14-chocolate-charts" class="section-header"><a href="#day-14-chocolate-charts">Day 14: Chocolate Charts</a></h1>
+<p>You finally have a chance to look at all of the produce moving around. Chocolate, cinnamon,
+mint, chili peppers, nutmeg, vanilla... the Elves must be growing these plants to make <strong>hot
+chocolate</strong>! As you realize this, you hear a conversation in the distance. When you go to
+investigate, you discover two Elves in what appears to be a makeshift underground
+kitchen/laboratory.</p>
+<p>The Elves are trying to come up with the ultimate hot chocolate recipe; they're even maintaining
+a scoreboard which tracks the quality <strong>score</strong> (<code>0</code>-<code>9</code>) of each recipe.</p>
+<p>Only two recipes are on the board: the first recipe got a score of <code>3</code>, the second, <code>7</code>. Each of
+the two Elves has a <strong>current recipe</strong>: the first Elf starts with the first recipe, and the
+second Elf starts with the second recipe.</p>
+<p>To create new recipes, the two Elves combine their current recipes. This creates new recipes
+from the <strong>digits of the sum</strong> of the current recipes' scores. With the current recipes' scores
+of <code>3</code> and <code>7</code>, their sum is <code>10</code>, and so two new recipes would be created: the first with score
+<code>1</code> and the second with score <code>0</code>. If the current recipes' scores were <code>2</code> and <code>3</code>, the sum,
+<code>5</code>, would only create one recipe (with a score of <code>5</code>) with its single digit.</p>
+<p>The new recipes are added to the end of the scoreboard in the order they are created. So, after
+the first round, the scoreboard is <code>3, 7, 1, 0</code>.</p>
+<p>After all new recipes are added to the scoreboard, each Elf picks a new current recipe. To do
+this, the Elf steps forward through the scoreboard a number of recipes equal to <strong>1 plus the
+score of their current recipe</strong>. So, after the first round, the first Elf moves forward
+<code>1 + 3 = 4</code> times, while the second Elf moves forward <code>1 + 7 = 8</code> times. If they run out of
+recipes, they loop back around to the beginning. After the first round, both Elves happen to
+loop around until they land on the same recipe that they had in the beginning; in general, they
+will move to different recipes.</p>
+<p>Drawing the first Elf as parentheses and the second Elf as square brackets, they continue this
+process:</p>
+<pre><code class="language-txt">(3)[7]
+(3)[7] 1  0
+ 3  7  1 [0](1) 0
+ 3  7  1  0 [1] 0 (1)
+(3) 7  1  0  1  0 [1] 2
+ 3  7  1  0 (1) 0  1  2 [4]
+ 3  7  1 [0] 1  0 (1) 2  4  5
+ 3  7  1  0 [1] 0  1  2 (4) 5  1
+ 3 (7) 1  0  1  0 [1] 2  4  5  1  5
+ 3  7  1  0  1  0  1  2 [4](5) 1  5  8
+ 3 (7) 1  0  1  0  1  2  4  5  1  5  8 [9]
+ 3  7  1  0  1  0  1 [2] 4 (5) 1  5  8  9  1  6
+ 3  7  1  0  1  0  1  2  4  5 [1] 5  8  9  1 (6) 7
+ 3  7  1  0 (1) 0  1  2  4  5  1  5 [8] 9  1  6  7  7
+ 3  7 [1] 0  1  0 (1) 2  4  5  1  5  8  9  1  6  7  7  9
+ 3  7  1  0 [1] 0  1  2 (4) 5  1  5  8  9  1  6  7  7  9  2
+</code></pre>
+<p>The Elves think their skill will improve after making a few recipes (your puzzle input).
+However, that could take ages; you can speed this up considerably by identifying <strong>the scores of
+the ten recipes</strong> after that. For example:</p>
+<ul>
+<li>If the Elves think their skill will improve after making <code>9</code> recipes, the scores of the ten
+recipes <strong>after</strong> the first nine on the scoreboard would be <code>5158916779</code> (highlighted in the
+last line of the diagram).</li>
+<li>After <code>5</code> recipes, the scores of the next ten would be <code>0124515891</code>.</li>
+<li>After <code>18</code> recipes, the scores of the next ten would be <code>9251071085</code>.</li>
+<li>After <code>2018</code> recipes, the scores of the next ten would be <code>5941429882</code>.</li>
+</ul>
+<p><strong>What are the scores of the ten recipes immediately after the number of recipes in your puzzle
+input?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2018::d14::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2018::d14::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2018::d14::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

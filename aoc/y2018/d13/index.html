@@ -1,0 +1,180 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d13` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d13"><title>aoc::y2018::d13 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d13</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a></p><script>window.sidebarCurrent = {name: "d13", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2018/d13.rs.html#1-218" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a>::<wbr><a class="mod" href="">d13</a></span></h1><div class="docblock"><h1 id="day-13-mine-cart-madness" class="section-header"><a href="#day-13-mine-cart-madness">Day 13: Mine Cart Madness</a></h1>
+<p>A crop of this size requires significant logistics to transport produce, soil, fertilizer, and
+so on. The Elves are very busy pushing things around in <strong>carts</strong> on some kind of rudimentary
+system of tracks they've come up with.</p>
+<p>Seeing as how cart-and-track systems don't appear in recorded history for another 1000 years,
+the Elves seem to be making this up as they go along. They haven't even figured out how to avoid
+collisions yet.</p>
+<p>You map out the tracks (your puzzle input) and see where you can help.</p>
+<p>Tracks consist of straight paths (<code>|</code> and <code>-</code>), curves (<code>/</code> and <code>\</code>), and intersections (<code>+</code>).
+Curves connect exactly two perpendicular pieces of track; for example, this is a closed loop:</p>
+<pre><code class="language-txt">/----\
+|    |
+|    |
+\----/
+</code></pre>
+<p>Intersections occur when two perpendicular paths cross. At an intersection, a cart is capable of
+turning left, turning right, or continuing straight. Here are two loops connected by two
+intersections:</p>
+<pre><code class="language-txt">/-----\
+|     |
+|  /--+--\
+|  |  |  |
+\--+--/  |
+   |     |
+   \-----/
+</code></pre>
+<p>Several <strong>carts</strong> are also on the tracks. Carts always face either up (<code>^</code>), down (<code>v</code>), left
+(<code>&lt;</code>), or right (<code>&gt;</code>). (On your initial map, the track under each cart is a straight path
+matching the direction the cart is facing.)</p>
+<p>Each time a cart has the option to turn (by arriving at any intersection), it turns <strong>left</strong> the
+first time, goes <strong>straight</strong> the second time, turns <strong>right</strong> the third time, and then repeats
+those directions starting again with <strong>left</strong> the fourth time, <strong>straight</strong> the fifth time, and
+so on. This process is independent of the particular intersection at which the cart has arrived</p>
+<ul>
+<li>that is, the cart has no per-intersection memory.</li>
+</ul>
+<p>Carts all move at the same speed; they take turns moving a single step at a time. They do this
+based on their <strong>current location</strong>: carts on the top row move first (acting from left to
+right), then carts on the second row move (again from left to right), then carts on the third
+row, and so on. Once each cart has moved one step, the process repeats; each of these loops is
+called a <strong>tick</strong>.</p>
+<p>For example, suppose there are two carts on a straight track:</p>
+<pre><code class="language-txt">|  |  |  |  |
+v  |  |  |  |
+|  v  v  |  |
+|  |  |  v  X
+|  |  ^  ^  |
+^  ^  |  |  |
+|  |  |  |  |
+</code></pre>
+<p>First, the top cart moves. It is facing down (<code>v</code>), so it moves down one square. Second, the
+bottom cart moves. It is facing up (<code>^</code>), so it moves up one square. Because all carts have
+moved, the first tick ends. Then, the process repeats, starting with the first cart. The first
+cart moves down, then the second cart moves up - right into the first cart, colliding with it!
+(The location of the crash is marked with an <code>X</code>.) This ends the second and last tick.</p>
+<p>Here is a longer example:</p>
+<pre><code class="language-txt">/-&gt;-\
+|   |  /----\
+| /-+--+-\  |
+| | |  | v  |
+\-+-/  \-+--/
+  \------/
+
+/--&gt;\
+|   |  /----\
+| /-+--+-\  |
+| | |  | |  |
+\-+-/  \-&gt;--/
+  \------/
+
+/---v
+|   |  /----\
+| /-+--+-\  |
+| | |  | |  |
+\-+-/  \-+&gt;-/
+  \------/
+
+/---\
+|   v  /----\
+| /-+--+-\  |
+| | |  | |  |
+\-+-/  \-+-&gt;/
+  \------/
+
+/---\
+|   |  /----\
+| /-&gt;--+-\  |
+| | |  | |  |
+\-+-/  \-+--^
+  \------/
+
+/---\
+|   |  /----\
+| /-+&gt;-+-\  |
+| | |  | |  ^
+\-+-/  \-+--/
+  \------/
+
+/---\
+|   |  /----\
+| /-+-&gt;+-\  ^
+| | |  | |  |
+\-+-/  \-+--/
+  \------/
+
+/---\
+|   |  /----&lt;
+| /-+--&gt;-\  |
+| | |  | |  |
+\-+-/  \-+--/
+  \------/
+
+/---\
+|   |  /---&lt;\
+| /-+--+&gt;\  |
+| | |  | |  |
+\-+-/  \-+--/
+  \------/
+
+/---\
+|   |  /--&lt;-\
+| /-+--+-v  |
+| | |  | |  |
+\-+-/  \-+--/
+  \------/
+
+/---\
+|   |  /-&lt;--\
+| /-+--+-\  |
+| | |  | v  |
+\-+-/  \-+--/
+  \------/
+
+/---\
+|   |  /&lt;---\
+| /-+--+-\  |
+| | |  | |  |
+\-+-/  \-&lt;--/
+  \------/
+
+/---\
+|   |  v----\
+| /-+--+-\  |
+| | |  | |  |
+\-+-/  \&lt;+--/
+  \------/
+
+/---\
+|   |  /----\
+| /-+--v-\  |
+| | |  | |  |
+\-+-/  ^-+--/
+  \------/
+
+/---\
+|   |  /----\
+| /-+--+-\  |
+| | |  X |  |
+\-+-/  \-+--/
+  \------/
+</code></pre>
+<p>After following their respective paths for a while, the carts eventually crash. To help prevent
+crashes, you'd like to know <strong>the location of the first crash</strong>. Locations are given in <code>X,Y</code>
+coordinates, where the furthest left column is <code>X=0</code> and the furthest top row is <code>Y=0</code>:</p>
+<pre><code class="language-txt">           111
+ 0123456789012
+0/---\
+1|   |  /----\
+2| /-+--+-\  |
+3| | |  X |  |
+4\-+-/  \-+--/
+5  \------/
+</code></pre>
+<p>In this example, the location of the first crash is <strong><code>7,3</code></strong>.</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2018::d13::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2018::d13::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2018::d13::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

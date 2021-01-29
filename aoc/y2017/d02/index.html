@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d02` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d02"><title>aoc::y2017::d02 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d02</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2017</a></p><script>window.sidebarCurrent = {name: "d02", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2017/d02.rs.html#1-113" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2017</a>::<wbr><a class="mod" href="">d02</a></span></h1><div class="docblock"><h1 id="day-2-corruption-checksum" class="section-header"><a href="#day-2-corruption-checksum">Day 2: Corruption Checksum</a></h1>
+<p>As you walk through the door, a glowing humanoid shape yells in your direction. &quot;You there! Your
+state appears to be idle. Come help us repair the corruption in this spreadsheet - if we take
+another millisecond, we'll have to display an hourglass cursor!&quot;</p>
+<p>The spreadsheet consists of rows of apparently-random numbers. To make sure the recovery process
+is on the right track, they need you to calculate the spreadsheet's <strong>checksum</strong>. For each row,
+determine the difference between the largest value and the smallest value; the checksum is the
+sum of all of these differences.</p>
+<p>For example, given the following spreadsheet:</p>
+<pre><code class="language-txt">5 1 9 5
+7 5 3
+2 4 6 8
+</code></pre>
+<ul>
+<li>The first row's largest and smallest values are <code>9</code> and <code>1</code>, and their difference is <code>8</code>.</li>
+<li>The second row's largest and smallest values are <code>7</code> and <code>3</code>, and their difference is <code>4</code>.</li>
+<li>The third row's difference is <code>6</code>.</li>
+</ul>
+<p>In this example, the spreadsheet's checksum would be <code>8 + 4 + 6 = 18</code>.</p>
+<p><strong>What is the checksum</strong> for the spreadsheet in your puzzle input?</p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>&quot;Great work; looks like we're on the right track after all. Here's a <strong>star</strong> for your effort.&quot;
+However, the program seems a little worried. Can programs <strong>be</strong> worried?</p>
+<p>&quot;Based on what we're seeing, it looks like all the User wanted is some information about the
+<strong>evenly divisible values</strong> in the spreadsheet. Unfortunately, none of us are equipped for that
+kind of calculation - most of us specialize in bitwise operations.&quot;</p>
+<p>It sounds like the goal is to find the only two numbers in each row where one evenly divides the
+other - that is, where the result of the division operation is a whole number. They would like
+you to find those numbers on each line, divide them, and add up each line's result.</p>
+<p>For example, given the following spreadsheet:</p>
+<pre><code class="language-txt">5 9 2 8
+9 4 7 3
+3 8 6 5
+</code></pre>
+<ul>
+<li>In the first row, the only two numbers that evenly divide are <code>8</code> and <code>2</code>; the result of this
+division is <code>4</code>.</li>
+<li>In the second row, the two numbers are <code>9</code> and <code>3</code>; the result is <code>3</code>.</li>
+<li>In the third row, the result is <code>2</code>.</li>
+</ul>
+<p>In this example, the sum of the results would be <code>4 + 3 + 2 = 9</code>.</p>
+<p>What is the <strong>sum of each row's result</strong> in your puzzle input?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2017::d02::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2017::d02::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2017::d02::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

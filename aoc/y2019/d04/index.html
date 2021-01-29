@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d04` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d04"><title>aoc::y2019::d04 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d04</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a></p><script>window.sidebarCurrent = {name: "d04", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2019/d04.rs.html#1-106" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a>::<wbr><a class="mod" href="">d04</a></span></h1><div class="docblock"><h1 id="day-4-secure-container" class="section-header"><a href="#day-4-secure-container">Day 4: Secure Container</a></h1>
+<p>You arrive at the Venus fuel depot only to discover it's protected by a password. The Elves had
+written the password on a sticky note, but someone threw it out.</p>
+<p>However, they do remember a few key facts about the password:</p>
+<ul>
+<li>It is a six-digit number.</li>
+<li>The value is within the range given in your puzzle input.</li>
+<li>Two adjacent digits are the same (like <code>22</code> in <code>122345</code>).</li>
+<li>Going from left to right, the digits <strong>never decrease</strong>; they only ever increase or stay the
+same (like <code>111123</code> or <code>135679</code>).</li>
+</ul>
+<p>Other than the range rule, the following are true:</p>
+<ul>
+<li><code>111111</code> meets these criteria (double <code>11</code>, never decreases).</li>
+<li><code>223450</code> does not meet these criteria (decreasing pair of digits <code>50</code>).</li>
+<li><code>123789</code> does not meet these criteria (no double).</li>
+</ul>
+<p><strong>How many different passwords</strong> within the range given in your puzzle input meet these
+criteria?</p>
+<h1 id="day-two" class="section-header"><a href="#day-two">Day Two</a></h1>
+<p>An Elf just remembered one more important detail: the two adjacent matching digits <strong>are not
+part of a larger group of matching digits</strong>.
+Given this additional criterion, but still ignoring the range rule, the following are now true:</p>
+<ul>
+<li><code>112233</code> meets these criteria because the digits never decrease and all repeated digits are
+exactly two digits long.</li>
+<li><code>123444</code> no longer meets the criteria (the repeated <code>44</code> is part of a larger group of <code>444</code>).</li>
+<li><code>111122</code> meets the criteria (even though <code>1</code> is repeated more than twice, it still contains a
+double <code>22</code>).</li>
+</ul>
+<p><strong>How many different passwords</strong> within the range given in your puzzle input meet all of the
+criteria?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2019::d04::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2019::d04::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2019::d04::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

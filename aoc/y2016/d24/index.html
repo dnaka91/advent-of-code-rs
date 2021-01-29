@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d24` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d24"><title>aoc::y2016::d24 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d24</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a></p><script>window.sidebarCurrent = {name: "d24", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2016/d24.rs.html#1-66" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a>::<wbr><a class="mod" href="">d24</a></span></h1><div class="docblock"><h1 id="day-24-air-duct-spelunking" class="section-header"><a href="#day-24-air-duct-spelunking">Day 24: Air Duct Spelunking</a></h1>
+<p>You've finally met your match; the doors that provide access to the roof are locked tight, and
+all of the controls and related electronics are inaccessible. You simply can't reach them.</p>
+<p>The robot that cleans the air ducts, however, <strong>can</strong>.</p>
+<p>It's not a very fast little robot, but you reconfigure it to be able to interface with some of
+the exposed wires that have been routed through the <a href="https://en.wikipedia.org/wiki/HVAC">HVAC</a> system. If you can direct it to each
+of those locations, you should be able to bypass the security controls.</p>
+<p>You extract the duct layout for this area from some blueprints you acquired and create a map
+with the relevant locations marked (your puzzle input). <code>0</code> is your current location, from which
+the cleaning robot embarks; the other numbers are (in <strong>no particular order</strong>) the locations the
+robot needs to visit at least once each. Walls are marked as <code>#</code>, and open passages are marked
+as <code>.</code>. Numbers behave like open passages.</p>
+<p>For example, suppose you have a map like the following:</p>
+<pre><code class="language-txt">###########
+#0.1.....2#
+#.#######.#
+#4.......3#
+###########
+</code></pre>
+<p>To reach all of the points of interest as quickly as possible, you would have the robot take the
+following path:</p>
+<ul>
+<li><code>0</code> to <code>4</code> (<code>2</code> steps)</li>
+<li><code>4</code> to <code>1</code> (<code>4</code> steps; it can't move diagonally)</li>
+<li><code>1</code> to <code>2</code> (<code>6</code> steps)</li>
+<li><code>2</code> to <code>3</code> (<code>2</code> steps)</li>
+</ul>
+<p>Since the robot isn't very fast, you need to find it the <strong>shortest route</strong>. This path is the
+fewest steps (in the above example, a total of <code>14</code>) required to start at <code>0</code> and then visit
+every other location at least once.</p>
+<p>Given your actual map, and starting from location <code>0</code>, what is the <strong>fewest number of steps</strong>
+required to visit every non-<code>0</code> number marked on the map at least once?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2016::d24::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2016::d24::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2016::d24::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

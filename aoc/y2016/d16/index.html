@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d16` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d16"><title>aoc::y2016::d16 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d16</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a></p><script>window.sidebarCurrent = {name: "d16", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2016/d16.rs.html#1-92" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2016</a>::<wbr><a class="mod" href="">d16</a></span></h1><div class="docblock"><h1 id="day-16-dragon-checksum" class="section-header"><a href="#day-16-dragon-checksum">Day 16: Dragon Checksum</a></h1>
+<p>You're done scanning this part of the network, but you've left traces of your presence. You need
+to overwrite some disks with random-looking data to cover your tracks and update the local
+security system with a new checksum for those disks.</p>
+<p>For the data to not be suspicious, it needs to have certain properties; purely random data will
+be detected as tampering. To generate appropriate random data, you'll need to use a modified
+<a href="https://en.wikipedia.org/wiki/Dragon_curve">dragon curve</a>.</p>
+<p>Start with an appropriate initial state (your puzzle input). Then, so long as you don't have
+enough data yet to fill the disk, repeat the following steps:</p>
+<ul>
+<li>Call the data you have at this point &quot;a&quot;.</li>
+<li>Make a copy of &quot;a&quot;; call this copy &quot;b&quot;.</li>
+<li>Reverse the order of the characters in &quot;b&quot;.</li>
+<li>In &quot;b&quot;, replace all instances of <code>0</code> with <code>1</code> and all <code>1</code>s with <code>0</code>.</li>
+<li>The resulting data is &quot;a&quot;, then a single <code>0</code>, then &quot;b&quot;.</li>
+</ul>
+<p>For example, after a single step of this process,</p>
+<ul>
+<li><code>1</code> becomes <code>100</code>.</li>
+<li><code>0</code> becomes <code>001</code>.</li>
+<li><code>11111</code> becomes <code>11111000000</code>.</li>
+<li><code>111100001010</code> becomes <code>1111000010100101011110000</code>.</li>
+</ul>
+<p>Repeat these steps until you have enough data to fill the desired disk.</p>
+<p>Once the data has been generated, you also need to create a checksum of that data. Calculate the
+checksum <strong>only</strong> for the data that fits on the disk, even if you generated more data than that
+in the previous step.</p>
+<p>The checksum for some given data is created by considering each non-overlapping <strong>pair</strong> of
+characters in the input data. If the two characters match (<code>00</code> or <code>11</code>), the next checksum
+character is a <code>1</code>. If the characters do not match (<code>01</code> or <code>10</code>), the next checksum character
+is a <code>0</code>. This should produce a new string which is exactly half as long as the original. If the
+length of the checksum is <strong>even</strong>, repeat the process until you end up with a checksum with an
+<strong>odd</strong> length.</p>
+<p>For example, suppose we want to fill a disk of length <code>12</code>, and when we finally generate a
+string of at least length <code>12</code>, the first <code>12</code> characters are <code>110010110100</code>. To generate its
+checksum:</p>
+<ul>
+<li>Consider each pair: <code>11</code>, <code>00</code>, <code>10</code>, <code>11</code>, <code>01</code>, <code>00</code>.</li>
+<li>These are same, same, different, same, different, same, producing <code>110101</code>.</li>
+<li>The resulting string has length <code>6</code>, which is <strong>even</strong>, so we repeat the process.</li>
+<li>The pairs are <code>11</code> (same), <code>01</code> (different), <code>01</code> (different).</li>
+<li>This produces the checksum <code>100</code>, which has an <strong>odd</strong> length, so we stop.</li>
+</ul>
+<p>Therefore, the checksum for <code>110010110100</code> is <code>100</code>.</p>
+<p>Combining all of these steps together, suppose you want to fill a disk of length <code>20</code> using an
+initial state of <code>10000</code>:</p>
+<ul>
+<li>Because <code>10000</code> is too short, we first use the modified dragon curve to make it longer.</li>
+<li>After one round, it becomes <code>10000011110</code> (<code>11</code> characters), still too short.</li>
+<li>After two rounds, it becomes <code>10000011110010000111110</code> (<code>23</code> characters), which is enough.</li>
+<li>Since we only need <code>20</code>, but we have <code>23</code>, we get rid of all but the first <code>20</code> characters:
+<code>10000011110010000111</code>.</li>
+<li>Next, we start calculating the checksum; after one round, we have <code>0111110101</code>, which <code>10</code>
+characters long (<strong>even</strong>), so we continue.</li>
+<li>After two rounds, we have <code>01100</code>, which is <code>5</code> characters long (<strong>odd</strong>), so we are done.</li>
+</ul>
+<p>In this example, the correct checksum would therefore be <code>01100</code>.</p>
+<p>The first disk you have to fill has length <code>272</code>. Using the initial state in your puzzle input,
+<strong>what is the correct checksum</strong>?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2016::d16::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2016::d16::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2016::d16::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

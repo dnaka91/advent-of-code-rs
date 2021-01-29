@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d15` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d15"><title>aoc::y2019::d15 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d15</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a></p><script>window.sidebarCurrent = {name: "d15", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2019/d15.rs.html#1-133" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a>::<wbr><a class="mod" href="">d15</a></span></h1><div class="docblock"><h1 id="day-15-oxygen-system" class="section-header"><a href="#day-15-oxygen-system">Day 15: Oxygen System</a></h1>
+<p>Out here in deep space, many things can go wrong. Fortunately, many of those things have
+indicator lights. Unfortunately, one of those lights is lit: the oxygen system for part of the
+ship has failed!</p>
+<p>According to the readouts, the oxygen system must have failed days ago after a rupture in oxygen
+tank two; that section of the ship was automatically sealed once oxygen levels went dangerously
+low. A single remotely-operated <strong>repair droid</strong> is your only option for fixing the oxygen
+system.</p>
+<p>The Elves' care package included an <a href="../../../aoc/y2019/d09/index.html">Intcode</a> program (your puzzle input) that you can use to
+remotely control the repair droid. By running that program, you can direct the repair droid to
+the oxygen system and fix the problem.</p>
+<p>The remote control program executes the following steps in a loop forever:</p>
+<ul>
+<li>Accept a <strong>movement command</strong> via an input instruction.</li>
+<li>Send the movement command to the repair droid.</li>
+<li>Wait for the repair droid to finish the movement operation.</li>
+<li>Report on the <strong>status</strong> of the repair droid via an output instruction.</li>
+</ul>
+<p>Only four <strong>movement commands</strong> are understood: north (<code>1</code>), south (<code>2</code>), west (<code>3</code>), and east
+(<code>4</code>). Any other command is invalid. The movements differ in direction, but not in distance: in
+a long enough east-west hallway, a series of commands like <code>4,4,4,4,3,3,3,3</code> would leave the
+repair droid back where it started.</p>
+<p>The repair droid can reply with any of the following <strong>status</strong> codes:</p>
+<ul>
+<li><code>0</code>: The repair droid hit a wall. Its position has not changed.</li>
+<li><code>1</code>: The repair droid has moved one step in the requested direction.</li>
+<li><code>2</code>: The repair droid has moved one step in the requested direction; its new position is the
+location of the oxygen system.</li>
+</ul>
+<p>You don't know anything about the area around the repair droid, but you can figure it out by
+watching the status codes.</p>
+<p>For example, we can draw the area using <code>D</code> for the droid, <code>#</code> for walls, <code>.</code> for locations the
+droid can traverse, and empty space for unexplored locations. Then, the initial state looks like
+this:</p>
+<pre><code class="language-txt">
+
+   D
+
+
+</code></pre>
+<p>To make the droid go north, send it <code>1</code>. If it replies with <code>0</code>, you know that location is a
+wall and that the droid didn't move:</p>
+<pre><code class="language-txt">
+   #
+   D
+
+
+</code></pre>
+<p>To move east, send <code>4</code>; a reply of <code>1</code> means the movement was successful:</p>
+<pre><code class="language-txt">
+   #
+   .D
+
+
+</code></pre>
+<p>Then, perhaps attempts to move north (<code>1</code>), south (<code>2</code>), and east (<code>4</code>) are all met with replies
+of <code>0</code>:</p>
+<pre><code class="language-txt">
+   ##
+   .D#
+    #
+
+</code></pre>
+<p>Now, you know the repair droid is in a dead end. Backtrack with <code>3</code> (which you already know will
+get a reply of <code>1</code> because you already know that location is open):</p>
+<pre><code class="language-txt">
+   ##
+   D.#
+    #
+
+</code></pre>
+<p>Then, perhaps west (<code>3</code>) gets a reply of <code>0</code>, south (<code>2</code>) gets a reply of <code>1</code>, south again (<code>2</code>)
+gets a reply of <code>0</code>, and then west (<code>3</code>) gets a reply of <code>2</code>:</p>
+<pre><code class="language-txt">
+   ##
+  #..#
+  D.#
+   #
+</code></pre>
+<p>Now, because of the reply of <code>2</code>, you know you've found the <strong>oxygen system</strong>! In this example,
+it was only <strong><code>2</code></strong> moves away from the repair droid's starting position.</p>
+<p><strong>What is the fewest number of movement commands</strong> required to move the repair droid from its
+starting position to the location of the oxygen system?</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2019::d15::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2019::d15::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2019::d15::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

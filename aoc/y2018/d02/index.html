@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d02` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d02"><title>aoc::y2018::d02 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d02</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a></p><script>window.sidebarCurrent = {name: "d02", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2018/d02.rs.html#1-91" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2018</a>::<wbr><a class="mod" href="">d02</a></span></h1><div class="docblock"><h1 id="day-2-inventory-management-system" class="section-header"><a href="#day-2-inventory-management-system">Day 2: Inventory Management System</a></h1>
+<p>You stop falling through time, catch your breath, and check the screen on the device.
+&quot;Destination reached. Current Year: 1518. Current Location: North Pole Utility Closet 83N10.&quot;
+You made it! Now, to find those anomalies.</p>
+<p>Outside the utility closet, you hear footsteps and a voice. &quot;...I'm not sure either. But now
+that so many people have chimneys, maybe he could sneak in that way?&quot; Another voice responds,
+&quot;Actually, we've been working on a new kind of <strong>suit</strong> that would let him fit through tight
+spaces like that. But, I heard that a few days ago, they lost the prototype fabric, the design
+plans, everything! Nobody on the team can even seem to remember important details of the
+project!&quot;</p>
+<p>&quot;Wouldn't they have had enough fabric to fill several boxes in the warehouse? They'd be stored
+together, so the box IDs should be similar. Too bad it would take forever to search the
+warehouse for <strong>two similar box IDs</strong>...&quot; They walk too far away to hear any more.</p>
+<p>Late at night, you sneak to the warehouse - who knows what kinds of paradoxes you could cause if
+you were discovered - and use your fancy wrist device to quickly scan every box and produce a
+list of the likely candidates (your puzzle input).</p>
+<p>To make sure you didn't miss any, you scan the likely candidate boxes again, counting the number
+that have an ID containing <strong>exactly two of any letter</strong> and then separately counting those with
+<strong>exactly three of any letter</strong>. You can multiply those two counts together to get a rudimentary
+<a href="https://en.wikipedia.org/wiki/Checksum">checksum</a> and compare it to what your device predicts.</p>
+<p>For example, if you see the following box IDs:</p>
+<ul>
+<li><code>abcdef</code> contains no letters that appear exactly two or three times.</li>
+<li><code>bababc</code> contains two <code>a</code> and three <code>b</code>, so it counts for both.</li>
+<li><code>abbcde</code> contains two <code>b</code>, but no letter appears exactly three times.</li>
+<li><code>abcccd</code> contains three <code>c</code>, but no letter appears exactly two times.</li>
+<li><code>aabcdd</code> contains two <code>a</code> and two <code>d</code>, but it only counts once.</li>
+<li><code>abcdee</code> contains two <code>e</code>.</li>
+<li><code>ababab</code> contains three <code>a</code> and three <code>b</code>, but it only counts once.</li>
+</ul>
+<p>Of these box IDs, four of them contain a letter which appears exactly twice, and three of them
+contain a letter which appears exactly three times. Multiplying these together produces a
+checksum of <code>4 * 3 = 12</code>.</p>
+<p><strong>What is the checksum</strong> for your list of box IDs?</p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>Confident that your list of box IDs is complete, you're ready to find the boxes full of
+prototype fabric.</p>
+<p>The boxes will have IDs which differ by exactly one character at the same position in both
+strings. For example, given the following box IDs:</p>
+<pre><code class="language-txt">abcde
+fghij
+klmno
+pqrst
+fguij
+axcye
+wvxyz
+</code></pre>
+<p>The IDs <code>abcde</code> and <code>axcye</code> are close, but they differ by two characters (the second and
+fourth). However, the IDs <code>fghij</code> and <code>fguij</code> differ by exactly one character, the third (<code>h</code>
+and <code>u</code>). Those must be the correct boxes.</p>
+<p><strong>What letters are common between the two correct box IDs?</strong> (In the example above, this is
+found by removing the differing character from either ID, producing <code>fgij</code>.)</p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2018::d02::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2018::d02::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2018::d02::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d06` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d06"><title>aoc::y2020::d06 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d06</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2020</a></p><script>window.sidebarCurrent = {name: "d06", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2020/d06.rs.html#1-186" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2020</a>::<wbr><a class="mod" href="">d06</a></span></h1><div class="docblock"><h1 id="day-6-custom-customs" class="section-header"><a href="#day-6-custom-customs">Day 6: Custom Customs</a></h1>
+<p>As your flight approaches the regional airport where you'll switch to a much larger plane,
+<a href="https://en.wikipedia.org/wiki/Customs_declaration">customs declaration forms</a> are distributed to the passengers.</p>
+<p>The form asks a series of 26 yes-or-no questions marked <code>a</code> through <code>z</code>. All you need to do is
+identify the questions for which <strong>anyone in your group</strong> answers &quot;yes&quot;. Since your group is
+just you, this doesn't take very long.</p>
+<p>However, the person sitting next to you seems to be experiencing a language barrier and asks if
+you can help. For each of the people in their group, you write down the questions for which they
+answer &quot;yes&quot;, one per line. For example:</p>
+<pre><code class="language-txt">abcx
+abcy
+abcz
+</code></pre>
+<p>In this group, there are <strong><code>6</code></strong> questions to which anyone answered &quot;yes&quot;: <code>a</code>, <code>b</code>, <code>c</code>, <code>x</code>,
+<code>y</code>, and <code>z</code>. (Duplicate answers to the same question don't count extra; each question counts at
+most once.)</p>
+<p>Another group asks for your help, then another, and eventually you've collected answers from
+every group on the plane (your puzzle input). Each group's answers are separated by a blank
+line, and within each group, each person's answers are on a single line. For example:</p>
+<pre><code class="language-txt">abc
+
+a
+b
+c
+
+ab
+ac
+
+a
+a
+a
+a
+
+b
+</code></pre>
+<p>This list represents answers from five groups:</p>
+<ul>
+<li>The first group contains one person who answered &quot;yes&quot; to <strong><code>3</code></strong> questions: <code>a</code>, <code>b</code>, and
+<code>c</code>.</li>
+<li>The second group contains three people; combined, they answered &quot;yes&quot; to <strong><code>3</code></strong> questions:
+<code>a</code>, <code>b</code>, and <code>c</code>.</li>
+<li>The third group contains two people; combined, they answered &quot;yes&quot; to <strong><code>3</code></strong> questions: <code>a</code>,
+<code>b</code>, and <code>c</code>.</li>
+<li>The fourth group contains four people; combined, they answered &quot;yes&quot; to only <strong><code>1</code></strong> question,
+<code>a</code>.</li>
+<li>The last group contains one person who answered &quot;yes&quot; to only <strong><code>1</code></strong> question, <code>b</code>.</li>
+</ul>
+<p>In this example, the sum of these counts is <code>3 + 3 + 3 + 1 + 1</code> = <strong><code>11</code></strong>.</p>
+<p>For each group, count the number of questions to which anyone answered &quot;yes&quot;. <strong>What is the sum
+of those counts?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>As you finish the last group's customs declaration, you notice that you misread one word in the
+instructions:</p>
+<p>You don't need to identify the questions to which <strong>anyone</strong> answered &quot;yes&quot;; you need to
+identify the questions to which <strong>everyone</strong> answered &quot;yes&quot;!</p>
+<p>Using the same example as above:</p>
+<pre><code class="language-txt">abc
+
+a
+b
+c
+
+ab
+ac
+
+a
+a
+a
+a
+
+b
+</code></pre>
+<p>This list represents answers from five groups:</p>
+<ul>
+<li>In the first group, everyone (all 1 person) answered &quot;yes&quot; to <strong><code>3</code></strong> questions: <code>a</code>, <code>b</code>, and
+<code>c</code>.</li>
+<li>In the second group, there is <strong>no</strong> question to which everyone answered &quot;yes&quot;.</li>
+<li>In the third group, everyone answered yes to only <strong><code>1</code></strong> question, <code>a</code>. Since some people did
+not answer &quot;yes&quot; to <code>b</code> or <code>c</code>, they don't count.</li>
+<li>In the fourth group, everyone answered yes to only <strong><code>1</code></strong> question, <code>a</code>.</li>
+<li>In the fifth group, everyone (all 1 person) answered &quot;yes&quot; to <strong><code>1</code></strong> question, <code>b</code>.</li>
+</ul>
+<p>In this example, the sum of these counts is <code>3 + 0 + 1 + 1 + 1</code> = <strong><code>6</code></strong>.</p>
+<p>For each group, count the number of questions to which <strong>everyone</strong> answered &quot;yes&quot;. <strong>What is
+the sum of those counts?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2020::d06::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2020::d06::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2020::d06::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>

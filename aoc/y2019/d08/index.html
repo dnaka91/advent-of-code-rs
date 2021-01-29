@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `d08` mod in crate `aoc`."><meta name="keywords" content="rust, rustlang, rust-lang, d08"><title>aoc::y2019::d08 - Rust</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../aoc/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a><p class="location">Module d08</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#constants">Constants</a></li><li><a href="#functions">Functions</a></li></ul></div><p class="location"><a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a></p><script>window.sidebarCurrent = {name: "d08", ty: "mod", relpath: "../"};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../../../src/aoc/y2019/d08.rs.html#1-169" title="goto source code">[src]</a></span><span class="in-band">Module <a href="../../index.html">aoc</a>::<wbr><a href="../index.html">y2019</a>::<wbr><a class="mod" href="">d08</a></span></h1><div class="docblock"><h1 id="day-8-space-image-format" class="section-header"><a href="#day-8-space-image-format">Day 8: Space Image Format</a></h1>
+<p>The Elves' spirits are lifted when they realize you have an opportunity to reboot one of their
+Mars rovers, and so they are curious if you would spend a brief sojourn on Mars. You land your
+ship near the rover.</p>
+<p>When you reach the rover, you discover that it's already in the process of rebooting! It's just
+waiting for someone to enter a <a href="https://en.wikipedia.org/wiki/BIOS">BIOS</a> password. The Elf responsible for the rover takes a
+picture of the password (your puzzle input) and sends it to you via the Digital Sending Network.</p>
+<p>Unfortunately, images sent via the Digital Sending Network aren't encoded with any normal
+encoding; instead, they're encoded in a special Space Image Format. None of the Elves seem to
+remember why this is the case. They send you the instructions to decode it.</p>
+<p>Images are sent as a series of digits that each represent the color of a single pixel. The
+digits fill each row of the image left-to-right, then move downward to the next row, filling
+rows top-to-bottom until every pixel of the image is filled.</p>
+<p>Each image actually consists of a series of identically-sized <strong>layers</strong> that are filled in this
+way. So, the first digit corresponds to the top-left pixel of the first layer, the second digit
+corresponds to the pixel to the right of that on the same layer, and so on until the last digit,
+which corresponds to the bottom-right pixel of the last layer.</p>
+<p>For example, given an image <code>3</code> pixels wide and <code>2</code> pixels tall, the image data <code>123456789012</code>
+corresponds to the following image layers:</p>
+<pre><code class="language-txt">Layer 1: 123
+         456
+
+Layer 2: 789
+         012
+</code></pre>
+<p>The image you received is <strong><code>25</code> pixels wide and <code>6</code> pixels tall</strong>.</p>
+<p>To make sure the image wasn't corrupted during transmission, the Elves would like you to find
+the layer that contains the <strong>fewest <code>0</code> digits</strong>. On that layer, what is <strong>the number of <code>1</code>
+digits multiplied by the number of <code>2</code> digits?</strong></p>
+<h2 id="part-two" class="section-header"><a href="#part-two">Part Two</a></h2>
+<p>Now you're ready to decode the image. The image is rendered by stacking the layers and aligning
+the pixels with the same positions in each layer. The digits indicate the color of the
+corresponding pixel: <code>0</code> is black, <code>1</code> is white, and <code>2</code> is transparent.</p>
+<p>The layers are rendered with the first layer in front and the last layer in back. So, if a given
+position has a transparent pixel in the first and second layers, a black pixel in the third
+layer, and a white pixel in the fourth layer, the final image would have a <strong>black</strong> pixel at
+that position.</p>
+<p>For example, given an image <code>2</code> pixels wide and <code>2</code> pixels tall, the image data
+<code>0222112222120000</code> corresponds to the following image layers:</p>
+<pre><code class="language-txt">Layer 1: 02
+         22
+
+Layer 2: 11
+         22
+
+Layer 3: 22
+         12
+
+Layer 4: 00
+         00
+</code></pre>
+<p>Then, the full image can be found by determining the top visible pixel in each position:</p>
+<ul>
+<li>The top-left pixel is <strong>black</strong> because the top layer is <code>0</code>.</li>
+<li>The top-right pixel is <strong>white</strong> because the top layer is <code>2</code> (transparent), but the second
+layer is <code>1</code>.</li>
+<li>The bottom-left pixel is <strong>white</strong> because the top two layers are <code>2</code>, but the third layer is
+<code>1</code>.</li>
+<li>The bottom-right pixel is <strong>black</strong> because the only visible pixel in that position is <code>0</code>
+(from layer 4).</li>
+</ul>
+<p>So, the final image looks like this:</p>
+<pre><code class="language-txt">01
+10
+</code></pre>
+<p><strong>What message is produced after decoding your image?</strong></p>
+</div><h2 id="constants" class="section-header"><a href="#constants">Constants</a></h2>
+<table><tr class="module-item"><td><a class="constant" href="constant.INPUT.html" title="aoc::y2019::d08::INPUT constant">INPUT</a></td><td class="docblock-short"></td></tr></table><h2 id="functions" class="section-header"><a href="#functions">Functions</a></h2>
+<table><tr class="module-item"><td><a class="fn" href="fn.solve_part_one.html" title="aoc::y2019::d08::solve_part_one fn">solve_part_one</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="fn" href="fn.solve_part_two.html" title="aoc::y2019::d08::solve_part_two fn">solve_part_two</a></td><td class="docblock-short"></td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "aoc";</script><script src="../../../main.js"></script><script defer src="../../../search-index.js"></script></body></html>
